@@ -39,7 +39,9 @@ public class Room : MonoBehaviour
             //We just wanna make sure that our entrance isn't connected already (don't wanna stack rooms on top of each other!)
             if(!entrance.is_connected){
                 foreach(Entrance attaching_entrance in attaching_room.entrances){
-                    if(!(attaching_entrance.is_connected) && entrance.IsValidForOrientation(attaching_entrance.main_direction)){
+
+                    //Theoritically, we don't have to check if this entrance is connected as well because this room isn't even placed yet!
+                    if(entrance.IsValidForOrientation(attaching_entrance.main_direction)){
                         r_array[0] = attaching_entrance;
                         r_array[1] = entrance;
                         return r_array; //We will return the valid entrance

@@ -50,6 +50,26 @@ public class RoomGenerator : MonoBehaviour
         return null;
     }
 
+
+    /*
+    
+        Since this algorithm is kind of difficult and I'm not copying off of an example (I'm looking at other algorithms though) I'm
+        implementing this in stages.
+
+        The stages go as follows:
+        1. Make sure the algorithm works for two rooms, attaching them correctly and in a way that I want to (DONE)
+        2. Make the algorithm iterative, constantly adding on rooms and doing so in a correct way
+        3. Change the algorithm to be recursive so that we can cover all entrances 
+        4. Fix potential overlap problems by making the algorithm recgonize the grid and add collision of rooms into consideration
+        5. Add weights and make sure the algorithm uses weights correctly
+        6. Make the algorithm find a destinition to an end room, create the end room
+        7. Implement the above recursively as well, add alternation between rooms and bridges (that shouldn't be too hard)
+        8. Optimize the algorithm by having it do most computation in compute buffers (fun!)
+
+        As you can see we are currently only 1/8th of the way there. Exciting! 
+    
+    */
+
     //Using the rooms in our room list we will place them in a way that we have described
     void Generate(){
 
@@ -69,7 +89,7 @@ public class RoomGenerator : MonoBehaviour
         GameObject previous_room = Instantiate(current_room, chosen_position, base_rotation);
 
         //Temp variable for number of rooms
-        int num_rooms = 2;
+        int num_rooms = 4;
 
 
         /*
@@ -96,6 +116,7 @@ public class RoomGenerator : MonoBehaviour
 
         for(int i = 1; i < num_rooms; i++){
             List<int> random_order = RoomHelper.CreateShuffledRandomList(rooms.Count);
+            DebugHelper.DebugList<int>(random_order);
 
             //Our room tuple contains the game object, room, and entrance that we will be using!
             RoomTuple found_entrance = ChooseValidRandomRoom(previous_room, random_order);
@@ -103,6 +124,7 @@ public class RoomGenerator : MonoBehaviour
             //Let's just make sure that it's not null
             if(found_entrance == null){
                 //Uh-oh! No more valid rooms :c
+                Debug.Log("No valid room found, exiting");
                 break;
             }
 

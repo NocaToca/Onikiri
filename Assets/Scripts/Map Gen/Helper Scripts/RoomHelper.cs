@@ -12,12 +12,12 @@ public static class RoomHelper{
             r_list.Add(i);
         }
 
-        Shuffle<int>(r_list);
+        r_list = Shuffle<int>(r_list);
 
         return r_list;
     }  
 
-    public static void Shuffle<T>(this IList<T> list)  
+    public static List<T> Shuffle<T>(List<T> list)  
     {  
         int n = list.Count;  
         while (n > 1) {  
@@ -27,6 +27,8 @@ public static class RoomHelper{
             list[k] = list[n];  
             list[n] = value;  
         }  
+
+        return list;
     }
 
 }
