@@ -11,7 +11,7 @@ public class RoomGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Generate();
+        GenerateRecursive();
     }
 
     // Update is called once per frame
@@ -58,15 +58,15 @@ public class RoomGenerator : MonoBehaviour
 
         The stages go as follows:
         1. Make sure the algorithm works for two rooms, attaching them correctly and in a way that I want to (DONE)
-        2. Make the algorithm iterative, constantly adding on rooms and doing so in a correct way
-        3. Change the algorithm to be recursive so that we can cover all entrances 
+        2. Make the algorithm iterative, constantly adding on rooms and doing so in a correct way (DONE)
+        3. Change the algorithm to be recursive so that we can cover all entrances (DONE)
         4. Fix potential overlap problems by making the algorithm recgonize the grid and add collision of rooms into consideration
         5. Add weights and make sure the algorithm uses weights correctly
         6. Make the algorithm find a destinition to an end room, create the end room
         7. Implement the above recursively as well, add alternation between rooms and bridges (that shouldn't be too hard)
         8. Optimize the algorithm by having it do most computation in compute buffers (fun!)
 
-        As you can see we are currently only 1/8th of the way there. Exciting! 
+        As you can see we are currently only 3/8th of the way there. Exciting! 
     
     */
 
@@ -141,4 +141,91 @@ public class RoomGenerator : MonoBehaviour
         }
 
     }
+
+    //I'm not deleting the above so I can go for fallback as well as reference
+    //This shall be our recursive version of the generation
+    //Recursion can be very dangerous and expensive! Hopefully we don't have much problems with it :prayge:
+    //Ascii should support my fox emotes fr
+    private void GenerateRecursive(){
+        //We're going to have a starting point here. It doesn't matter for now but later it will be important
+        //To do somethings before going right into recursion
+
+        DebugResetAttachtment();
+
+        //Although we can do the first step here
+        GameObject current_room = ChooseRandomRoom();
+        Vector3 chosen_position = Vector3.zero;
+        Quaternion base_rotation = Quaternion.identity; 
+        GameObject previous_room = Instantiate(current_room, chosen_position, base_rotation);
+
+        //This is so we don't constantantly place rooms together that can recurse with themselves
+        int max_room_depth = 5;
+
+        RecurseGenerationStep(previous_room, 1, max_room_depth);
+
+
+    }
+
+    private void RecurseGenerationStep(GameObject current_room, int current_depth, int max_room_depth){
+
+        //If we are at the edge we want to stop!
+        if(current_depth >= max_room_depth){
+            return;
+        }
+        Quaternion base_rotation = Quaternion.identity; 
+
+        //Else let's do the generation
+        //Basically we will want to generate a room for each entrance
+        //Let's do this by iterating through each entrance
+
+        //We do have a function to do what we are going to do in a really similar way in the room class, but the difference there
+        //Is that we will not have access to recursion, so we have to do it again here
+        Room current_room_room_component = current_room.GetComponent<Room>();
+
+        foreach(Entrance current_entrance in current_room_room_component.entrances){
+            //Let's create a random list 
+            List<int> r_list = RoomHelper.CreateShuffledRandomList(rooms.Count);
+
+            //Now we shall grab a random room and assess it much like the ChooseValidRandomRoom() function
+            for(int i = 0; i < r_list.Count; i++){
+                int index = r_list[i];
+
+                GameObject assessing_room_object = rooms[index];
+                Room assessing_room = assessing_room_object.GetComponent<Room>();
+                for(int k = 0; k < assessing_room.entrances.Length; k++){
+                    Entrance potential_attaching_entrance = assessing_room.entrances[k];
+                    if(current_entrance.is_connected == false &&
+                        
+                        current_entrance.IsValidForOrientation(potential_attaching_entrance.main_direction)){
+                        //Attach
+                        Vector3 position = current_entrance.transform.position;
+                        position -= potential_attaching_entrance.transform.position;
+
+                        GameObject created_object = Instantiate(assessing_room_object, position, base_rotation);
+
+                        current_entrance.is_connected = true;
+                        created_object.GetComponent<Room>().entrances[k].is_connected = true;
+
+                        RecurseGenerationStep(created_object, current_depth + 1, max_room_depth);
+                        i = r_list.Count;
+                        break;
+                    }
+                }
+            }
+        }
+
+        
+    }
+
+
+    //All the base objects that are stored inside the room list should not have their entrances connected
+    //This is a debug function to reset them in case they have for some reason
+    private void DebugResetAttachtment(){
+        for(int i = 0; i < rooms.Count; i++){
+            foreach(Entrance entrance in rooms[i].GetComponent<Room>().entrances){
+                entrance.is_connected = false;
+            }
+        }
+    }
+
 }

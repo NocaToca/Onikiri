@@ -154,7 +154,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rooms:
   - {fileID: 6669442354222449504, guid: cef31b862addd0846b19d9577834b15b, type: 3}
-  - {fileID: 602147915993419931, guid: ec554c18500f55f409ba979ea46fd80b, type: 3}
+  - {fileID: 6727850116116741715, guid: 3b6e0fea9829f49f0b5cc5e696a71b82, type: 3}
+  - {fileID: 7867192895019480785, guid: 4f5d20d772325632795b9a7ac7a54876, type: 3}
+  - {fileID: 8185207904421578964, guid: 8a9c0af8adf5aac1e822555d0100a349, type: 3}
 --- !u!4 &192276826
 Transform:
   m_ObjectHideFlags: 0
