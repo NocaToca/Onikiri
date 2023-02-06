@@ -6,7 +6,7 @@ public class RoomGenerator : MonoBehaviour
 {
 
     //Contains all of our rooms that we will use to generate
-    public List<GameObject> rooms;
+    public List<RoomObject> rooms;
 
     GeneratorGrid grid;
 
@@ -27,7 +27,7 @@ public class RoomGenerator : MonoBehaviour
 
     //Chooses a random room from the list using the weights (currently all are weighted equal)
     GameObject ChooseRandomRoom(){
-        return rooms[Random.Range(0, rooms.Count)];
+        return rooms[Random.Range(0, rooms.Count)].prefab;
     }
 
     //So, using our current room we will search through every room and find a valid entrance to use, returning it
@@ -42,12 +42,12 @@ public class RoomGenerator : MonoBehaviour
             int index = random_order[i];
 
             //This will essentially look through each room randomly
-            Room assessing_room = rooms[index].GetComponent<Room>();
+            Room assessing_room = rooms[index].prefab.GetComponent<Room>();
 
             entrances = current_room.GetComponent<Room>().TryToFindValidEntrance(assessing_room);
 
             if(entrances != null){
-                return new RoomTuple(rooms[index], assessing_room, entrances[0], entrances[1]);
+                return new RoomTuple(rooms[index].prefab, assessing_room, entrances[0], entrances[1]);
             }
         }
 
@@ -198,7 +198,7 @@ public class RoomGenerator : MonoBehaviour
             for(int i = 0; i < r_list.Count; i++){
                 int index = r_list[i];
 
-                GameObject assessing_room_object = rooms[index];
+                GameObject assessing_room_object = rooms[index].prefab;
                 Room assessing_room = assessing_room_object.GetComponent<Room>();
                 for(int k = 0; k < assessing_room.entrances.Length; k++){
                     Entrance potential_attaching_entrance = assessing_room.entrances[k];
@@ -235,10 +235,11 @@ public class RoomGenerator : MonoBehaviour
     //This is a debug function to reset them in case they have for some reason
     private void DebugResetAttachtment(){
         for(int i = 0; i < rooms.Count; i++){
-            foreach(Entrance entrance in rooms[i].GetComponent<Room>().entrances){
+            foreach(Entrance entrance in rooms[i].prefab.GetComponent<Room>().entrances){
                 entrance.is_connected = false;
             }
         }
     }
 
 }
+
