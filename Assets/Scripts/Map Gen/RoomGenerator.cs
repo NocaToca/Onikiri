@@ -8,10 +8,15 @@ public class RoomGenerator : MonoBehaviour
     //Contains all of our rooms that we will use to generate
     public List<GameObject> rooms;
 
+    GeneratorGrid grid;
+
     // Start is called before the first frame update
     void Start()
     {
+        grid = this.gameObject.AddComponent<GeneratorGrid>();
         GenerateRecursive();
+        
+        //We're going to want to remove the component once we've generated the room so we don't keep the memory allocation
     }
 
     // Update is called once per frame
@@ -60,13 +65,13 @@ public class RoomGenerator : MonoBehaviour
         1. Make sure the algorithm works for two rooms, attaching them correctly and in a way that I want to (DONE)
         2. Make the algorithm iterative, constantly adding on rooms and doing so in a correct way (DONE)
         3. Change the algorithm to be recursive so that we can cover all entrances (DONE)
-        4. Fix potential overlap problems by making the algorithm recgonize the grid and add collision of rooms into consideration
+        4. Fix potential overlap problems by making the algorithm recgonize the grid and add collision of rooms into consideration (DONE - though not tested well)
         5. Add weights and make sure the algorithm uses weights correctly
         6. Make the algorithm find a destinition to an end room, create the end room
         7. Implement the above recursively as well, add alternation between rooms and bridges (that shouldn't be too hard)
         8. Optimize the algorithm by having it do most computation in compute buffers (fun!)
 
-        As you can see we are currently only 3/8th of the way there. Exciting! 
+        As you can see we are currently only 4/8th of the way there. Exciting! 
     
     */
 
@@ -158,6 +163,9 @@ public class RoomGenerator : MonoBehaviour
         Quaternion base_rotation = Quaternion.identity; 
         GameObject previous_room = Instantiate(current_room, chosen_position, base_rotation);
 
+        //Now let's just place our room on the Generator Grid
+        grid.Place(previous_room);
+
         //This is so we don't constantantly place rooms together that can recurse with themselves
         int max_room_depth = 5;
 
@@ -201,14 +209,19 @@ public class RoomGenerator : MonoBehaviour
                         Vector3 position = current_entrance.transform.position;
                         position -= potential_attaching_entrance.transform.position;
 
-                        GameObject created_object = Instantiate(assessing_room_object, position, base_rotation);
+                        if(grid.DoesNotOverlap(assessing_room.height, assessing_room.width, position)){
+                            GameObject created_object = Instantiate(assessing_room_object, position, base_rotation);
+                            grid.Place(created_object);
 
-                        current_entrance.is_connected = true;
-                        created_object.GetComponent<Room>().entrances[k].is_connected = true;
+                            current_entrance.is_connected = true;
+                            created_object.GetComponent<Room>().entrances[k].is_connected = true;
 
-                        RecurseGenerationStep(created_object, current_depth + 1, max_room_depth);
-                        i = r_list.Count;
-                        break;
+                            RecurseGenerationStep(created_object, current_depth + 1, max_room_depth);
+                            i = r_list.Count; //To break the second for loop
+                            break;
+                        }
+
+                        
                     }
                 }
             }
