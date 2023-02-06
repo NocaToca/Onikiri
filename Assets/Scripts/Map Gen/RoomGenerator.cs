@@ -11,6 +11,15 @@ public class RoomGenerator : MonoBehaviour
     public RoomObject start_room; //weight does not matter
     public RoomObject end_room; //weight does not matter
 
+    [Range(10, 500)]
+    public int lower_end_room_distance_threshold = 10;
+    
+    [Range(50, 750)]
+    public int higher_end_room_distance_threshold = 50;
+
+    [Range(0,10)]
+    public int max_snap_distance = 5; //The max distance the exit will snap 
+
     //We use this so we wont frustrate ourselves
     public bool EditingWeights;
 
@@ -24,7 +33,7 @@ public class RoomGenerator : MonoBehaviour
         }
 
         grid = this.gameObject.AddComponent<GeneratorGrid>();
-        GenerateRecursive();
+        GenerateStartEndRooms();
         
         //We're going to want to remove the component once we've generated the room so we don't keep the memory allocation
     }
@@ -326,6 +335,148 @@ public class RoomGenerator : MonoBehaviour
         
     }
 
+    //This will make the main path, and then we will us recursion to cap off rooms once finished. We want to generate the path to the start and end rooms first, however, as 
+    //We want to prioritize it in the way of paths.
+
+    //I'm honestly not happy with the time complexity of this algorithm (it's like O(n^4)) but it shouldn't be too bad considering the n (number of rooms) is bound to be small
+    private void GenerateStartEndRooms(){
+
+        //The first thing we can do is create and place the start room
+        //I'm a fox girl
+        //peepee poopoo
+        
+        //Okay, so we want to place these rooms much like we have done so previously. Except we're not choosing a random room
+        DebugResetAttachtment();
+
+        //Although we can do the first step here
+        GameObject current_room = start_room.prefab;
+        Vector3 chosen_position = Vector3.zero;
+        Quaternion base_rotation = Quaternion.identity; 
+        GameObject start_room_gameObject = Instantiate(current_room, chosen_position, base_rotation);
+
+        
+
+        //Now we want to place the end room, but first choose where we want it to be
+        Vector3 random_position = new Vector3(Random.Range(lower_end_room_distance_threshold, higher_end_room_distance_threshold), Random.Range(lower_end_room_distance_threshold, higher_end_room_distance_threshold), 0);
+
+        //Now we're just going to randomly flip signs
+
+        //x
+        float ran = Random.Range(0.0f, 1.0f);
+        random_position.x = (ran < 0.5f) ? random_position.x : random_position.x * -1;
+
+        //y
+        ran = Random.Range(0.0f, 1.0f);
+        random_position.y = (ran < 0.5f) ? random_position.y : random_position.y * -1;        
+
+        GameObject end_room_gameObject = end_room.prefab;
+        end_room_gameObject = Instantiate(end_room_gameObject, random_position, base_rotation);
+
+        /*
+            Now comes the hard part, we have to create an algorithm that will intelligently place rooms in a way that the entrances between each room attach. Normally we can use A* to combat pathfinding, but in this case it is
+            extremely difficult as we need to be congnizant of room *and* exit placement
+
+            We care more about the former than the latter right now however, so we will first make the algorithm just attach the start and end rooms before doing anything else. 
+
+            Something to keep in mind, however, is that we actually have not placed the exit into the grid. This is because we might want to move the exit to attach it to the end in case we're close enough but cannot find a valid room to brigde the two        
+        */
+
+        //We're going to use a modified A-star to start out. To do this however we need to make sure the rooms we are using have at least 2 entrances
+        List<RoomObject> filtered_rooms;
+
+        System.Func<RoomObject, bool> filter_func = delegate(RoomObject obj){
+            return obj.prefab.GetComponent<Room>().entrances.Length >= 2;
+        };
+
+        filtered_rooms = NocaScripts.FilterList<RoomObject>(filter_func, rooms);
+
+        //So we have our start entrance and we will basically want to go through each possible entrance and assess which one is the best - this will be pretty unweighted but we will update our weights accordingly
+        //At least when I implement it
+        
+        /*
+            Basic idea:
+                Go through each entrance of the room we currently placed and attach each possible room and see which one will offer the best solution
+                Attach the best room to the end and add each unused entrance to a list so we can recurse through it later using our previously built recursive function
+                Do this until either we find a match or there are no good rooms to place
+        */
+
+        Room curr_room = start_room_gameObject.GetComponent<Room>();
+
+        //Just so we break in case if it is an endless loop
+        int i = 0;
+        while(++i <= 10){
+            //We're going to go through each entrance and just assess it
+
+            Entrance best_entrance = curr_room.entrances[0];
+
+            RoomObject best_attachment_overall = rooms[0];
+            float best_distance = 0.0f;
+            foreach(Entrance entrance in curr_room.entrances){
+
+                //For each entrance we'll go through each VALID room and see which one is best
+                List<RoomObject> workable_rooms;
+
+                System.Func<RoomObject, Direction, bool> filter = delegate(RoomObject r, Direction d){
+                    Room ro = r.prefab.GetComponent<Room>();
+                    foreach(Entrance e in ro.entrances){
+                        if(d == e.main_direction){
+                            return true;
+                        }
+                    }
+                    return false;
+                };
+
+                workable_rooms = NocaScripts.FilterList<RoomObject, Direction>(filter, entrance.main_direction, filtered_rooms);
+                RoomObject best_attachment;
+
+                try{
+                    best_attachment = workable_rooms[0];      
+
+                    float best_attachment_distance = 0.0f;
+                    //Now we will just go through the workable rooms and assess their distance to the exit and then score them basically only on that
+                    for(int j = 0; j < workable_rooms.Count; j++){
+                        Room assessing_room = workable_rooms[j].prefab.GetComponent<Room>();
+
+                        float best_distance_for_this_part_lol = 0.0f;
+                        //Now we will just attach the correct entrance and see what entrance scores the best
+                        foreach(Entrance assessing_entrance in assessing_room.entrances){
+                            float distance = Vector3.Distance(assessing_entrance.gameObject.transform.position, curr_room.transform.position);
+
+                            if(distance > best_distance_for_this_part_lol){
+                                best_distance_for_this_part_lol = distance;
+                            }
+                        }
+
+                        if(best_distance_for_this_part_lol > best_attachment_distance){
+                            best_attachment_distance = best_distance_for_this_part_lol;
+                            best_attachment = workable_rooms[j];
+                        }
+                    }
+
+                    if(best_attachment_distance > best_distance){
+                        best_distance = best_attachment_distance;
+                        best_entrance = entrance;
+                        best_attachment_overall = best_attachment;
+                    }              
+                }catch(System.Exception e){
+                    //Well there would be no working room so we can just ignore the except and continue - it isn't neccessarily an error
+                    Debug.LogWarning("No workable rooms found for direction " + entrance.main_direction.ToString());
+                }
+
+                
+            }
+
+            //Now that we have our best room we want to place it and then see how close it is
+            GameObject go = Instantiate(best_attachment_overall.prefab, chosen_position, base_rotation);
+            curr_room = go.GetComponent<Room>();
+
+            if(Vector3.Distance(go.transform.position, end_room_gameObject.transform.position) <= max_snap_distance){
+                end_room_gameObject.transform.position = curr_room.GetRandomEntrancePosition();
+            }
+        }
+
+    }
+
 
     //All the base objects that are stored inside the room list should not have their entrances connected
     //This is a debug function to reset them in case they have for some reason
@@ -359,6 +510,10 @@ public class RoomGenerator : MonoBehaviour
                 Debug.Log("Sum of weights does not add up to one, fixing weights.");
                 FixUpWeights(sum);
             }
+        }
+
+        if(lower_end_room_distance_threshold >= higher_end_room_distance_threshold){
+            lower_end_room_distance_threshold = higher_end_room_distance_threshold - 1;
         }
     }
 
