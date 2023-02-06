@@ -8,11 +8,21 @@ public class RoomGenerator : MonoBehaviour
     //Contains all of our rooms that we will use to generate
     public List<RoomObject> rooms;
 
+    public RoomObject start_room; //weight does not matter
+    public RoomObject end_room; //weight does not matter
+
+    //We use this so we wont frustrate ourselves
+    public bool EditingWeights;
+
     GeneratorGrid grid;
 
     // Start is called before the first frame update
     void Start()
     {
+        if(EditingWeights){
+            Debug.LogWarning("EditingWeights bool still turned on in the Room Generator script. This can cause issues if the sum of the weights is not one!");
+        }
+
         grid = this.gameObject.AddComponent<GeneratorGrid>();
         GenerateRecursive();
         
@@ -66,12 +76,14 @@ public class RoomGenerator : MonoBehaviour
         2. Make the algorithm iterative, constantly adding on rooms and doing so in a correct way (DONE)
         3. Change the algorithm to be recursive so that we can cover all entrances (DONE)
         4. Fix potential overlap problems by making the algorithm recgonize the grid and add collision of rooms into consideration (DONE - though not tested well)
-        5. Add weights and make sure the algorithm uses weights correctly
+        5. Add weights and make sure the algorithm uses weights correctly (DONE - although it may not work entirely as intended rn)
         6. Make the algorithm find a destinition to an end room, create the end room
         7. Implement the above recursively as well, add alternation between rooms and bridges (that shouldn't be too hard)
-        8. Optimize the algorithm by having it do most computation in compute buffers (fun!)
+        8. Optimize the algorithm by having it do most computation in compute buffers (fun! Will be left out till later however bc it's not that important)
 
         As you can see we are currently only 4/8th of the way there. Exciting! 
+        P.S I'm keeping all of the old code I make as a way of not only looking back but showcasing my process for this in case anyone wants to comment on it or improve it - or tell me I'm really stupid
+        Shouldn't matter bc I trust C#'s compiler to ignore the functions I do not use
     
     */
 
@@ -147,6 +159,14 @@ public class RoomGenerator : MonoBehaviour
 
     }
 
+    private int[] CreateIntWeights(){
+        int[] return_weights = new int[rooms.Count];
+        for(int i = 0; i < rooms.Count; i++){
+            return_weights[i]  = (int)(rooms[i].weight * 1000.0f);
+        }
+        return return_weights;
+    }
+
     //I'm not deleting the above so I can go for fallback as well as reference
     //This shall be our recursive version of the generation
     //Recursion can be very dangerous and expensive! Hopefully we don't have much problems with it :prayge:
@@ -169,12 +189,60 @@ public class RoomGenerator : MonoBehaviour
         //This is so we don't constantantly place rooms together that can recurse with themselves
         int max_room_depth = 5;
 
-        RecurseGenerationStep(previous_room, 1, max_room_depth);
+        //Let's initialize our weights
+        int[] current_weights;
+
+        //An important thing to keep in mind is that our int array is 1/1000. We store it in an integer array to help memory problems as well as make the algorithms faster
+        //We don't need super precise room weights as it generally does not make much sense. But anyway, we need to convert it to our int list
+        current_weights = CreateIntWeights();
+
+        int[] copy_weights = new int[rooms.Count];
+
+        //We don't want the weights from a previous recurse to affect the weights of the current one
+        System.Array.Copy(current_weights, copy_weights, rooms.Count);
+        RecurseGenerationStep(previous_room, 1, max_room_depth, copy_weights);
 
 
     }
 
-    private void RecurseGenerationStep(GameObject current_room, int current_depth, int max_room_depth){
+    //Refactors our weights to have a sum of 1000 (or a little under)
+    private void AdjustWeights(int[] in_weights, out int[] out_weights){
+        float[] to_float = new float[in_weights.Length];
+
+        float sum = 0.0f;
+        for(int i = 0; i < in_weights.Length; i++){
+            to_float[i] = in_weights[i]/1000.0f;
+            sum += to_float[i];
+        }
+
+        //Now go through and adjust
+        for(int i = 0; i < in_weights.Length; i++){
+            to_float[i] /= sum;
+            in_weights[i] = (int)(to_float[i] * 1000.0f);
+        }
+
+        //return
+        out_weights = in_weights;
+
+        //uhh idk why I'm using a bunch of out functions I'm just used to it from GLSL ig lmfao
+    }
+
+    //Now we just use the idea of the algorithm below
+    private int GetRandomIndexFromWeights(int[] weights){
+        int ran = Random.Range(0, weights.Length);
+
+        int current_sum = 0;
+        for(int i = 0; i < weights.Length; i++){
+            current_sum += weights[i];
+            if(ran < current_sum){
+                return i;
+            }
+        }
+
+        return weights.Length - 1;
+    }
+
+    private void RecurseGenerationStep(GameObject current_room, int current_depth, int max_room_depth, int[] current_weights){
 
         //If we are at the edge we want to stop!
         if(current_depth >= max_room_depth){
@@ -192,11 +260,32 @@ public class RoomGenerator : MonoBehaviour
 
         foreach(Entrance current_entrance in current_room_room_component.entrances){
             //Let's create a random list 
-            List<int> r_list = RoomHelper.CreateShuffledRandomList(rooms.Count);
+            //List<int> r_list = RoomHelper.CreateShuffledRandomList(rooms.Count); //dead code, doesn't work with weights
+
+            /*
+                So, why did I actually use an integer list instead of keeping the floats?
+                Well, I want to think about this integer list as a list of lengths of lists.
+
+                In otherwords, if we have [500, 500] we have two lists of 500, one filled with the index of 0 and the other 1
+                Similarly, for [333,333,334] we have two of 333, and one of 334 with indexes 0,1,2
+
+                So why does this help us? Well, we can generate a random number 0-999 since we know the sum is 1000. Then we will similuate int_list[rand] (or choosing the index through the concatnated list)
+                by just choosing where the index falls within the lengths
+
+                We can also deal with already searched rooms by "removing" the list of indices from the concatnated list. However, since we want to think of this smartly, we know we will
+                be inputting the weights into the recursed call. 
+
+                We're going to have to create a copy!
+            */
+
+            int[] effective_weights = new int[current_weights.Length];
+            System.Array.Copy(current_weights,effective_weights,current_weights.Length);
 
             //Now we shall grab a random room and assess it much like the ChooseValidRandomRoom() function
-            for(int i = 0; i < r_list.Count; i++){
-                int index = r_list[i];
+            //Now it's weighted though!
+            for(int i = 0; i < rooms.Count; i++){
+                //int index = r_list[i];
+                int index = GetRandomIndexFromWeights(effective_weights);
 
                 GameObject assessing_room_object = rooms[index].prefab;
                 Room assessing_room = assessing_room_object.GetComponent<Room>();
@@ -216,8 +305,15 @@ public class RoomGenerator : MonoBehaviour
                             current_entrance.is_connected = true;
                             created_object.GetComponent<Room>().entrances[k].is_connected = true;
 
-                            RecurseGenerationStep(created_object, current_depth + 1, max_room_depth);
-                            i = r_list.Count; //To break the second for loop
+                            int[] copy_weights = new int[rooms.Count];
+                            System.Array.Copy(current_weights, copy_weights, rooms.Count);
+
+                            //Making sure the room is reset to a weight of zero
+                            copy_weights[index] = 0;
+                            AdjustWeights(copy_weights, out copy_weights);
+
+                            RecurseGenerationStep(created_object, current_depth + 1, max_room_depth, copy_weights);
+                            i = rooms.Count; //To break the second for loop
                             break;
                         }
 
@@ -237,6 +333,31 @@ public class RoomGenerator : MonoBehaviour
         for(int i = 0; i < rooms.Count; i++){
             foreach(Entrance entrance in rooms[i].prefab.GetComponent<Room>().entrances){
                 entrance.is_connected = false;
+            }
+        }
+    }
+
+    //We divide our weights by the sum
+    private void FixUpWeights(float sum){
+        for(int i = 0; i < rooms.Count; i++){
+            rooms[i].weight /= sum;
+        }
+    }
+
+    /*
+        On each validate we want to make sure the sum of the percentages equal one and if they do not weight them to equal one unless an
+        editing bool is turned on
+    */
+    private void OnValidate() {
+        if(!EditingWeights){
+            float sum = 0.0f;
+            for(int i = 0; i < rooms.Count; i++){
+                sum += rooms[i].weight; 
+            }
+
+            if(sum != 1.0f){
+                Debug.Log("Sum of weights does not add up to one, fixing weights.");
+                FixUpWeights(sum);
             }
         }
     }
