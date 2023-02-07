@@ -18,7 +18,8 @@ public class GeneratorGrid : MonoBehaviour
 {
 
     //I know this SEEMS really inefficient memory wise but these are only used for generation as well as they are bool arrays.
-    //That's important bc these 4 arrays take as much memory as one single-point 1024 array (float[1024])
+    //That's important bc 2 of these arrays arrays take as much memory as one single-point 1024 array (float[1024])
+    //We also trash them immediately after we're done with them
     bool[,] first_quad; //Works with positive x and y coordinates
     bool[,] second_quad; //Works with negative x and positive y coordinates
     bool[,] third_quad; //Works with negative x and y coordinates
