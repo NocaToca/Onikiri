@@ -34,6 +34,11 @@ public class Entrance : MonoBehaviour
     //Had to edit because I realize that we don't actually call awake until we instantiate the object (fml)
     public bool IsValidForOrientation(Direction opposing_entrance_orient){
 
+        if(orientation == null){
+            Orient temp_orient = new Orient(main_direction);
+            return temp_orient.Validify(opposing_entrance_orient);
+        }
+
         return orientation.Validify(opposing_entrance_orient);
 
     }

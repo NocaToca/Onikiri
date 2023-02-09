@@ -21,5 +21,22 @@ public static class DebugHelper{
         Debug.Log(s);
 
     }
+
+    public static void DebugArray<T>(T[] list){
+
+        string s = "List contents : [";
+
+        for(int i = 0; i < list.Length; i++){
+            s += list[i].ToString();
+            if(i != list.Length - 1){
+                s +=" , ";
+            } else {
+                s += "]";
+            }
+        }
+
+        Debug.Log(s);
+
+    }
     
 }

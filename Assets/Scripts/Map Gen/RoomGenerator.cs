@@ -226,8 +226,9 @@ public class RoomGenerator : MonoBehaviour
     }
 
     //Refactors our weights to have a sum of 1000 (or a little under)
-    private void AdjustWeights(int[] in_weights, out int[] out_weights){
+    private int[] AdjustWeights(int[] in_weights){
         float[] to_float = new float[in_weights.Length];
+        int[] out_weights = new int[in_weights.Length];
 
         float sum = 0.0f;
         for(int i = 0; i < in_weights.Length; i++){
@@ -235,14 +236,22 @@ public class RoomGenerator : MonoBehaviour
             sum += to_float[i];
         }
 
-        //Now go through and adjust
-        for(int i = 0; i < in_weights.Length; i++){
-            to_float[i] /= sum;
-            in_weights[i] = (int)(to_float[i] * 1000.0f);
+        if(sum != 0.0f){
+            //Now go through and adjust
+            for(int i = 0; i < out_weights.Length; i++){
+                to_float[i] /= sum;
+                out_weights[i] = (int)(to_float[i] * 1000.0f);
+            }
+        } else {
+            for(int i = 0; i < out_weights.Length; i++){
+                float val = 1/out_weights.Length;
+                out_weights[i] = (int)(val * 1000.0f);
+            }
         }
+        
 
         //return
-        out_weights = in_weights;
+        return out_weights;
 
         //uhh idk why I'm using a bunch of out functions I'm just used to it from GLSL ig lmfao
     }
@@ -309,7 +318,7 @@ public class RoomGenerator : MonoBehaviour
                 //int index = r_list[i];
                 int index = GetRandomIndexFromWeights(effective_weights);
                 effective_weights[index] = 0;
-                AdjustWeights(effective_weights, out effective_weights);
+                effective_weights = AdjustWeights(effective_weights);
 
                 GameObject assessing_room_object = rooms[index].prefab;
                 Room assessing_room = assessing_room_object.GetComponent<Room>();
@@ -334,7 +343,7 @@ public class RoomGenerator : MonoBehaviour
 
                             //Making sure the room is reset to a weight of zero
                             copy_weights[index] = 0;
-                            AdjustWeights(copy_weights, out copy_weights);
+                            copy_weights = AdjustWeights(copy_weights);
 
                             RecurseGenerationStep(created_object, current_depth + 1, max_room_depth, copy_weights);
                             i = rooms.Count; //To break the second for loop
@@ -472,7 +481,7 @@ public class RoomGenerator : MonoBehaviour
                     for(int j = 0; j < workable_rooms.Count; j++){
                         int random_index = GetRandomIndexFromWeights(effective_weights);
                         effective_weights[random_index] = 0;
-                        AdjustWeights(effective_weights, out effective_weights);
+                        effective_weights = AdjustWeights(effective_weights);
 
                         Room assessing_room = workable_rooms[random_index].prefab.GetComponent<Room>();
 
@@ -520,7 +529,7 @@ public class RoomGenerator : MonoBehaviour
             //Now let's adjust our weights
             //This is really easy thanks to our index parameter
             current_weights[best_attachment_overall.index] = 0;
-            AdjustWeights(current_weights, out current_weights);
+            current_weights = AdjustWeights(current_weights);
 
         }
 
@@ -625,75 +634,93 @@ public class RoomGenerator : MonoBehaviour
 
         //Just so we break in case if it is an endless loop
         int i = 0;
-        while(++i <= 10){
+        while(++i <= 100){
             //We're going to go through each entrance and just assess it
 
             Entrance best_entrance = curr_room.entrances[0];
+            List<RoomObject> using_bridges_or_rooms = (i % 2 == 1) ? filtered_rooms : filtered_bridges;
 
-            RoomObject best_attachment_overall = rooms[0];
-            float best_distance = 0.0f;
+            RoomObject best_attachment_overall = using_bridges_or_rooms[0];
+            float best_distance = float.MaxValue;
             foreach(Entrance entrance in curr_room.entrances){
+                if(entrance.is_connected == false){
+                    //For each entrance we'll go through each VALID room and see which one is best
+                    List<RoomObject> workable_rooms;
 
-                //For each entrance we'll go through each VALID room and see which one is best
-                List<RoomObject> workable_rooms;
-
-                System.Func<RoomObject, Direction, bool> filter = delegate(RoomObject r, Direction d){
-                    Room ro = r.prefab.GetComponent<Room>();
-                    foreach(Entrance e in ro.entrances){
-                        if(e.IsValidForOrientation(d)){
-                            return true;
+                    System.Func<RoomObject, Direction, bool> filter = delegate(RoomObject r, Direction d){
+                        Room ro = r.prefab.GetComponent<Room>();
+                        foreach(Entrance e in ro.entrances){
+                            if(e.IsValidForOrientation(d)){
+                                return true;
+                            }
                         }
-                    }
-                    return false;
-                };
+                        return false;
+                    };
 
-                //This is all we need to add alternation
-                List<RoomObject> using_bridges_or_rooms = (i % 2 == 1) ? filtered_rooms : filtered_bridges;
-                workable_rooms = NocaScripts.FilterList<RoomObject, Direction>(filter, entrance.main_direction, using_bridges_or_rooms);
+                    //This is all we need to add alternation
+                    workable_rooms = NocaScripts.FilterList<RoomObject, Direction>(filter, entrance.main_direction, using_bridges_or_rooms);
+                    Debug.Log(workable_rooms.Count);
 
-                RoomObject best_attachment;
+                    RoomObject best_attachment;
 
-                try{
-                    best_attachment = workable_rooms[0];      
+                    try{
+                        best_attachment = workable_rooms[0];      
 
-                    float best_attachment_distance = 0.0f;
+                        float best_attachment_distance = float.MaxValue;
 
 
-                    int[] effective_weights = new int[current_weights[i % 2].Length];
-                    System.Array.Copy(current_weights[i % 2],effective_weights,current_weights[i % 2].Length);
-                    //Now we will just go through the workable rooms and assess their distance to the exit and then score them basically only on that
-                    for(int j = 0; j < workable_rooms.Count; j++){
-                        int random_index = GetRandomIndexFromWeights(effective_weights);
-                        effective_weights[random_index] = 0;
-                        AdjustWeights(effective_weights, out effective_weights);
-
-                        Room assessing_room = workable_rooms[random_index].prefab.GetComponent<Room>();
-
-                        float best_distance_for_this_part_lol = 0.0f;
-                        //Now we will just attach the correct entrance and see what entrance scores the best
-                        foreach(Entrance assessing_entrance in assessing_room.entrances){
-                            float distance = Vector3.Distance(assessing_entrance.gameObject.transform.position, curr_room.transform.position);
-
-                            if(distance > best_distance_for_this_part_lol){
-                                best_distance_for_this_part_lol = distance;
+                        int[] effective_weights = new int[workable_rooms.Count];
+                        //Now we have to copy to their respective indexes
+                        for(int l = 0; l < workable_rooms.Count; l++){
+                            for(int o = 0; o < current_weights.Count; o++){
+                                if(workable_rooms[l].index == o){
+                                    effective_weights[l] = current_weights[i % 2][o];
+                                    break;
+                                }
                             }
                         }
 
-                        if(best_distance_for_this_part_lol > best_attachment_distance){
-                            best_attachment_distance = best_distance_for_this_part_lol;
-                            best_attachment = workable_rooms[j];
-                        }
-                    }
+                        //Now we will just go through the workable rooms and assess their distance to the exit and then score them basically only on that
+                        for(int j = 0; j < workable_rooms.Count; j++){
+                            int random_index = GetRandomIndexFromWeights(effective_weights);
+                            effective_weights[random_index] = 0;
+                            effective_weights = AdjustWeights(effective_weights);
 
-                    if(best_attachment_distance > best_distance){
-                        best_distance = best_attachment_distance;
-                        best_entrance = entrance;
-                        best_attachment_overall = best_attachment;
-                    }              
-                }catch(System.Exception e){
-                    //Well there would be no working room so we can just ignore the except and continue - it isn't neccessarily an error
-                    Debug.LogWarning("No workable rooms found for direction " + entrance.main_direction.ToString());
+                            DebugHelper.DebugArray<int>(effective_weights);
+
+                            Room assessing_room = workable_rooms[random_index].prefab.GetComponent<Room>();
+
+                            float best_distance_for_this_part_lol = float.MaxValue;
+                            //Now we will just attach the correct entrance and see what entrance scores the best
+                            foreach(Entrance assessing_entrance in assessing_room.entrances){
+                                Vector3 would_be_entrance_position = assessing_entrance.gameObject.transform.position;
+                                would_be_entrance_position -= entrance.transform.position;
+
+                                float distance = Vector3.Distance(would_be_entrance_position, -end_room_gameObject.GetComponent<Room>().entrances[0].transform.position);
+
+                                if(distance < best_distance_for_this_part_lol){
+                                    best_distance_for_this_part_lol = distance;
+                                }
+                            }
+
+                            if(best_distance_for_this_part_lol < best_attachment_distance){
+                                best_attachment_distance = best_distance_for_this_part_lol;
+                                best_attachment = workable_rooms[random_index];
+                            }
+                        }
+
+                        if(best_attachment_distance < best_distance){
+                            best_distance = best_attachment_distance;
+                            best_entrance = entrance;
+                            best_attachment_overall = best_attachment;
+                        }              
+                    }catch(System.Exception e){
+                        //Well there would be no working room so we can just ignore the except and continue - it isn't neccessarily an error
+                        Debug.LogWarning("No workable rooms found for direction " + entrance.main_direction.ToString());
+                    }
                 }
+
+                
 
                 
             }
@@ -702,17 +729,17 @@ public class RoomGenerator : MonoBehaviour
             position -= best_attachment_overall.GetRoom().GetOpposingEntrance(best_entrance.main_direction).transform.position;
 
             //Now that we have our best room we want to place it and then see how close it is
-            GameObject go = Instantiate(best_attachment_overall.prefab, chosen_position, base_rotation);
+            GameObject go = Instantiate(best_attachment_overall.prefab, position, base_rotation);
+
+            go.GetComponent<Room>().GetOpposingEntrance(best_entrance.main_direction).is_connected = true;
+            best_entrance.is_connected = true;
 
 
             //Adding it to our path
             path.Add(go);
 
             curr_room = go.GetComponent<Room>();
-
-            if(Vector3.Distance(go.transform.position, end_room_gameObject.transform.position) <= max_snap_distance){
-                end_room_gameObject.transform.position = curr_room.GetRandomEntrancePosition();
-            }
+            Debug.Log(curr_room.gameObject.name);
 
             //Now let's adjust our weights
             //This is really easy thanks to our index parameter
@@ -720,8 +747,17 @@ public class RoomGenerator : MonoBehaviour
 
             //Can't pass indexers as out arguments
             int[] c = current_weights[i % 2];
-            AdjustWeights(c, out c);
+            c = AdjustWeights(c);
             current_weights[i % 2] = c;
+
+            if(Vector3.Distance(go.transform.position, end_room_gameObject.GetComponent<Room>().entrances[0].transform.position) <= max_snap_distance){
+                Vector3 move_position = curr_room.GetRandomEntrancePosition();
+                move_position -= end_room.prefab.GetComponent<Room>().entrances[0].transform.position;
+                end_room_gameObject.transform.position = move_position; 
+                break;
+            }
+
+            
 
         }
 
@@ -730,7 +766,7 @@ public class RoomGenerator : MonoBehaviour
 
         //Now that we have placed our path we can start our recursion
         for(int k = 0; k < path.Count; k++){
-            RecursiveStepBridges(path[k], 0, 5, current_weights);
+            RecursiveStepBridges(path[k], 0, 2, current_weights);
         }
 
     }
@@ -782,7 +818,7 @@ public class RoomGenerator : MonoBehaviour
                 //int index = r_list[i];
                 int index = GetRandomIndexFromWeights(effective_weights);
                 effective_weights[index] = 0;
-                AdjustWeights(effective_weights, out effective_weights);
+                effective_weights = AdjustWeights(effective_weights);
 
                 GameObject assessing_room_object = bridges[index].prefab;
                 Room assessing_room = assessing_room_object.GetComponent<Room>();
@@ -807,7 +843,7 @@ public class RoomGenerator : MonoBehaviour
 
                             //Making sure the room is reset to a weight of zero
                             copy_weights[index] = 0;
-                            AdjustWeights(copy_weights, out copy_weights);
+                            copy_weights = AdjustWeights(copy_weights);
 
                             List<int[]> new_weight_list = new List<int[]>();
                             new_weight_list.Add(copy_weights);
@@ -873,7 +909,7 @@ public class RoomGenerator : MonoBehaviour
                 //int index = r_list[i];
                 int index = GetRandomIndexFromWeights(effective_weights);
                 effective_weights[index] = 0;
-                AdjustWeights(effective_weights, out effective_weights);
+                effective_weights = AdjustWeights(effective_weights);
 
                 GameObject assessing_room_object = rooms[index].prefab;
                 Room assessing_room = assessing_room_object.GetComponent<Room>();
@@ -898,7 +934,7 @@ public class RoomGenerator : MonoBehaviour
 
                             //Making sure the room is reset to a weight of zero
                             copy_weights[index] = 0;
-                            AdjustWeights(copy_weights, out copy_weights);
+                            copy_weights = AdjustWeights(copy_weights);
 
                             List<int[]> new_weight_list = new List<int[]>();
                             new_weight_list.Add(current_weights[0]);

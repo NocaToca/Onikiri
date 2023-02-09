@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca0b79f68e96df874ae26f50c9caeab5, type: 3}
-  m_Name: Room 1
+  m_Name: Room8
   m_EditorClassIdentifier: 
-  prefab: {fileID: 6669442354222449504, guid: cef31b862addd0846b19d9577834b15b, type: 3}
-  weight: 0
-  index: 0
+  prefab: {fileID: 5947956803380991406, guid: d194bb2fc977af54b8aeb2dd79eb4e97, type: 3}
+  weight: 0.41860464
+  index: 2
