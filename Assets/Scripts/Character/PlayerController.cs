@@ -10,7 +10,7 @@ using UnityEngine;
     That is why the player holds most environment variables and not this class, regardless whether it is based off of movement
 */
 [RequireComponent(typeof(Rigidbody2D))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : Controller
 {
     private Player p;
     private Rigidbody2D rb;
@@ -24,6 +24,16 @@ public class PlayerController : MonoBehaviour
         }
 
         rb = GetComponent<Rigidbody2D>();
+    }
+
+    void Update(){
+        HandleInteractionInput();
+    }
+
+    void HandleInteractionInput(){
+        if(Input.GetKeyDown(KeyCode.E)){
+            p.AttemptAttack();
+        }
     }
 
     // Update is called once per frame
