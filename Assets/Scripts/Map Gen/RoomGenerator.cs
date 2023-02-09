@@ -696,11 +696,18 @@ public class RoomGenerator : MonoBehaviour
                                 Vector3 would_be_entrance_position = assessing_entrance.gameObject.transform.position;
                                 would_be_entrance_position -= entrance.transform.position;
 
-                                float distance = Vector3.Distance(would_be_entrance_position, -end_room_gameObject.GetComponent<Room>().entrances[0].transform.position);
+                                Vector3 would_be_room_position = assessing_room.gameObject.transform.position;
+                                would_be_room_position -= entrance.transform.position;
 
-                                if(distance < best_distance_for_this_part_lol){
-                                    best_distance_for_this_part_lol = distance;
+                                if(grid.DoesNotOverlap(assessing_room.height, assessing_room.width, would_be_room_position)){
+                                    float distance = Vector3.Distance(would_be_entrance_position, -end_room_gameObject.GetComponent<Room>().entrances[0].transform.position);
+
+                                    if(distance < best_distance_for_this_part_lol){
+                                        best_distance_for_this_part_lol = distance;
+                                    }
                                 }
+
+                                
                             }
 
                             if(best_distance_for_this_part_lol < best_attachment_distance){
