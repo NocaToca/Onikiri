@@ -13,6 +13,9 @@ public class Player : Actor
     
     public float speed;
     public float boost_speed;
+    
+    public Weapon main_hand;
+    public Weapon off_hand;
 
     PlayerController controller;
 
@@ -20,6 +23,7 @@ public class Player : Actor
     void Start()
     {
         controller = this.GetComponent<PlayerController>();
+        main_hand.holding_actor = this;
     }
 
     // Update is called once per frame
