@@ -8,7 +8,7 @@ using UnityEngine;
     For input look at PlayerController
 */
 [RequireComponent(typeof(PlayerController))]
-public class Player : MonoBehaviour
+public class Player : Actor
 {
     
     public float speed;
