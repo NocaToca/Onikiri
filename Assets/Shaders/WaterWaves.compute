@@ -1,0 +1,93 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+RWTexture2D<float4> Input;
+
+#define delta 0.75
+
+const int2 resolution = int2(256, 256);
+
+float2 pressedUV;
+float pressedStrength;
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    // TODO: insert actual code here!
+    int2 fragCoord = id.xy;
+
+    float pressure =  Input[fragCoord].x;
+    float pVel =  Input[fragCoord].y;
+
+    int2 editCoord = fragCoord + int2(1,0);
+    float p_right = Input[editCoord].x;
+
+    editCoord = fragCoord + int2(-1,0);
+    float p_left = Input[editCoord].x;
+
+    editCoord = fragCoord + int2(0,-1);
+    float p_up = Input[editCoord].x;
+
+    editCoord = fragCoord + int2(0,1);
+    float p_down = Input[editCoord].x;
+
+    // Apply horizontal wave function
+    pVel += delta * (-2.0 * pressure + p_right + p_left) / 4.0;
+    // Apply vertical wave function (these could just as easily have been one line)
+    pVel += delta * (-2.0 * pressure + p_up + p_down) / 4.0;
+
+    // Change pressure by pressure velocity
+    pressure += delta * pVel;
+
+    // "Spring" motion. This makes the waves look more like water waves and less like sound waves.
+    pVel -= 0.005 * delta * pressure;
+    
+    // Velocity damping so things eventually calm down
+    pVel *= 1.0 - 0.02 * delta;
+    
+    // Pressure damping to prevent it from building up forever.
+    pressure *= 0.999;
+    
+    //x = pressure. y = pressure velocity. Z and W = X and Y gradient
+    float4 fragColor = float4(0.0,0.0,0.0,0.0);
+    fragColor = float4(pressure, pVel, (p_right - p_left) / 2.0, (p_up - p_down) / 2.0);
+
+
+    if(pressedUV.x != 0.0 && pressedUV.y != 0.0){
+        int2 pressed_Coords = pressedUV * int2(256, 256);
+        float dist = distance(fragCoord, pressed_Coords);
+        if (dist <= 5.0) {
+            fragColor.x  += + (1.0 - dist / 5.0);
+        }
+    }
+    
+
+    Input[fragCoord] = fragColor;
+
+}
+/*
+#pragma kernel DrawBrush
+
+RWTexture2D<float4> Base_Input;
+float2 pressedUV;
+
+[numthreads(8,8,1)]
+void DrawBrush(uint3 id : SV_DispatchThreadID){
+    if(pressedUV.x == 0.0 && pressedUV.y == 0.0){
+        return;
+
+    }
+
+    int2 fragCoord = id.xy;
+    int2 pressed_Coords = pressedUV * int2(256, 256);
+
+    float dist = distance(fragCoord, pressed_Coords);
+    if (dist <= 5.0) {
+        float4 col = Base_Input[id.xy];
+        col.x  += + (1.0 - dist / 5.0);
+        Base_Input[id.xy] = col;
+    }
+
+}*/

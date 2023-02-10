@@ -58,6 +58,11 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKey(KeyCode.LeftShift)){
             velocity *= p.boost_speed;
         }
+        if(velocity != Vector2.zero){
+            p.movedLastFrame = true;
+        } else {
+            p.movedLastFrame = false;
+        }
 
         rb.velocity = velocity;
 
