@@ -6,6 +6,7 @@ using UnityEngine;
 
 public abstract class Weapon : ScriptableObject{
     
+    [HideInInspector]
     public Actor holding_actor;
 
 

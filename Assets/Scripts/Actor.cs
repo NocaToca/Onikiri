@@ -10,7 +10,10 @@ public abstract class Actor : MonoBehaviour
     void Update(){
         
     }
-    
+
+    [HideInInspector]
+    public Controller actor_controller;
+
     //Tries to extract an object of trpe Actor
     public static Actor ExtractActor(GameObject obj){
 

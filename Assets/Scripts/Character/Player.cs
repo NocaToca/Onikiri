@@ -17,12 +17,11 @@ public class Player : Actor
     public Weapon main_hand;
     public Weapon off_hand;
 
-    PlayerController controller;
 
     // Start is called before the first frame update
     void Start()
     {
-        controller = this.GetComponent<PlayerController>();
+        actor_controller = this.GetComponent<PlayerController>();
         main_hand.holding_actor = this;
     }
 
@@ -30,5 +29,13 @@ public class Player : Actor
     void Update()
     {
         
+    }
+
+    public bool AttemptAttack(){
+        if(main_hand != null){
+            main_hand.Attack();
+        }
+
+        return main_hand != null;
     }
 }
