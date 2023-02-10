@@ -8,6 +8,7 @@ public class Entrance : MonoBehaviour
     public Direction main_direction; //We just need this here to work with the unity editor to streamline editing 
     //(P.S This might change since I want to work on editing the editor but that is not a main focus)
 
+    [HideInInspector]
     public bool is_connected = false; //Let's us know if this entrance is taken
 
     //Since we have the Direction set up but not the orient let's just do that on awake

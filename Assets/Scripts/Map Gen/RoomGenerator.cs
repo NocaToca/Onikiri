@@ -90,10 +90,10 @@ public class RoomGenerator : MonoBehaviour
         4. Fix potential overlap problems by making the algorithm recgonize the grid and add collision of rooms into consideration (DONE - though not tested well)
         5. Add weights and make sure the algorithm uses weights correctly (DONE - although it may not work entirely as intended rn)
         6. Make the algorithm find a destinition to an end room, create the end room (Uhh, I think Done can't test on laptop bc no mouse to make rooms xd)
-        7. Implement the above recursively as well, add alternation between rooms and bridges (that shouldn't be too hard)
+        7. Implement the above recursively as well, add alternation between rooms and bridges (that shouldn't be too hard) (DONE)
         8. Optimize the algorithm by having it do most computation in compute buffers (fun! Will be left out till later however bc it's not that important)
 
-        As you can see we are currently only 4/8th of the way there. Exciting! 
+        As you can see we are currently 7/8th of the way there. Exciting! 
         P.S I'm keeping all of the old code I make as a way of not only looking back but showcasing my process for this in case anyone wants to comment on it or improve it - or tell me I'm really stupid
         Shouldn't matter bc I trust C#'s compiler to ignore the functions I do not use
     
@@ -341,8 +341,8 @@ public class RoomGenerator : MonoBehaviour
                             int[] copy_weights = new int[rooms.Count];
                             System.Array.Copy(current_weights, copy_weights, rooms.Count);
 
-                            //Making sure the room is reset to a weight of zero
-                            copy_weights[index] = 0;
+                            //Making sure the room is reset to a low weight but not 0 so it can still be considered
+                            copy_weights[index] = (copy_weights[index] - 10 <= 0) ? 1 : copy_weights[index] - 10;
                             copy_weights = AdjustWeights(copy_weights);
 
                             RecurseGenerationStep(created_object, current_depth + 1, max_room_depth, copy_weights);
@@ -659,7 +659,7 @@ public class RoomGenerator : MonoBehaviour
 
                     //This is all we need to add alternation
                     workable_rooms = NocaScripts.FilterList<RoomObject, Direction>(filter, entrance.main_direction, using_bridges_or_rooms);
-                    Debug.Log(workable_rooms.Count);
+                    //Debug.Log(workable_rooms.Count);
 
                     RoomObject best_attachment;
 
@@ -686,7 +686,7 @@ public class RoomGenerator : MonoBehaviour
                             effective_weights[random_index] = 0;
                             effective_weights = AdjustWeights(effective_weights);
 
-                            DebugHelper.DebugArray<int>(effective_weights);
+                            //DebugHelper.DebugArray<int>(effective_weights);
 
                             Room assessing_room = workable_rooms[random_index].prefab.GetComponent<Room>();
 
