@@ -1,0 +1,66 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(BoxCollider2D))]
+//The basic idea is that it's sent out and comes back to the sender
+public class OrbProjectile : Projectile
+{
+
+    [HideInInspector]
+    public float max_distance;
+
+    bool returning;
+
+    Vector3 destination;
+
+    protected override void Awake(){
+        base.Awake();
+        returning = false;
+    }
+
+    protected override void Start(){
+        base.Start();
+
+        //Our destination will be our max distance plus one of our init velocity vector
+        Vector2 init_velocity = rb.velocity;
+
+        destination = new Vector3(init_velocity.x * (max_distance+1) + this.gameObject.transform.position.x, init_velocity.y *(max_distance+1) + this.gameObject.transform.position.y, 0.0f);
+    }
+
+    protected void FixedUpdate(){
+
+        //Debug.Log(Vector3.Distance(this.transform.position, sender.transform.position));
+        // Debug.Log(returning);
+        
+        if(!returning && Vector3.Distance(this.transform.position, sender.transform.position) >= max_distance){
+            returning = true;
+        }
+
+        if(returning){
+            destination = sender.gameObject.transform.position;
+        }
+
+        Move();
+    }
+
+    void Move(){
+        destination.z = 0.0f;
+        Vector3 base_vel = Vector3.MoveTowards(transform.position, destination, Mathf.Abs(base_speed * ((max_distance) - Vector3.Distance(this.transform.position, sender.transform.position)))/100.0f);
+        base_vel = transform.position - base_vel;
+        base_vel = base_vel.normalized;
+        rb.velocity = base_vel * base_speed;
+    }
+
+    protected override void OnTriggerEnter2D(Collider2D other){
+        base.OnTriggerEnter2D(other);
+        
+        if(returning){
+            if(other.gameObject == sender.gameObject){
+                Debug.Log("Destory");
+                Destroy(this.gameObject);
+            }
+        }
+   }
+}
