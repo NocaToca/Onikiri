@@ -19,8 +19,9 @@ public class Player : Actor
 
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         actor_controller = this.GetComponent<PlayerController>();
         main_hand.holding_actor = this;
     }
