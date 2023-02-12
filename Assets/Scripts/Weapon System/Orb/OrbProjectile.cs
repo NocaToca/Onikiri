@@ -11,6 +11,8 @@ public class OrbProjectile : Projectile
     [HideInInspector]
     public float max_distance;
 
+    public float speed_scale;
+
     bool returning;
 
     Vector3 destination;
@@ -38,19 +40,18 @@ public class OrbProjectile : Projectile
             returning = true;
         }
 
-        if(returning){
-            destination = sender.gameObject.transform.position;
-        }
+        
 
         Move();
     }
 
     void Move(){
         destination.z = 0.0f;
-        Vector3 base_vel = Vector3.MoveTowards(transform.position, destination, Mathf.Abs(base_speed * ((max_distance) - Vector3.Distance(this.transform.position, sender.transform.position)))/100.0f);
-        base_vel = transform.position - base_vel;
+        Vector3 base_vel = (returning) ? sender.transform.position - transform.position : destination - transform.position;
         base_vel = base_vel.normalized;
-        rb.velocity = base_vel * base_speed;
+        float speed = Mathf.Abs(base_speed - (Mathf.Abs(max_distance - Vector3.Distance(this.transform.position, destination))/max_distance));
+        Debug.Log(speed);
+        rb.velocity = base_vel * speed * speed_scale;
     }
 
     protected override void OnTriggerEnter2D(Collider2D other){

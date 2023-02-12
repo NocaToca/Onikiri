@@ -174,3 +174,4 @@ MonoBehaviour:
   base_speed: 1
   sender: {fileID: 0}
   max_distance: 0
+  speed_scale: 8
