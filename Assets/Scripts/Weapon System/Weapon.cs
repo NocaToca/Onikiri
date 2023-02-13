@@ -20,8 +20,6 @@ public abstract class Weapon : ScriptableObject{
 
     }
 
-    public virtual void OnHit(){
-
-    }
+    
     
 }
