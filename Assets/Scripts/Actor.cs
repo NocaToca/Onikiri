@@ -69,10 +69,17 @@ public abstract class Actor : MonoBehaviour
 
 public struct Stats{
 
+    public float max_health {get; internal set;}
     public float health {get; internal set;}
 
     public Stats(float health){
+        this.max_health = health;
         this.health = health;
+    }
+
+    public void AddHealth(float num){
+        max_health += num;
+        health += num;
     }
 
 }

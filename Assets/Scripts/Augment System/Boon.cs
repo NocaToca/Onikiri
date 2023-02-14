@@ -5,15 +5,25 @@ using UnityEngine;
 
 public class Boon : Augment
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+
+    public bool already_activated;
+
+    void Start(){
+        already_activated = false;
+    }
+    
+    //Updates stats and adds related update function
+    public virtual void ActivateBoon(Player p){
+        if(already_activated){
+            return;
+        }
+        already_activated = true;
+        p.update_boons.AddListener(UpdateSubscriber);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public virtual void UpdateSubscriber(){
+
     }
+
+
 }

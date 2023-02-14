@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 /*
     Handles all logic regarding the player
@@ -19,6 +20,10 @@ public class Player : Actor
 
     public List<Augment> augments;
 
+    //Holds the functions that we call do update
+    [HideInInspector]
+    public UnityEvent update_boons; 
+
 
     // Start is called before the first frame update
     protected override void Start()
@@ -35,6 +40,15 @@ public class Player : Actor
     void Update()
     {
         
+    }
+
+    public void RefreshBoons(){
+        foreach(Augment aug in augments){
+            if(aug is Boon){
+                Boon boon_cast = (Boon)aug;
+                boon_cast.ActivateBoon(this);
+            }
+        }
     }
 
     public bool AttemptAugmentAbility(){
