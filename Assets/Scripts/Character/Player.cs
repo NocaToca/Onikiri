@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 /*
     Handles all logic regarding the player
@@ -17,39 +18,56 @@ public class Player : Actor
     public Weapon main_hand;
     public Weapon off_hand;
 
-<<<<<<< Updated upstream
-=======
     public List<Augment> augments;
 
     //Our mana
     public Mana kitsunebi;
 
+    public List<Augment> augments;
     //Holds the functions that we call do update
     [HideInInspector]
     public UnityEvent update_boons; 
 
->>>>>>> Stashed changes
 
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
+        augments = new List<Augment>();
         actor_controller = this.GetComponent<PlayerController>();
         main_hand.holding_actor = this;
-<<<<<<< Updated upstream
-=======
 
         //We have 9 mana
         kitsunebi = new Mana(9);
 
         augments.Add(this.gameObject.AddComponent<Dash>());
->>>>>>> Stashed changes
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void RefreshBoons(){
+        foreach(Augment aug in augments){
+            if(aug is Boon){
+                Boon boon_cast = (Boon)aug;
+                boon_cast.ActivateBoon(this);
+            }
+        }
+    }
+
+    public bool AttemptAugmentAbility(){
+        foreach(Augment aug in augments){
+            if(aug is Spell){
+                Spell spell_cast = (Spell)aug;
+                spell_cast.OnActivate();
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public bool AttemptAttack(){

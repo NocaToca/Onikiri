@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Controller : MonoBehaviour
 {
+    //If the actor is stun we are not accepting movement
+    public bool accepting_movement;
+
     // Start is called before the first frame update
     void Start()
     {

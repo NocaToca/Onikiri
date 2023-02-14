@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 //This is just used as a parent class for Enemies and the Player to do similar functions (namely damage functions)
 public abstract class Actor : MonoBehaviour
@@ -25,6 +26,19 @@ public abstract class Actor : MonoBehaviour
     void Update(){
         
     }
+
+    //Returns a unity event that is bound to the re-enable function. 
+    public UnityEvent DisableMovement(){
+        actor_controller.accepting_movement = false;
+        UnityEvent return_event = new UnityEvent();
+        return_event.AddListener(EnableMovement);
+        return return_event;
+    }
+
+    public void EnableMovement(){
+        actor_controller.accepting_movement = true;
+        Debug.Log("Enabled");
+    } 
 
     public void PlayDamageAnimation(){
         anime.Play("Hit");
@@ -55,10 +69,17 @@ public abstract class Actor : MonoBehaviour
 
 public struct Stats{
 
+    public float max_health {get; internal set;}
     public float health {get; internal set;}
 
     public Stats(float health){
+        this.max_health = health;
         this.health = health;
+    }
+
+    public void AddHealth(float num){
+        max_health += num;
+        health += num;
     }
 
 }
