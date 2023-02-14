@@ -9,6 +9,8 @@ public abstract class Weapon : ScriptableObject{
     [HideInInspector]
     public Actor holding_actor;
 
+    public Enchantment enchantment;
+
 
     public virtual void Attack(){
         //plays attacking animation and behavoir
