@@ -34,6 +34,9 @@ public class PlayerController : Controller
         if(Input.GetKeyDown(KeyCode.E)){
             p.AttemptAttack();
         }
+        if(Input.GetKeyDown(KeyCode.Q)){
+            p.AttemptAugmentAbility();
+        }
     }
 
     // Update is called once per frame
@@ -43,6 +46,9 @@ public class PlayerController : Controller
     }
 
     private void HandleMovement(){
+        if(!accepting_movement){
+            return;
+        }
 
         Vector2 velocity = Vector2.zero;
 

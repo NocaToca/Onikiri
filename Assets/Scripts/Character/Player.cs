@@ -17,19 +17,36 @@ public class Player : Actor
     public Weapon main_hand;
     public Weapon off_hand;
 
+    public List<Augment> augments;
+
 
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
+        augments = new List<Augment>();
         actor_controller = this.GetComponent<PlayerController>();
         main_hand.holding_actor = this;
+
+        augments.Add(this.gameObject.AddComponent<Dash>());
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public bool AttemptAugmentAbility(){
+        foreach(Augment aug in augments){
+            if(aug is Spell){
+                Spell spell_cast = (Spell)aug;
+                spell_cast.OnActivate();
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public bool AttemptAttack(){

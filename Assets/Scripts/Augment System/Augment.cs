@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //Basically a basic class for augments
-public class Augment : MonoBehaviour
+public abstract class Augment : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
