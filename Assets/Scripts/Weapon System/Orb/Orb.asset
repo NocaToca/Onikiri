@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: Orb
   m_EditorClassIdentifier: 
   holding_actor: {fileID: 0}
+  projectile_prefab: {fileID: 9012470390843410861, guid: c03da06d334b0934eacdbae06410b0b4, type: 3}
+  max_distance: 5
