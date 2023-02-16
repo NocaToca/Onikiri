@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Bow
   m_EditorClassIdentifier: 
   holding_actor: {fileID: 0}
-  arrow_prefab: {fileID: 351086904145576752, guid: 9e2adddc6bf4c5f8b908fd7ee5b94c5e, type: 3}
+  projectile_prefab: {fileID: 351086904145576752, guid: 9e2adddc6bf4c5f8b908fd7ee5b94c5e, type: 3}

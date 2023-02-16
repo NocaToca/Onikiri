@@ -27,7 +27,6 @@ public class Player : Actor
     [HideInInspector]
     public UnityEvent update_boons; 
 
-
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -40,6 +39,7 @@ public class Player : Actor
         kitsunebi = new Mana(9);
 
         augments.Add(this.gameObject.AddComponent<Dash>());
+        augments.Add(this.gameObject.AddComponent<SpeedIncrease>());
     }
 
     // Update is called once per frame
