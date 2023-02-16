@@ -23,7 +23,6 @@ public class Player : Actor
     //Our mana
     public Mana kitsunebi;
 
-    public List<Augment> augments;
     //Holds the functions that we call do update
     [HideInInspector]
     public UnityEvent update_boons; 
