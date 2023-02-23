@@ -81,7 +81,7 @@ public class Player : Actor
 //Mana class
 public class Mana{
 
-    static List<float[]> list_of_all_mana;
+    public static List<float[]> list_of_all_mana;
     static float tick_rate;
 
     //We have a mana if the tick is above 1.0f 
