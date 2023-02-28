@@ -44,9 +44,6 @@ public class Projectile : MonoBehaviour
 
     //Collision
     protected virtual void OnTriggerEnter2D(Collider2D other) {
-
-        
-
         
 
         Actor possible_actor = Actor.ExtractActor(other.gameObject);

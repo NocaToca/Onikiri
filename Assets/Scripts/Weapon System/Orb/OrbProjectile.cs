@@ -11,6 +11,8 @@ public class OrbProjectile : Projectile
     [HideInInspector]
     public float max_distance;
 
+    private float time_before_return;
+
     public float speed_scale;
 
     bool returning;
@@ -25,6 +27,8 @@ public class OrbProjectile : Projectile
     protected override void Start(){
         base.Start();
 
+        time_before_return = 2.0f;
+
         //Our destination will be our max distance plus one of our init velocity vector
         Vector2 init_velocity = rb.velocity;
 
@@ -35,12 +39,12 @@ public class OrbProjectile : Projectile
 
         //Debug.Log(Vector3.Distance(this.transform.position, sender.transform.position));
         // Debug.Log(returning);
+
+        time_before_return -= Time.deltaTime;
         
-        if(!returning && Vector3.Distance(this.transform.position, sender.transform.position) >= max_distance){
+        if(!returning && ((Vector3.Distance(this.transform.position, sender.transform.position) >= max_distance) || (time_before_return <= 0.0f))){
             returning = true;
         }
-
-        
 
         Move();
     }

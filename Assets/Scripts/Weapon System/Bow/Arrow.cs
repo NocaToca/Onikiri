@@ -16,11 +16,12 @@ public class Arrow : Projectile
             return;
         }
 
-        if(other.gameObject == sender){
+        if(other.gameObject == sender.gameObject){
             return;
         }
 
         base.OnTriggerEnter2D(other);
+
         Destroy(this.gameObject);
    }
 }
