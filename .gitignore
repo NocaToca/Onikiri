@@ -58,3 +58,6 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+.vsconfig
+ProjectSettings/ShaderGraphSettings.asset
+UserSettings/EditorUserSettings.asset
