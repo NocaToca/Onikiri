@@ -9,6 +9,8 @@ public class Arrow : Projectile
     //Empty atm bc almost everything was moved to the projectile class
    
    protected override void OnTriggerEnter2D(Collider2D other){
+
+        base.OnTriggerEnter2D(other);
         //We have to make sure we aren't colliding with another arrow as well
         //We'll make a projectile tag for anything else later but for now we have this
         Arrow possible_arrow = other.gameObject.GetComponent<Arrow>();
