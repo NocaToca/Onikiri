@@ -32,7 +32,6 @@ public class Player : Actor
     {
         base.Start();
         augments = new List<Augment>();
-        actor_controller = this.GetComponent<PlayerController>();
         main_hand.holding_actor = this;
 
         //We have 9 mana

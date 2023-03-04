@@ -6,6 +6,12 @@ using UnityEngine;
 public class Game : MonoBehaviour
 {
 
+    //An easy static way to get the player
+    public static Player player {get{return GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();}}
+
+    //Used to normalize actor speed
+    public static float normalizing_speed_constant = 0.0001f;
+
     public float mana_tick_rate = 0.01f;
 
     // Start is called before the first frame update

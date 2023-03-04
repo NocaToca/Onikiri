@@ -16,8 +16,10 @@ public class PlayerController : Controller
     private Rigidbody2D rb;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
+        
         p = GetComponent<Player>();
         if(p == null){
             Debug.LogError("Player Controller is attached to a game object without a player component");

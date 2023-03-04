@@ -16,6 +16,8 @@ public abstract class Actor : MonoBehaviour
     public Controller actor_controller;
 
     protected virtual void Start(){
+        SetController();
+
         stats = new Stats(100.0f);
         anime = GetComponent<Animator>();
         if(anime == null){
@@ -25,6 +27,13 @@ public abstract class Actor : MonoBehaviour
 
     void Update(){
         
+    }
+
+    private void SetController(){
+        actor_controller = Controller.GetController(this.gameObject);
+        if(actor_controller == null){
+            Debug.LogWarning("Warning: No controller found on the Actor " + gameObject.name + ". No actions will be done");
+        }
     }
 
     //Returns a unity event that is bound to the re-enable function. 
@@ -57,7 +66,7 @@ public abstract class Actor : MonoBehaviour
             return player;
         }
 
-        Enemy enemy = obj.GetComponent<Enemy>();
+        Enemy enemy = Enemy.GetEnemy(obj);
         if(enemy != null){
             return enemy;
         }

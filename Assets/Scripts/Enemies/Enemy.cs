@@ -9,6 +9,10 @@ public class Enemy : Actor
 {
     Rigidbody2D rb;
     BoxCollider2D cc;
+
+    public float speed;
+
+    public List<AIAction> available_actions; 
     
     // Start is called before the first frame update
     protected override void Start()
@@ -16,11 +20,21 @@ public class Enemy : Actor
         base.Start();
         rb = GetComponent<Rigidbody2D>();
         cc = GetComponent<BoxCollider2D>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public static Enemy GetEnemy(GameObject go){
+        SwordEnemy sword_cast = go.GetComponent<SwordEnemy>();
+        if(sword_cast != null){
+            return sword_cast;
+        }
+
+        return null;
     }
 }
