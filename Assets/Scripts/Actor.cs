@@ -34,6 +34,10 @@ public abstract class Actor : MonoBehaviour
         return_event.AddListener(EnableMovement);
         return return_event;
     }
+    
+    protected virtual void Die(){
+
+    }
 
     public void EnableMovement(){
         actor_controller.accepting_movement = true;
@@ -47,6 +51,9 @@ public abstract class Actor : MonoBehaviour
     public virtual void TakeDamage(float damage){
         PlayDamageAnimation();
         stats.health -= damage;
+        if(stats.health <= 0.0f){
+            Die();
+        }
     }
 
     //Tries to extract an object of trpe Actor
@@ -71,6 +78,7 @@ public struct Stats{
 
     public float max_health {get; internal set;}
     public float health {get; internal set;}
+    public float percent_health {get{return health/max_health;}}
 
     public Stats(float health){
         this.max_health = health;

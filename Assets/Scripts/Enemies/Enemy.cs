@@ -32,4 +32,8 @@ public class Enemy : Actor
             canvas.CreateHealthBar(this);
         }
     }
+
+    protected override void Die(){
+        Destroy(this.gameObject);
+    }
 }
