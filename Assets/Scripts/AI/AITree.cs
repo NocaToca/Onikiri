@@ -6,7 +6,7 @@ namespace AI{
 
     public abstract class AITree : MonoBehaviour
     {
-        private AINode root;
+        protected AINode root;
 
         // Start is called before the first frame update
         protected virtual void Start()

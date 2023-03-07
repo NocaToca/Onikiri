@@ -9,8 +9,10 @@ public class Game : MonoBehaviour
     //An easy static way to get the player
     public static Player player {get{return GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();}}
 
-    //Used to normalize actor speed
-    public static float normalizing_speed_constant = 0.0001f;
+    //Used to normalize actor speed and other operations running on FixedUpdate()
+    public static float normalizing_speed_constant = 0.01f;
+    //Another name for it
+    public static float tick {get{return normalizing_speed_constant;}}
 
     public float mana_tick_rate = 0.01f;
 
