@@ -17,6 +17,10 @@ public class Enemy : Actor
     public Weapon weapon;
 
     public List<AIAction> available_actions; 
+
+    //Is the animator or animation running for a different move?
+    [HideInInspector]
+    public bool playing_action;
     
     // Start is called before the first frame update
     protected override void Start()
