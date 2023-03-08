@@ -105,6 +105,19 @@ namespace AI
             return root;
         }
 
+        public Status FAIL(){
+            state = Status.FAILURE;
+            return state;
+        }
+        public Status SUCCESS(){
+            state = Status.SUCCESS;
+            return state;
+        }
+        public Status RUNNING(){
+            state = Status.RUNNING;
+            return state;
+        }
+
     }
 
     public class Sequence : AINode{
