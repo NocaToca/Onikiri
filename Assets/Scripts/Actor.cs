@@ -50,7 +50,11 @@ public abstract class Actor : MonoBehaviour
     } 
 
     public void PlayDamageAnimation(){
-        anime.Play("Hit");
+        if(anime != null){
+            anime.Play("Hit");
+        } else {
+            Debug.Log("Hit");
+        }
     }
 
     public virtual void TakeDamage(float damage){

@@ -12,6 +12,10 @@ public class Enemy : Actor
 
     public float speed;
 
+    public float attack_speed;
+
+    public Weapon weapon;
+
     public List<AIAction> available_actions; 
     
     // Start is called before the first frame update

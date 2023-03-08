@@ -21,6 +21,10 @@ public abstract class MeleeWeapon : Weapon
         }
     }
 
+    public override void Attack(GameObject inflicting_actor){
+        OnHit(inflicting_actor.GetComponent<Actor>());
+    }
+
 
     public virtual bool ScanInFront(Actor actor, out RaycastHit2D hit){
         //Essentially we're going to scan in front of the actor to see if there are any enemies in front of them. We will probably change the direction later but for now we're going 

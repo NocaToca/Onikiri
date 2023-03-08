@@ -712,7 +712,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movedLastFrame: 0
   actor_controller: {fileID: 0}
-  speed: 0
+  speed: 3
+  attack_speed: 1
+  weapon: {fileID: 11400000, guid: 3406da6a03e48c74781df7a5f35f216d, type: 2}
 --- !u!61 &1266944119
 BoxCollider2D:
   m_ObjectHideFlags: 0

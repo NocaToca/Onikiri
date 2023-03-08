@@ -16,7 +16,7 @@ public class OgreTree : AITree
 
     WalkSettings settings;
 
-    Actor a;
+    Enemy a;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -30,6 +30,10 @@ public class OgreTree : AITree
     protected override AINode SetUpTree(){
         AINode root = new Selector(new List<AINode>{
 
+            new Sequence(new List<AINode>{
+                new AttackNode(a, a.weapon),
+                new Attack(a, a.weapon)
+            }),
             new Sequence(new List<AINode>{
                 new EnemyDetection(a, fov),
                 new GoToTarget(a, speed)

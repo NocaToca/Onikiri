@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Sword
   m_EditorClassIdentifier: 
   holding_actor: {fileID: 0}
-  attacking_distance: 2
+  attacking_distance: 1
   damage: 1
