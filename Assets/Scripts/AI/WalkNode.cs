@@ -30,12 +30,16 @@ public class WalkNode : AINode
         radius_buffer = settings.radius_buffer;
 
         time_spent_waiting = 0.0f;
+
+        AINode root = GetRoot();
+        
+        root.SetData("Speed", speed);
     }
 
     public WalkNode(WalkSettings settings, Actor actor) : base(){
         Init(actor, settings);
     }
-    public WalkNode(List<AINode> children, WalkSettings settings, Actor actor) : base(children){
+    public WalkNode(WalkSettings settings, Actor actor, List<AINode> children) : base(children){
         Init(actor, settings);
     }
 

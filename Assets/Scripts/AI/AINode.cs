@@ -16,7 +16,7 @@ namespace AI
 
         public AINode parent;
 
-        public List<AINode> children;
+        public List<AINode> children = new List<AINode>();
 
         protected Dictionary<string, object> environment;
 
@@ -43,7 +43,7 @@ namespace AI
             return Status.FAILURE;
         }
 
-        public void AddEnvironment(string id, object value){
+        public void SetData(string id, object value){
             environment[id] = value;
         }
 
@@ -90,6 +90,19 @@ namespace AI
             }
 
             return false;
+        }
+
+        public AINode GetRoot(){
+            if(parent == null){
+                return this;
+            }
+
+            AINode root = parent;
+            while(root.parent != null){
+                root = root.parent;
+            }
+
+            return root;
         }
 
     }

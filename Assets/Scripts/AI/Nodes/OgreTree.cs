@@ -12,6 +12,8 @@ public class OgreTree : AITree
     public float radius_buffer;
     public float wait_time;
 
+    public float fov;
+
     WalkSettings settings;
 
     Actor a;
@@ -26,8 +28,16 @@ public class OgreTree : AITree
     }
 
     protected override AINode SetUpTree(){
-        AINode node = new WalkNode(settings, a);
-        return node;
+        AINode root = new Selector(new List<AINode>{
+
+            new Sequence(new List<AINode>{
+                new EnemyDetection(a, fov),
+                new GoToTarget(a, speed)
+            }),
+            new WalkNode(settings, a)
+
+        });
+        return root;
     }
 
     
