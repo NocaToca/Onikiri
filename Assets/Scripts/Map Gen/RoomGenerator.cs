@@ -579,6 +579,7 @@ public class RoomGenerator : MonoBehaviour
         Vector3 chosen_position = Vector3.zero;
         Quaternion base_rotation = Quaternion.identity; 
         GameObject start_room_gameObject = Instantiate(current_room, chosen_position, base_rotation);
+        grid.Place(start_room_gameObject);
 
         
 
@@ -597,6 +598,7 @@ public class RoomGenerator : MonoBehaviour
 
         GameObject end_room_gameObject = end_room.prefab;
         end_room_gameObject = Instantiate(end_room_gameObject, random_position, base_rotation);
+        grid.Place(end_room_gameObject);
 
         /*
             Now comes the hard part, we have to create an algorithm that will intelligently place rooms in a way that the entrances between each room attach. Normally we can use A* to combat pathfinding, but in this case it is
@@ -739,6 +741,7 @@ public class RoomGenerator : MonoBehaviour
             GameObject go = Instantiate(best_attachment_overall.prefab, position, base_rotation);
 
             go.GetComponent<Room>().GetOpposingEntrance(best_entrance.main_direction).is_connected = true;
+            grid.Place(go);
             best_entrance.is_connected = true;
 
 
