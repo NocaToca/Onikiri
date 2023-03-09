@@ -2,48 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//The whip visual and interaction of the blade and whip weapon
-//This is basically the projectile
-[RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(CircleCollider2D))]
+//The whips attack is basically long ranged melee with an AOE collider shifted in. For everything, we're going to use colliders
 public class Whip : MonoBehaviour
 {
-    public float rotational_speed;
-    public float whip_length;
+    
+    List<WhipCollider> colliders;
 
-    Rigidbody2D rb;
-    CircleCollider2D cc;
+    public int collider_index;
 
-    float angle = 90.0f;
-
-    void Awake(){
-        cc = GetComponent<CircleCollider2D>();
-        rb = GetComponent<Rigidbody2D>();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void OnTriggerEnter2D(Collider2D other) {
-        Actor a = Actor.ExtractActor(other.gameObject);
-        if(a.gameObject.transform != this.transform.parent){
-            a.TakeDamage(10.0f);
+    void Start(){
+        collider_index = 0;
+        if(colliders == null){
+            Debug.LogWarning("No colliders on the whip object, will be broken");
         }
     }
 
-    //We're going to want to rotate around the fixed point
-    private void FixedUpdate() {
-        
-        transform.RotateAround(this.transform.parent.position, new Vector3(0,0,1), rotational_speed);
-        
+    public void Attack(float whip_damage){
+        WhipCollider current_collider = colliders[collider_index%colliders.Count];
+        if(current_collider.enemies_in_collider){
+            foreach(GameObject obj in current_collider.enemies){
+                Actor enemy = Actor.ExtractActor(obj);
+                enemy.TakeDamage(whip_damage);
+            }
+        }
+
+        collider_index++;
     }
+
 }
