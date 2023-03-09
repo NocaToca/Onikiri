@@ -25,6 +25,7 @@ public class PlayerController : Controller
         }
 
         rb = GetComponent<Rigidbody2D>();
+        accepting_movement = true;
     }
 
     void Update(){
@@ -43,37 +44,40 @@ public class PlayerController : Controller
     // Update is called once per frame
     void FixedUpdate()
     {
-        HandleMovement();
+        rb.velocity = Vector2.zero;
+        HandleMovement(1);
     }
 
-    private void HandleMovement(){
+    private void HandleMovement(float deltaTime){
         if(!accepting_movement){
             return;
         }
 
         Vector2 velocity = Vector2.zero;
 
-        //North
+        //Northhow to tell if no keys are being pressed unity
         if(Input.GetKey(KeyCode.W)){
-            velocity.y += p.speed;
+            velocity.y += p.speed * deltaTime;
         }
         //South
         if(Input.GetKey(KeyCode.S)){
-            velocity.y -= p.speed;
+            velocity.y -= p.speed * deltaTime;
         }
         //West
         if(Input.GetKey(KeyCode.A)){
-            velocity.x -= p.speed;
+            velocity.x -= p.speed * deltaTime;
         }
         //East
         if(Input.GetKey(KeyCode.D)){
-            velocity.x += p.speed;
+            velocity.x += p.speed * deltaTime;
         }
 
         velocity = velocity.normalized;
+        //Debug.Log(velocity);
 
-        if(Input.GetKey(KeyCode.LeftShift)){
-            velocity *= p.boost_speed;
+        if(Input.GetKey(KeyCode.Z)){
+            velocity.y *= p.boost_speed;
+            velocity.x *= p.boost_speed;
         }
         if(velocity != Vector2.zero){
             p.movedLastFrame = true;
