@@ -51,8 +51,8 @@ public class Water : MonoBehaviour{
         if(active){
             CheckRipples();
         } else {
-            waterMat.SetVector("_PressedWorld", new Vector2(-1.0f, -1.0f));
-            waterWaves.SetVector("pressedUV", new Vector2(-0.0f, 0.0f));
+            //waterMat.SetVector("_PressedWorld", new Vector2(-1.0f, -1.0f));
+            waterWaves.SetVector("pressedUV", new Vector2(0.0f, 0.0f));
         }
         waterWaves.SetTexture(0, "Input", renderTexture);
 
@@ -63,7 +63,7 @@ public class Water : MonoBehaviour{
 
     private void OnTriggerEnter2D(Collider2D other) {
         active = true;
-        a = other.gameObject.GetComponent<Actor>();
+        a = Actor.ExtractActor(other.gameObject);
     }
 
     private void OnTriggerExit2D(Collider2D other) {
@@ -98,7 +98,7 @@ public class Water : MonoBehaviour{
 
                         //waterWaves.SetTexture(1, "Base_Input", renderTexture);
                         waterWaves.SetVector("pressedUV", uvSpace);
-                        waterWaves.Dispatch(0, renderTexture.width/8, renderTexture.height/8, 1);
+                        //waterWaves.Dispatch(0, renderTexture.width/8, renderTexture.height/8, 1);
                         //waterWaves.Dispatch(1, renderTexture.width/8, renderTexture.height/8, 1);
                         
                         
