@@ -761,9 +761,11 @@ public class RoomGenerator : MonoBehaviour
             current_weights[i % 2] = c;
 
             if(Vector3.Distance(go.transform.position, end_room_gameObject.GetComponent<Room>().entrances[0].transform.position) <= max_snap_distance){
-                Vector3 move_position = curr_room.GetRandomEntrancePosition();
+                Entrance bd_entrance;
+                Vector3 move_position = curr_room.GetRandomEntrancePosition(out bd_entrance);
                 move_position -= end_room.prefab.GetComponent<Room>().entrances[0].transform.position;
                 end_room_gameObject.transform.position = move_position; 
+                bd_entrance.is_connected = true;
                 break;
             }
 
