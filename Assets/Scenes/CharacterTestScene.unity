@@ -668,9 +668,9 @@ GameObject:
   - component: {fileID: 1266944121}
   - component: {fileID: 1266944120}
   - component: {fileID: 1266944119}
-  - component: {fileID: 1266944118}
   - component: {fileID: 1266944117}
   - component: {fileID: 1266944123}
+  - component: {fileID: 1266944124}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -698,23 +698,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
---- !u!114 &1266944118
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1266944116}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f364b2b0c4cf6bbe9a5cfd1aa0b2363, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movedLastFrame: 0
-  actor_controller: {fileID: 0}
-  speed: 3
-  attack_speed: 1
-  weapon: {fileID: 11400000, guid: 3406da6a03e48c74781df7a5f35f216d, type: 2}
 --- !u!61 &1266944119
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -871,6 +854,27 @@ MonoBehaviour:
   radius_buffer: 1
   wait_time: 1
   fov: 2
+--- !u!114 &1266944124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1266944116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84175cfa47929ee4f96f156763a843f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movedLastFrame: 0
+  actor_controller: {fileID: 0}
+  speed: 1
+  attack_speed: 1
+  weapon: {fileID: 11400000, guid: 3406da6a03e48c74781df7a5f35f216d, type: 2}
+  playing_action: 0
+  club_collider: {fileID: 0}
+  slam_collider: {fileID: 0}
+  roar_collider: {fileID: 0}
 --- !u!1 &1275062225
 GameObject:
   m_ObjectHideFlags: 0

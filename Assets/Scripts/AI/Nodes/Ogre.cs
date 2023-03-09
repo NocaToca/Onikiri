@@ -38,6 +38,10 @@ public class ClubSlamCheck : AINode{
             wait_time += Game.tick;
             return FAIL();
         } else {
+            if(ogre.club_collider == null){
+                return FAIL();
+            }
+
             if(ogre.club_collider.player_in_action){
                 wait_time = 0.0f;
                 return SUCCESS();
@@ -63,7 +67,7 @@ public class ClubSlam : AINode{
 }
 
 public class OgreRoarCheck : AINode{
-private float wait_time;
+    private float wait_time;
 
     public OgreRoarCheck() : base(){
         wait_time = 0.0f;
@@ -82,7 +86,11 @@ private float wait_time;
         if(wait_time < settings.roar_cooldown){
             wait_time += Game.tick;
             return FAIL();
+            
         } else {
+            if(ogre.roar_collider == null){
+                return FAIL();
+            }
             if(ogre.roar_collider.player_in_action){
                 wait_time = 0.0f;
                 return SUCCESS();
@@ -126,6 +134,9 @@ private float wait_time;
             wait_time += Game.tick;
             return FAIL();
         } else {
+            if(ogre.slam_collider == null){
+                return FAIL();
+            }
             if(ogre.slam_collider.player_in_action){
                 wait_time = 0.0f;
                 return SUCCESS();
