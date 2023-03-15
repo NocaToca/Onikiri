@@ -43,6 +43,7 @@ public class OrbProjectile : Projectile
         time_before_return -= Time.deltaTime;
         
         if(!returning && ((Vector3.Distance(this.transform.position, sender.transform.position) >= max_distance) || (time_before_return <= 0.0f))){
+            DamageTouchingEnemies();
             returning = true;
         }
 
@@ -68,4 +69,20 @@ public class OrbProjectile : Projectile
             }
         }
    }
+
+    private void DamageTouchingEnemies()
+    {
+        List<Collider2D> TouchingColliders = new List<Collider2D>();
+        ContactFilter2D filter = new ContactFilter2D();
+        filter.NoFilter();
+        base.bc.OverlapCollider(filter, TouchingColliders);
+        foreach(Collider2D collider in TouchingColliders)
+        {
+            Actor possible_actor = Actor.ExtractActor(collider.gameObject);
+            if (possible_actor is Enemy)
+            {
+                possible_actor.TakeDamage(10.0f);
+            }
+        }
+    }
 }
