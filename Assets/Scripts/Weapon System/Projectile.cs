@@ -44,13 +44,18 @@ public class Projectile : MonoBehaviour
 
     //Collision
     protected virtual void OnTriggerEnter2D(Collider2D other) {
-        
 
+        DamageCollidingEnemies(other);
+    }
+
+    protected virtual void DamageCollidingEnemies(Collider2D other)
+    {
         Actor possible_actor = Actor.ExtractActor(other.gameObject);
-        if(possible_actor is Enemy){
+        if (possible_actor is Enemy)
+        {
+            Debug.Log(this.name + " is dealing damage to " + other.gameObject.name);
             possible_actor.TakeDamage(10.0f);
         }
 
-        
     }
 }

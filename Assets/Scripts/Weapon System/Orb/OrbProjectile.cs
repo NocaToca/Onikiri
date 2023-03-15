@@ -55,7 +55,7 @@ public class OrbProjectile : Projectile
         Vector3 base_vel = (returning) ? sender.transform.position - transform.position : destination - transform.position;
         base_vel = base_vel.normalized;
         float speed = Mathf.Abs(base_speed - (Mathf.Abs(max_distance - Vector3.Distance(this.transform.position, destination))/max_distance));
-        Debug.Log(speed);
+        //Debug.Log(speed);
         rb.velocity = base_vel * speed * speed_scale;
     }
 
@@ -78,11 +78,7 @@ public class OrbProjectile : Projectile
         base.bc.OverlapCollider(filter, TouchingColliders);
         foreach(Collider2D collider in TouchingColliders)
         {
-            Actor possible_actor = Actor.ExtractActor(collider.gameObject);
-            if (possible_actor is Enemy)
-            {
-                possible_actor.TakeDamage(10.0f);
-            }
+            base.DamageCollidingEnemies(collider);
         }
     }
 }
