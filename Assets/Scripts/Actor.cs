@@ -11,6 +11,8 @@ public abstract class Actor : MonoBehaviour
 
     public Stats stats;
 
+    public bool immune;
+
 
     [HideInInspector]
     public Controller actor_controller;
@@ -21,30 +23,24 @@ public abstract class Actor : MonoBehaviour
         if(anime == null){
             Debug.LogWarning("Warning: No animator found on the Game Object " + gameObject.name + ". No animations will play.");
         }
+
+        immune = false;
     }
 
     void Update(){
         
     }
 
-    //Returns a unity event that is bound to the re-enable function. 
-    public UnityEvent DisableMovement(){
-        actor_controller.accepting_movement = false;
-        UnityEvent return_event = new UnityEvent();
-        return_event.AddListener(EnableMovement);
-        return return_event;
-    }
-
-    public void EnableMovement(){
-        actor_controller.accepting_movement = true;
-        Debug.Log("Enabled");
-    } 
+    
 
     public void PlayDamageAnimation(){
         anime.Play("Hit");
     }
 
     public virtual void TakeDamage(float damage){
+        if(immune){
+            return;
+        }
         PlayDamageAnimation();
         stats.health -= damage;
     }

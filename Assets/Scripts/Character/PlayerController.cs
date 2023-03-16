@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using Augments;
+
 
 /*
     Controls all of the movement regarding the player
@@ -15,9 +17,12 @@ public class PlayerController : Controller
     private Player p;
     private Rigidbody2D rb;
 
+    // List<SkillListener> skills;
+
     // Start is called before the first frame update
     protected override void Start()
     {
+        // skills = new List<SkillListener>();
         base.Start();
         p = GetComponent<Player>();
         if(p == null){
@@ -35,9 +40,6 @@ public class PlayerController : Controller
     void HandleInteractionInput(){
         if(Input.GetKeyDown(KeyCode.E)){
             p.AttemptAttack();
-        }
-        if(Input.GetKeyDown(KeyCode.Q)){
-            p.AttemptAugmentAbility();
         }
     }
 
@@ -89,3 +91,18 @@ public class PlayerController : Controller
 
     }
 }
+
+//Structure to add a specific listener to the player, used for skills
+// public class SkillListener{
+
+//     List<WeaponPass> weapons;
+//     KeyCode key;
+//     UnityEvent event;
+
+//     public SkillListener(List<WeaponPass> weapons, KeyCode key, UnityEvent event){
+//         this.weapons = weapons;
+//         this.key = key;
+//         this.event = event;
+//     }
+
+// }
