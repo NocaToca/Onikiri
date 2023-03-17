@@ -15,5 +15,7 @@ MonoBehaviour:
   children: []
   parent: {fileID: 0}
   active: 0
-  well_prefab: {fileID: 0}
-  life_time: 0
+  p: {fileID: 0}
+  display_image: {fileID: 0}
+  well_prefab: {fileID: 1614985545211281452, guid: 784d0cb9af5dbe5ac9e2b3cb680027ab, type: 3}
+  life_time: 1

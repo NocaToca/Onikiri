@@ -15,5 +15,7 @@ MonoBehaviour:
   children: []
   parent: {fileID: 0}
   active: 0
-  percentage: 0
+  p: {fileID: 0}
+  display_image: {fileID: 0}
+  percentage: 0.9
   toggled: 0
