@@ -59,6 +59,10 @@ public abstract class Actor : MonoBehaviour
         damage_listener.Invoke(weapon, other);
     }
 
+    protected virtual void Die(){
+
+    }
+
     //Tries to extract an object of trpe Actor
     public static Actor ExtractActor(GameObject obj){
 
@@ -80,6 +84,7 @@ public abstract class Actor : MonoBehaviour
 public struct Stats{
 
     public float max_health {get; internal set;}
+    public float percent_health {get{return health/max_health;}}
     public float health {get; internal set;}
 
     public Stats(float health){
