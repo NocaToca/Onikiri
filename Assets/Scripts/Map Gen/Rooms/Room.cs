@@ -27,6 +27,11 @@ public class Room : MonoBehaviour
         return entrances[Random.Range(0, num_entrances)].transform.position;
     }
 
+    public Vector3 GetRandomEntrancePosition(out Entrance entrance){
+        entrance = entrances[Random.Range(0, num_entrances)];
+        return entrance.transform.position;
+    }
+
     public Entrance GetOpposingEntrance(Direction d){
         foreach(Entrance e in entrances){
             if(e.IsValidForOrientation(d)){
