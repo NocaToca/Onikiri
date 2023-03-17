@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine;
 
 //Main class to display the UI functions
 public class CanvasController : MonoBehaviour
@@ -27,6 +27,7 @@ public class CanvasController : MonoBehaviour
     void Update()
     {
         UpdateManaSprites();
+        UpdateHealth();
         
     }
 
@@ -56,20 +57,31 @@ public class CanvasController : MonoBehaviour
     }
 
     private void UpdateHealth(){
+        for(int i = 0; i < health_bars.Count; i++){
+            HealthBar bar = health_bars[i];
+            if(bar.actor == null){
+                health_bars.RemoveAt(i);
+                i--;
+                GameObject.Destroy(bar.display.gameObject);
+            }
+        }
+
         foreach(HealthBar bar in health_bars){
-            bar.display.value = bar.actor.stats.health;
+            bar.display.value = bar.actor.stats.percent_health;
 
             Vector3 screen_point = Camera.main.WorldToScreenPoint(bar.actor.gameObject.transform.position);
-            Vector2 rect_point = new Vector2(screen_point.x, screen_point.y + 1.0f);
+            Vector2 rect_point = new Vector2(screen_point.x, screen_point.y + 25.0f);
+
+            //Debug.Log(rect_point);
 
 
-            bar.display.handleRect.position = rect_point;
+            bar.display.gameObject.transform.position = rect_point;
         }
     }
 
     public void CreateHealthBar(Actor actor){
         HealthBar bar = new HealthBar(Instantiate(health_bar_prefab), actor);
-        bar.display.gameObject.transform.parent = this.transform;
+        bar.display.gameObject.transform.SetParent(this.transform);
         bar.display.gameObject.SetActive(true);
         health_bars.Add(bar);
 
