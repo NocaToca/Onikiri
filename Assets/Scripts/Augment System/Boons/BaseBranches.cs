@@ -5,22 +5,31 @@ using UnityEngine;
 namespace Augments{
 
 /**************************************************************Lifesteal******************************************************************/
+    [CreateAssetMenu(fileName = "Eternal Hunger", menuName = "Augments/Boons/Basic/Eternal Hunger")]
     public class EternalHunger : BoonNode{
 
-        float percentage;
+        public float percentage;
 
         public EternalHunger(float percentage, Player p) : base(p){
             this.percentage = percentage;
         }
 
         public override void ActivateEvent(){
-
+            p.damage_listener.AddListener(DamageListener);
         }
 
+        //Has not update event
         public override void UpdateEvent(){
 
         }
 
+        public void DamageListener(Weapon weapon, Actor hit){
+            //Find out how much damage the actor would take
+            float damage = 10.0f;
+            p.Heal(damage * percentage);
+        }
+
+        //Has no passive effect
         public override void PassiveEvent(){
 
         }
@@ -43,6 +52,7 @@ namespace Augments{
     }
 
 /**************************************************************Max Health Increase******************************************************************/
+    [CreateAssetMenu(fileName = "Immortal Vitality", menuName = "Augments/Boons/Basic/Immortal Vitality")]
     public class ImmortalVitality : BoonNode{
 
         float percentage;
@@ -52,7 +62,7 @@ namespace Augments{
         }
 
         public override void ActivateEvent(){
-
+            
         }
 
         public override void UpdateEvent(){
@@ -90,6 +100,7 @@ namespace Augments{
     }
 
 /**************************************************************Resistance Increase******************************************************************/
+    [CreateAssetMenu(fileName = "Divine Aegis", menuName = "Augments/Boons/Basic/Divine Aegis")]
     public class DivineAegis : BoonNode{
 
         float percentage;
@@ -128,6 +139,8 @@ namespace Augments{
     }
 
 /**************************************************************Damage Increase******************************************************************/
+
+    [CreateAssetMenu(fileName = "Celestial Fury", menuName = "Augments/Boons/Basic/Celestial Fury")]
     public class CelestialFury : BoonNode{
 
         float percentage;
@@ -175,6 +188,7 @@ namespace Augments{
     }
 /**************************************************************Attack Speed Increase******************************************************************/
     //Swift as the Wind
+    [CreateAssetMenu(fileName = "Swift as the Wind", menuName = "Augments/Boons/Basic/Swift as the Wind")]
     public class SwiftasWind : BoonNode{
 
         float percentage;
@@ -213,6 +227,7 @@ namespace Augments{
     }
 /**************************************************************Negative Status Duration******************************************************************/
     //Purifying Light
+    [CreateAssetMenu(fileName = "Purifying Light", menuName = "Augments/Boons/Basic/Purifying Light")]
     public class PurifyingLight : BoonNode{
 
         float percentage;
@@ -251,6 +266,7 @@ namespace Augments{
     }
 /**************************************************************Passive Healing (Per Second)******************************************************************/
     //Healing Rain
+    [CreateAssetMenu(fileName = "Healing Rain", menuName = "Augments/Boons/Basic/Healing Rain")]
     public class HealingRain : BoonNode{
 
         float percentage;
@@ -289,6 +305,7 @@ namespace Augments{
     }
 /**************************************************************Kitsunebi Regeneration******************************************************************/
     //Inari's Blessing
+    [CreateAssetMenu(fileName = "Inaris Blessing", menuName = "Augments/Boons/Basic/Inaris Blessing")]
     public class InarisBlessing : BoonNode{
 
         float percentage;
