@@ -87,11 +87,11 @@ namespace Augments{
             GhostDash c3 = new GhostDash(speed, distance, p);
             PhantomDash c4 = new PhantomDash(speed, distance, p);
             ArcDash c5 = new ArcDash(speed, distance, p);
-            children.Add(c1.Assemble());
-            children.Add(c2.Assemble());
-            children.Add(c3.Assemble());
-            children.Add(c4.Assemble());
-            children.Add(c5.Assemble());
+            AddChild(c1.Assemble());
+            AddChild(c2.Assemble());
+            AddChild(c3.Assemble());
+            AddChild(c4.Assemble());
+            AddChild(c5.Assemble());
 
             return this;
         }
@@ -152,8 +152,8 @@ namespace Augments{
 
             children = new List<Node>();
 
-            children.Add(child1.Assemble());
-            children.Add(child2.Assemble());
+            AddChild(child1.Assemble());
+            AddChild(child2.Assemble());
 
             foreach(Node child in children){
                 child.parent = this;
@@ -196,8 +196,8 @@ namespace Augments{
 
         public override Node Assemble(){
             children = new List<Node>();
-            children.Add(new RevengeDash(speed, distance, p));
-            children.Add(new QuickAttack(speed, distance, p));
+            AddChild(new RevengeDash(speed, distance, p));
+            AddChild(new QuickAttack(speed, distance, p));
 
             return this;
         }
@@ -231,8 +231,8 @@ namespace Augments{
 
             NightmareDash nd = new NightmareDash(speed, distance, p);
             PhaseShift ps = new PhaseShift(speed, distance, p);
-            children.Add(nd.Assemble());
-            children.Add(ps.Assemble());
+            AddChild(nd.Assemble());
+            AddChild(ps.Assemble());
 
             return this;
         }
@@ -268,8 +268,8 @@ namespace Augments{
 
             ShadowAssault nd = new ShadowAssault(speed, distance, p);
             LivingShadow ps = new LivingShadow(speed, distance, p);
-            children.Add(nd.Assemble());
-            children.Add(ps.Assemble());
+            AddChild(nd.Assemble());
+            AddChild(ps.Assemble());
 
             return this;
         }
@@ -306,8 +306,8 @@ namespace Augments{
 
             Fissure nd = new Fissure(speed, distance, p);
             ShortCircuit ps = new ShortCircuit(speed, distance, p);
-            children.Add(nd.Assemble());
-            children.Add(ps.Assemble());
+            AddChild(nd.Assemble());
+            AddChild(ps.Assemble());
 
             return this;
         }

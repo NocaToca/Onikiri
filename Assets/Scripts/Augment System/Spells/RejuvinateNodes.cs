@@ -62,9 +62,9 @@ namespace Augments{
             Revitalize c1 = new Revitalize(p);
             Empower c2 = new Empower(p);
             Devour c3 = new Devour(p);
-            children.Add(c1.Assemble());
-            children.Add(c2.Assemble());
-            children.Add(c3.Assemble());
+            AddChild(c1.Assemble());
+            AddChild(c2.Assemble());
+            AddChild(c3.Assemble());
 
             return this;
         }
@@ -93,8 +93,8 @@ namespace Augments{
 
             Engross c1 = new Engross(p);
             Absorb c2 = new Absorb(p);
-            children.Add(c1.Assemble());
-            children.Add(c2.Assemble());
+            AddChild(c1.Assemble());
+            AddChild(c2.Assemble());
 
             return this;
         }
@@ -127,8 +127,8 @@ namespace Augments{
 
             Embolden c1 = new Embolden(p);
             Invigor c2 = new Invigor(p);
-            children.Add(c1.Assemble());
-            children.Add(c2.Assemble());
+            AddChild(c1.Assemble());
+            AddChild(c2.Assemble());
 
             return this;
         }
@@ -161,8 +161,8 @@ namespace Augments{
 
             Gorge c1 = new Gorge(p);
             Ravage c2 = new Ravage(p);
-            children.Add(c1.Assemble());
-            children.Add(c2.Assemble());
+            AddChild(c1.Assemble());
+            AddChild(c2.Assemble());
 
             return this;
         }

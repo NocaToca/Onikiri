@@ -21,6 +21,9 @@ public class Player : Actor
     public SpellTree first_tree;
 
     public Weapon off_hand;
+    public SpellTree second_tree;
+
+    public BoonTree[] boon_trees;
 
 
     UnityEvent collision_listener;
@@ -44,6 +47,33 @@ public class Player : Actor
 
         //We have 9 mana
         kitsunebi = new Mana(9);
+
+        GameObject tree_prefab = null;
+        if(first_tree != null){
+            tree_prefab = first_tree.gameObject;
+            if(tree_prefab == this.gameObject){
+                Debug.LogError("Please put skill trees and boon trees on seperate game objects to the player. Thank you!");
+            }
+        } else {
+            tree_prefab = new GameObject();
+            GameObject t = Instantiate(tree_prefab);
+            t.transform.SetParent(this.transform);
+            first_tree = t.AddComponent<SpellTree>();
+            t.gameObject.name = "Spell Tree One";
+        }
+
+        GameObject t2 = Instantiate(tree_prefab);
+        t2.transform.SetParent(this.transform);
+        second_tree = t2.AddComponent<SpellTree>();
+        t2.gameObject.name = "Spell Tree Two";
+
+        boon_trees = new BoonTree[3];
+        for(int i = 0; i < 3; i++){
+            GameObject t_boon = Instantiate(tree_prefab);
+            t_boon.transform.SetParent(this.transform);
+            boon_trees[i] = t_boon.AddComponent<BoonTree>();
+            t_boon.gameObject.name = "Boon Tree " + i;
+        }
 
         //augments.Add(this.gameObject.AddComponent<Dash>());
         //augments.Add(this.gameObject.AddComponent<SpeedIncrease>());
@@ -95,6 +125,18 @@ public class Player : Actor
     }
     public void ToggleCollider(bool status){
         immune = status;
+    }
+
+    public List<AugmentTree> GetAugmentTrees(){
+        List<AugmentTree> trees = new List<AugmentTree>();
+
+        trees.Add(first_tree);
+        trees.Add(second_tree);
+        foreach(BoonTree tree in boon_trees){
+            trees.Add(tree);
+        }
+
+        return trees;
     }
 
     // //Sends information to the controller to add the keycode in regards to the event and weapon types

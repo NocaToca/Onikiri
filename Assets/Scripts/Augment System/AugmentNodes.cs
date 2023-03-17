@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 namespace Augments{
@@ -18,6 +19,8 @@ namespace Augments{
 
         public Player p;
 
+        public Image display_image;
+
         public Node(Player p){
             this.p = p;
         }
@@ -33,6 +36,27 @@ namespace Augments{
         //Assembles the main node structure for easy use within the tree
         public abstract Node Assemble();
 
+        public bool IsRelated(Node other){
+            if(other.Name() == this.Name()){
+                return true;
+            }
+
+            Node temp = other.parent;
+            while(temp != null){
+                if(temp.Name() == this.Name()){
+                    return true;
+                }
+                temp = temp.parent;
+            }
+
+            return false;
+        }
+
+        public void AddChild(Node child){
+            child.parent = this;
+            children.Add(child);
+        }
+
         //Event Added to the player Update Listener
         public abstract void UpdateEvent();
 
@@ -41,6 +65,8 @@ namespace Augments{
 
         //Returns the in-game description of the node
         public abstract string Description();
+
+        public abstract int OrderNum();
 
     }
 
@@ -72,13 +98,19 @@ namespace Augments{
             Rejuvenate c3 = new Rejuvenate(p);
             Vampire c4 = new Vampire(p);
             GravityWell c5 = new GravityWell(p);
-            children.Add(c1.Assemble());
-            children.Add(c2.Assemble());
-            children.Add(c3.Assemble());
-            children.Add(c4.Assemble());
-            children.Add(c5.Assemble());
+            AddChild(c1.Assemble());
+            AddChild(c2.Assemble());
+            AddChild(c3.Assemble());
+            AddChild(c4.Assemble());
+            AddChild(c5.Assemble());
 
             return this;
+        }
+
+        
+
+        public virtual string WeaponCompatibility(){
+            return "All";
         }
 
         public override void UpdateEvent(){
@@ -94,6 +126,10 @@ namespace Augments{
 
         public override void ActivateEvent(){
 
+        }
+
+        public override int OrderNum(){
+            return -1;
         }
 
     }
@@ -132,16 +168,16 @@ namespace Augments{
             InarisBlessing c8 = new InarisBlessing(0.05f,p);
             Companion c9 = new Companion(0.05f,0.05f,p);
             MagicalAttunement c10 = new MagicalAttunement(0.05f,0.05f,p);
-            children.Add(c1.Assemble());
-            children.Add(c2.Assemble());
-            children.Add(c3.Assemble());
-            children.Add(c4.Assemble());
-            children.Add(c5.Assemble());
-            children.Add(c6.Assemble());
-            children.Add(c7.Assemble());
-            children.Add(c8.Assemble());
-            children.Add(c9.Assemble());
-            children.Add(c10.Assemble());
+            AddChild(c1.Assemble());
+            AddChild(c2.Assemble());
+            AddChild(c3.Assemble());
+            AddChild(c4.Assemble());
+            AddChild(c5.Assemble());
+            AddChild(c6.Assemble());
+            AddChild(c7.Assemble());
+            AddChild(c8.Assemble());
+            AddChild(c9.Assemble());
+            AddChild(c10.Assemble());
 
             return this;
         }
@@ -159,6 +195,10 @@ namespace Augments{
 
         public override void ActivateEvent(){
             
+        }
+
+        public override int OrderNum(){
+            return -1;
         }
 
     }

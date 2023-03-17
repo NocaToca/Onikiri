@@ -15,9 +15,8 @@ namespace Augments{
         public bool active = true;
 
         // Start is called before the first frame update
-        void Start()
+        protected virtual void Start()
         {
-            
         }
 
         // Update is called once per frame
@@ -28,6 +27,10 @@ namespace Augments{
 
         protected virtual void FixedUpdate(){
             root.UpdateEvent();
+        }
+
+        public List<Node> GetChildren(){
+            return root.children;
         }
     }
 

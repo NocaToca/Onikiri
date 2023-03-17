@@ -11,8 +11,10 @@ namespace Augments{
     public class BoonTree : AugmentTree
     {
         // Start is called before the first frame update
-        void Start()
+        protected override void Start()
         {
+            base.Start();
+            root = new BoonNode(GameObject.FindGameObjectWithTag("Player").GetComponent<Player>());
             if(!(root is BoonNode)){
                 Debug.LogError("Incompatible node type for BoonTree");
             }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using Augments.Display;
 
 //Main class to display the UI functions
 public class CanvasController : MonoBehaviour
@@ -12,6 +13,8 @@ public class CanvasController : MonoBehaviour
 
     public Slider health_bar_prefab;
     public List<HealthBar> health_bars;
+
+    
 
     void Awake(){
         health_bars = new List<HealthBar>();

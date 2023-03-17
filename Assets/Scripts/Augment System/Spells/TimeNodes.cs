@@ -51,9 +51,9 @@ namespace Augments{
             ChronoFissure c1 = new ChronoFissure(p);
             TimeDilation c2 = new TimeDilation(p);
             Retrocausality c3 = new Retrocausality(p);
-            children.Add(c1.Assemble());
-            children.Add(c2.Assemble());
-            children.Add(c3.Assemble());
+            AddChild(c1.Assemble());
+            AddChild(c2.Assemble());
+            AddChild(c3.Assemble());
 
             return this;
         }
@@ -83,8 +83,8 @@ namespace Augments{
 
             TemporalPulse c1 = new TemporalPulse(p);
             TemporalBurn c2 = new TemporalBurn(p);
-            children.Add(c1.Assemble());
-            children.Add(c2.Assemble());
+            AddChild(c1.Assemble());
+            AddChild(c2.Assemble());
 
             return this;
         }
@@ -115,8 +115,8 @@ namespace Augments{
 
             TemporalClock_Slow c1 = new TemporalClock_Slow(p);
             TemporalClock_Speed c2 = new TemporalClock_Speed(p);
-            children.Add(c1.Assemble());
-            children.Add(c2.Assemble());
+            AddChild(c1.Assemble());
+            AddChild(c2.Assemble());
 
             return this;
         }
@@ -147,8 +147,8 @@ namespace Augments{
 
             ChronoBomb c1 = new ChronoBomb(p);
             TimeBreak c2 = new TimeBreak(p);
-            children.Add(c1.Assemble());
-            children.Add(c2.Assemble());
+            AddChild(c1.Assemble());
+            AddChild(c2.Assemble());
 
             return this;
         }

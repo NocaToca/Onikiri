@@ -15,11 +15,12 @@ namespace Augments{
     {
 
         // Start is called before the first frame update
-        void Start()
+        protected override void Start()
         {
-            //root = new Rejuvenate(10.0f, 2.0f, this.GetComponent<Player>());
-            root.p = GetComponent<Player>();
+            base.Start();
 
+            root = new SkillNode(GameObject.FindGameObjectWithTag("Player").GetComponent<Player>());
+            //root = new Rejuvenate(10.0f, 2.0f, this.GetComponent<Player>());
             if(!(root is SkillNode)){
                 Debug.LogError("Incompatible node type for Spell Trees");
             }
@@ -34,6 +35,9 @@ namespace Augments{
         }
 
         protected override void FixedUpdate(){
+            if(root == null){
+                return;
+            }
             root.UpdateEvent();
         }
 

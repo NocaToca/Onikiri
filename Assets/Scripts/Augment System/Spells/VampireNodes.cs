@@ -64,8 +64,8 @@ namespace Augments{
 
             Hemophage c1 = new Hemophage(p);
             Lacerate c2 = new Lacerate(p);
-            children.Add(c1.Assemble());
-            children.Add(c2.Assemble());
+            AddChild(c1.Assemble());
+            AddChild(c2.Assemble());
 
             return this;
         }
@@ -94,8 +94,8 @@ namespace Augments{
 
             Ichor c1 = new Ichor(p);
             Sanguine c2 = new Sanguine(p);
-            children.Add(c1.Assemble());
-            children.Add(c2.Assemble());
+            AddChild(c1.Assemble());
+            AddChild(c2.Assemble());
 
             return this;
         }
@@ -128,8 +128,8 @@ namespace Augments{
 
             Maul c1 = new Maul(p);
             Infection c2 = new Infection(p);
-            children.Add(c1.Assemble());
-            children.Add(c2.Assemble());
+            AddChild(c1.Assemble());
+            AddChild(c2.Assemble());
 
             return this;
         }
