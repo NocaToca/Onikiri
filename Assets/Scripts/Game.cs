@@ -7,6 +7,7 @@ public class Game : MonoBehaviour
 {
 
     public float mana_tick_rate = 0.01f;
+    public static float tick = 0.01f;
 
     // Start is called before the first frame update
     void Start()

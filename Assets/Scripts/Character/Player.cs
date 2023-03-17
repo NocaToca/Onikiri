@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+using Augments;
+
 /*
     Handles all logic regarding the player
 
@@ -16,30 +18,35 @@ public class Player : Actor
     public float boost_speed;
     
     public Weapon main_hand;
+    public SpellTree first_tree;
+
     public Weapon off_hand;
 
-    public List<Augment> augments;
+
+    UnityEvent collision_listener;
+
+    bool on_enter_damage;
+
+    //public List<Augment> augments;
 
     //Our mana
     public Mana kitsunebi;
 
     //Holds the functions that we call do update
-    [HideInInspector]
-    public UnityEvent update_boons; 
 
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
-        augments = new List<Augment>();
+        //augments = new List<Augment>();
         actor_controller = this.GetComponent<PlayerController>();
         main_hand.holding_actor = this;
 
         //We have 9 mana
         kitsunebi = new Mana(9);
 
-        augments.Add(this.gameObject.AddComponent<Dash>());
-        augments.Add(this.gameObject.AddComponent<SpeedIncrease>());
+        //augments.Add(this.gameObject.AddComponent<Dash>());
+        //augments.Add(this.gameObject.AddComponent<SpeedIncrease>());
     }
 
     // Update is called once per frame
@@ -48,26 +55,75 @@ public class Player : Actor
         
     }
 
-    public void RefreshBoons(){
-        foreach(Augment aug in augments){
-            if(aug is Boon){
-                Boon boon_cast = (Boon)aug;
-                boon_cast.ActivateBoon(this);
+    private void OnTriggerEnter2D(Collider2D col){
+        //collision_listener.Invoke();
+        if(on_enter_damage){
+            if(col.gameObject.tag == "Enemy"){
+                Actor a = ExtractActor(col.gameObject);
+                Debug.Log("Damaged " + a.name);
+                a.TakeDamage(20.0f);
             }
         }
     }
 
-    public bool AttemptAugmentAbility(){
-        foreach(Augment aug in augments){
-            if(aug is Spell){
-                Spell spell_cast = (Spell)aug;
-                spell_cast.OnActivate();
-                return true;
-            }
-        }
-
-        return false;
+    public void ToggleMovement(){
+        actor_controller.accepting_movement = !actor_controller.accepting_movement;
     }
+    public void ToggleMovement(bool status){
+        actor_controller.accepting_movement = status;
+    }
+
+    public void ToggleOnEnterDamage(){
+        on_enter_damage = !on_enter_damage;
+    }
+    public void ToggleOnEnterDamage(bool status){
+        on_enter_damage = status;
+    }
+
+
+    //Easiest thing would be to turn off collider, but this could cause problems if we need for otherthings
+    public void ToggleCollisionImmunity(){
+        immune = !immune;
+    }
+    public void ToggleCollisionImmunity(bool status){
+        immune = status;
+    }
+
+    //Used for main collider, not the trigger collider
+    public void ToggleCollider(){
+        immune = !immune;
+    }
+    public void ToggleCollider(bool status){
+        immune = status;
+    }
+
+    // //Sends information to the controller to add the keycode in regards to the event and weapon types
+    // public void AddControllerListenerForWeapons(List<WeaponPass> weapon_types, KeyCode key, UnityEvent event){
+
+    // }
+
+    // public void RefreshBoons(){
+    //     foreach(Augment aug in augments){
+    //         if(aug is Boon){
+    //             Boon boon_cast = (Boon)aug;
+    //             boon_cast.ActivateBoon(this);
+    //         }
+    //     }
+    // }
+
+    // public bool AttemptAugmentAbility(){
+    //     foreach(Augment aug in augments){
+    //         if(aug is Spell){
+    //             Spell spell_cast = (Spell)aug;
+    //             spell_cast.OnActivate();
+    //             return true;
+    //         }
+    //     }
+
+    //     return false;
+    // }
+
+    
 
     public bool AttemptAttack(){
         if(main_hand != null){
