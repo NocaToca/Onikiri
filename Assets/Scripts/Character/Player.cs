@@ -22,6 +22,7 @@ public class Player : Actor
 
     public Weapon off_hand;
 
+
     UnityEvent collision_listener;
 
     bool on_enter_damage;
@@ -121,6 +122,8 @@ public class Player : Actor
 
     //     return false;
     // }
+
+    
 
     public bool AttemptAttack(){
         if(main_hand != null){

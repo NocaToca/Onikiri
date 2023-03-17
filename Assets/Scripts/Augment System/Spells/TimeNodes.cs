@@ -6,14 +6,23 @@ namespace Augments{
 
 /***************************************************************************Base Time Control********************************************************************************/
 
-
+    [CreateAssetMenu(fileName = "Time Control", menuName = "Augments/Spells/Time Control/Base")]
     public class TimeControl : SkillNode
     {
-        public TimeControl(Player p) : base(p){}
+        public float percentage;
+
+        [HideInInspector]
+        public bool toggled;
+
+        public TimeControl(Player p) : base(p){
+            toggled = false;
+
+        }
 
 
         public override void ActivateEvent(){
             active = true;
+            toggled = false;
         }
 
         public override void UpdateEvent(){
@@ -22,7 +31,13 @@ namespace Augments{
 
         public override void SkillEvent(){
             //This is basically the idea, exceot we will obviously need to implement it better
-            Game.tick = 0.005f;
+            if(toggled){
+                Game.tick = 0.01f * percentage;
+            } else {
+                Game.tick = 0.01f;
+            }
+
+            toggled = !toggled;
         }
 
         //TimeControl can be used with any weapon

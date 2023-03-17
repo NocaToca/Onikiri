@@ -6,19 +6,53 @@ namespace Augments{
 
 /***************************************************************************Base Vampire********************************************************************************/
 
+    [CreateAssetMenu(fileName = "Vampire", menuName = "Augments/Spells/Vampire/Base")]
     //Basically all the logic for bleed stacks 
     public class Vampire : SkillNode
     {
         public Vampire(Player p) : base(p){}
 
+        public float bleed_damage_per_second;
+        public float bleed_pop_damage;
+        public float heal_percentage;
+
+        Dictionary<Actor, int> inflicted_enemies;
+
         public override void UpdateEvent(){
+            foreach(KeyValuePair<Actor, int> pair in inflicted_enemies){
+                float dmg = pair.Value * bleed_damage_per_second;
+                pair.Key.TakeDamage(dmg);
+            }
 
         }
+
+        public void AddBleed(Weapon weapon, Actor enemy){
+            int num = 0;
+
+            if(inflicted_enemies.ContainsKey(enemy)){
+                inflicted_enemies[enemy] += 1;
+            } else {
+                num = 1;
+                inflicted_enemies.Add(enemy, num);
+            }
+        }
+
         public override void ActivateEvent(){
+            inflicted_enemies = new Dictionary<Actor, int>();
+            p.damage_listener.AddListener(AddBleed);
             active = true;
         }
-        public override void SkillEvent(){
 
+        public override void SkillEvent(){
+            float heal = 0.0f;
+            foreach(KeyValuePair<Actor, int> pair in inflicted_enemies){
+                float dmg = pair.Value * bleed_pop_damage;
+                pair.Key.TakeDamage(dmg);
+                heal += dmg;
+            }
+            inflicted_enemies = new Dictionary<Actor, int>();
+
+            p.Heal(heal * heal_percentage);
         }
 
         public override bool AssessWeapon(Weapon weapon){

@@ -13,6 +13,9 @@ public abstract class Actor : MonoBehaviour
 
     public bool immune;
 
+    [HideInInspector]
+    public UnityEvent<Weapon, Actor> damage_listener = new UnityEvent<Weapon, Actor>(); 
+
 
     [HideInInspector]
     public Controller actor_controller;
@@ -43,6 +46,17 @@ public abstract class Actor : MonoBehaviour
         }
         PlayDamageAnimation();
         stats.health -= damage;
+    }
+
+    public void Heal(float amount){
+        stats.health += amount;
+        if(stats.health > stats.max_health){
+            stats.health = stats.max_health;
+        }
+    }
+
+    public void DamageOther(Weapon weapon, Actor other){
+        damage_listener.Invoke(weapon, other);
     }
 
     //Tries to extract an object of trpe Actor

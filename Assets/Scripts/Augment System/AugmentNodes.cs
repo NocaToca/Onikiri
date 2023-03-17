@@ -5,14 +5,18 @@ using UnityEngine;
 
 namespace Augments{
 
-    public abstract class Node{
+    public abstract class Node : ScriptableObject{
 
+        [HideInInspector]
         public List<Node> children;
+
+        [HideInInspector]
         public Node parent;
 
+        [HideInInspector]
         public bool active = false;
 
-        protected Player p;
+        public Player p;
 
         public Node(Player p){
             this.p = p;

@@ -7,12 +7,12 @@ namespace Augments{
 
 /***************************************************************************Base Dash********************************************************************************/
 
-
+    [CreateAssetMenu(fileName = "Dash", menuName = "Augments/Spells/Dash/Base")]
     public class Dash : SkillNode{
 
         protected bool dashing;
-        protected float speed;
-        protected float distance;
+        public float speed;
+        public float distance;
         protected Vector3 destination;
         protected UnityEvent enable_event;
 

@@ -7,7 +7,16 @@ namespace Augments{
 
 /***************************************************************************Base Rejuvenate********************************************************************************/
 
+    [CreateAssetMenu(fileName = "Rejuvenate", menuName = "Augments/Spells/Rejuvenate/Base")]
     public class Rejuvenate : SkillNode{
+
+        public GameObject well_prefab; //The prefab for the well
+        public float life_time;
+
+        GameObject well; //The well object
+
+        bool well_spawned;
+        float current_life;
 
         public Rejuvenate(Player p) : base(p){}
 
@@ -16,11 +25,30 @@ namespace Augments{
         }
 
         public override void UpdateEvent(){
+            if(well_spawned){
+                current_life += Game.tick;
+                if(current_life > life_time){
+                    GameObject.Destroy(well.gameObject);
+                    current_life = 0.0f;
+                    well_spawned = false;
+                }
+            }
+        }
 
+        public void PlayerEffect(){
+            p.Heal(1.0f);
+            Debug.Log("Healed");
         }
 
         public override void SkillEvent(){
             //Summon a well
+            if(well_spawned){
+                return;
+            }
+            well = Instantiate(well_prefab);
+            well.transform.position = p.transform.position; 
+            well.GetComponent<Well>().player_event.AddListener(PlayerEffect);
+            well_spawned = true;
         }
 
         //

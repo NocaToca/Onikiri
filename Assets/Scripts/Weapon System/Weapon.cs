@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 //abstract parent class to be used with different weapon types
 
@@ -10,6 +11,8 @@ public abstract class Weapon : ScriptableObject{
     public Actor holding_actor;
 
     public Enchantment enchantment;
+
+    public UnityEvent<Actor> damage_listener;
 
 
     public virtual void Attack(){
@@ -23,6 +26,12 @@ public abstract class Weapon : ScriptableObject{
     }
 
     public virtual void OnHit(){
+
+    }
+
+    //used for melee
+    public virtual void Damage(Actor a){
+        damage_listener.Invoke(a);
 
     }
     
