@@ -42,7 +42,7 @@ public class ClubSlamCheck : AINode{
                 return FAIL();
             }
 
-            if(ogre.club_collider.player_in_action){
+            if(ogre.club_collider.is_player_in_action_collider){
                 wait_time = 0.0f;
                 return SUCCESS();
             }
@@ -91,7 +91,7 @@ public class OgreRoarCheck : AINode{
             if(ogre.roar_collider == null){
                 return FAIL();
             }
-            if(ogre.roar_collider.player_in_action){
+            if(ogre.roar_collider.is_player_in_action_collider){
                 wait_time = 0.0f;
                 return SUCCESS();
             }
@@ -137,7 +137,7 @@ private float wait_time;
             if(ogre.slam_collider == null){
                 return FAIL();
             }
-            if(ogre.slam_collider.player_in_action){
+            if(ogre.slam_collider.is_player_in_action_collider){
                 wait_time = 0.0f;
                 return SUCCESS();
             }

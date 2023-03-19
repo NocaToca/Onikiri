@@ -48,7 +48,7 @@ public class SwordEnemy : Enemy
         //First, we get the player
         Player player = Game.player;
 
-        if(slam_trigger.player_in_action){
+        if(slam_trigger.is_player_in_action_collider){
             //Player is in our action. Later this will be more complicated math relating to player health, movement, and cooldown but for now we just return this
             return 1.0f;
         } else {
@@ -61,7 +61,7 @@ public class SwordEnemy : Enemy
         //First, we get the player
         Player player = Game.player;
 
-        if(slam_trigger.player_in_action){
+        if(slam_trigger.is_player_in_action_collider){
             //Player is in our action. Later this will be more complicated math relating to player health, movement, and cooldown but for now we just return this
             return 1.0f;
         } else {
@@ -74,7 +74,7 @@ public class SwordEnemy : Enemy
         //First, we get the player
         Player player = Game.player;
 
-        if(slam_trigger.player_in_action){
+        if(slam_trigger.is_player_in_action_collider){
             //Player is in our action. Later this will be more complicated math relating to player health, movement, and cooldown but for now we just return this
             return 1.0f;
         } else {

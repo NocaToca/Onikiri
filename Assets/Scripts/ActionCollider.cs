@@ -11,12 +11,12 @@ public class ActionCollider : MonoBehaviour
     BoxCollider2D box;
 
     [HideInInspector]
-    public bool player_in_action;
+    public bool is_player_in_action_collider;
 
     // Start is called before the first frame update
     void Start()
     {
-        player_in_action = false;
+        is_player_in_action_collider = false;
     }
 
     // Update is called once per frame
@@ -27,13 +27,13 @@ public class ActionCollider : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other){
         if(other.gameObject == Game.player.gameObject){
-            player_in_action = true;
+            is_player_in_action_collider = true;
         }
     }
 
     private void OnTriggerExit2D(Collider2D other){
         if(other.gameObject == Game.player.gameObject){
-            player_in_action = false;
+            is_player_in_action_collider = false;
         }
     }
 }

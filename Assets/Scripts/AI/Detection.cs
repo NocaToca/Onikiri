@@ -43,6 +43,10 @@ public class EnemyDetection : AINode{
             AINode root = GetRoot();
 
             root.SetData("target", player);
+            Debug.Log("Target acquired: " + player.name);
+        } else
+        {
+            // Debug.Log("Already has Target");
         }
 
         state = Status.SUCCESS;
