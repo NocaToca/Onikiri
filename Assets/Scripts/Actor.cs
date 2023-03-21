@@ -21,7 +21,7 @@ public abstract class Actor : MonoBehaviour
     public Controller actor_controller;
 
     protected virtual void Start(){
-        SetController();
+        //SetController();
 
         stats = new Stats(100.0f);
         anime = GetComponent<Animator>();

@@ -48,6 +48,8 @@ public class Enemy : Actor
 
     protected override void Die(){
         Destroy(this.gameObject);
+    }
+    
     public static Enemy GetEnemy(GameObject go){
         SwordEnemy sword_cast = go.GetComponent<SwordEnemy>();
         if(sword_cast != null){
