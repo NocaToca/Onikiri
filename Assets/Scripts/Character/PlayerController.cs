@@ -22,8 +22,8 @@ public class PlayerController : Controller
     // Start is called before the first frame update
     protected override void Start()
     {
-        // skills = new List<SkillListener>();
         base.Start();
+        
         p = GetComponent<Player>();
         if(p == null){
             Debug.LogError("Player Controller is attached to a game object without a player component");

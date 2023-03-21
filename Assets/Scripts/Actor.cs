@@ -21,6 +21,8 @@ public abstract class Actor : MonoBehaviour
     public Controller actor_controller;
 
     protected virtual void Start(){
+        SetController();
+
         stats = new Stats(100.0f);
         anime = GetComponent<Animator>();
         if(anime == null){
@@ -37,7 +39,11 @@ public abstract class Actor : MonoBehaviour
     
 
     public void PlayDamageAnimation(){
-        anime.Play("Hit");
+        if(anime != null){
+            anime.Play("Hit");
+        } else {
+            Debug.Log("Hit");
+        }
     }
 
     public virtual void TakeDamage(float damage){
@@ -71,7 +77,7 @@ public abstract class Actor : MonoBehaviour
             return player;
         }
 
-        Enemy enemy = obj.GetComponent<Enemy>();
+        Enemy enemy = Enemy.GetEnemy(obj);
         if(enemy != null){
             return enemy;
         }

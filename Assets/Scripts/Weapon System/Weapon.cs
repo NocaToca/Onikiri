@@ -20,6 +20,10 @@ public abstract class Weapon : ScriptableObject{
         PlayAttackAnimation();
     }
 
+    public virtual void Attack(GameObject inflicting_actor){
+        Attack();
+    }
+
     //Plays whatever animination we have stored for our attack
     public virtual void PlayAttackAnimation(){
 
@@ -34,5 +38,6 @@ public abstract class Weapon : ScriptableObject{
         damage_listener.Invoke(a);
 
     }
+    
     
 }

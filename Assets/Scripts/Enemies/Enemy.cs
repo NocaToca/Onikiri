@@ -9,6 +9,18 @@ public class Enemy : Actor
 {
     Rigidbody2D rb;
     BoxCollider2D cc;
+
+    public float speed;
+
+    public float attack_speed;
+
+    public Weapon weapon;
+
+    public List<AIAction> available_actions; 
+
+    //Is the animator or animation running for a different move?
+    [HideInInspector]
+    public bool playing_action;
     
     // Start is called before the first frame update
     protected override void Start()
@@ -16,6 +28,7 @@ public class Enemy : Actor
         base.Start();
         rb = GetComponent<Rigidbody2D>();
         cc = GetComponent<BoxCollider2D>();
+        
     }
 
     // Update is called once per frame
@@ -35,5 +48,12 @@ public class Enemy : Actor
 
     protected override void Die(){
         Destroy(this.gameObject);
+    public static Enemy GetEnemy(GameObject go){
+        SwordEnemy sword_cast = go.GetComponent<SwordEnemy>();
+        if(sword_cast != null){
+            return sword_cast;
+        }
+
+        return null;
     }
 }
