@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 240207993}
   m_Layer: 5
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: Canvas
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -466,6 +466,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   follow: {fileID: 0}
+  speed: 10
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -783,15 +784,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movedLastFrame: 0
+  immune: 0
+  damage_listener:
+    m_PersistentCalls:
+      m_Calls: []
   actor_controller: {fileID: 0}
   speed: 1
   boost_speed: 2
   main_hand: {fileID: 11400000, guid: e274c7a7223419f47ac21af59288fd3b, type: 2}
+  first_tree: {fileID: 0}
   off_hand: {fileID: 0}
-  augments: []
-  update_boons:
-    m_PersistentCalls:
-      m_Calls: []
+  second_tree: {fileID: 0}
+  boon_trees: []
 --- !u!114 &1226369021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -805,6 +809,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   accepting_movement: 0
+  canvas: {fileID: 0}
 --- !u!50 &1226369022
 Rigidbody2D:
   serializedVersion: 4
@@ -1151,6 +1156,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movedLastFrame: 0
+  immune: 0
+  damage_listener:
+    m_PersistentCalls:
+      m_Calls: []
   actor_controller: {fileID: 0}
   speed: 1
   attack_speed: 1

@@ -13,6 +13,8 @@ public class CameraFollow : MonoBehaviour
 
     public GameObject follow;
 
+    public float speed;
+
     void Start(){
         if(type == FollowType.Player){
             follow = GameObject.FindGameObjectWithTag("Player");
@@ -20,7 +22,7 @@ public class CameraFollow : MonoBehaviour
     }
 
     public void Update(){
-        Vector3 point = follow.transform.position;
+        Vector3 point = Vector3.MoveTowards(this.transform.position, follow.transform.position, Game.tick * speed);
         point.z = this.transform.position.z;
 
         this.transform.position = point;
