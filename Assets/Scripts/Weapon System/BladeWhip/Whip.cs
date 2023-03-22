@@ -14,7 +14,7 @@ public class Whip : MonoBehaviour
     Rigidbody2D rb;
     CircleCollider2D cc;
 
-    float angle = 90.0f;
+    //float angle = 90.0f;
 
     void Awake(){
         cc = GetComponent<CircleCollider2D>();

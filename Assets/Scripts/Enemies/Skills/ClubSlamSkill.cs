@@ -5,7 +5,7 @@ using AI;
 
 public class ClubSlamSkill : SkillComponent
 {
-    public ActionCollider hitbox = new ActionCollider();
+    public ActionCollider hitbox;// = new ActionCollider();
     public float damage = -1.0f;
     public float cooldown = 5.0f;
     // Start is called before the first frame update

@@ -14,16 +14,31 @@ public class CanvasController : MonoBehaviour
     public Slider health_bar_prefab;
     public List<HealthBar> health_bars;
 
+    public CanvasCommunicator augment_comminicator;
+
+    public AugmentDisplay[] boons;
+    public AugmentDisplay[] skills;
+
     
 
     void Awake(){
         health_bars = new List<HealthBar>();
+        augment_comminicator = new CanvasCommunicator(boons, skills);
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
         
+    }
+
+    void DisplayBoonChoices(){
+        augment_comminicator.ChooseDisplayUpgrades(player, DisplayType.Boon);
+    }
+
+    void DisplaySkillChoices(){
+        augment_comminicator.ChooseDisplayUpgrades(player, DisplayType.Skill);
     }
 
     // Update is called once per frame
