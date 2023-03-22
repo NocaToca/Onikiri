@@ -52,6 +52,9 @@ public abstract class Actor : MonoBehaviour
         }
         PlayDamageAnimation();
         stats.health -= damage;
+        if(stats.health <= 0){
+            Die();
+        }
     }
 
     public void Heal(float amount){

@@ -37,17 +37,9 @@ public class Player : Actor
 
     //Holds the functions that we call do update
 
-    // Start is called before the first frame update
-    protected override void Start()
-    {
-        base.Start();
-        //augments = new List<Augment>();
-        actor_controller = this.GetComponent<PlayerController>();
-        main_hand.holding_actor = this;
+    // Start is called before the first frame update\\
 
-        //We have 9 mana
-        kitsunebi = new Mana(9);
-
+    void Awake(){
         GameObject tree_prefab = null;
         if(first_tree != null){
             tree_prefab = first_tree.gameObject;
@@ -74,6 +66,19 @@ public class Player : Actor
             boon_trees[i] = t_boon.AddComponent<BoonTree>();
             t_boon.gameObject.name = "Boon Tree " + i;
         }
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        //augments = new List<Augment>();
+        actor_controller = this.GetComponent<PlayerController>();
+        main_hand.holding_actor = this;
+
+        //We have 9 mana
+        kitsunebi = new Mana(9);
+
+        
 
         //augments.Add(this.gameObject.AddComponent<Dash>());
         //augments.Add(this.gameObject.AddComponent<SpeedIncrease>());
@@ -130,9 +135,16 @@ public class Player : Actor
     public List<AugmentTree> GetAugmentTrees(){
         List<AugmentTree> trees = new List<AugmentTree>();
 
+        if(first_tree == null){
+            Debug.LogWarning("First Tree is null");
+        }
+
         trees.Add(first_tree);
         trees.Add(second_tree);
         foreach(BoonTree tree in boon_trees){
+            if(tree == null){
+                Debug.LogWarning("Returning null boon tree");
+            }
             trees.Add(tree);
         }
 

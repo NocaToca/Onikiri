@@ -19,7 +19,8 @@ public class CanvasController : MonoBehaviour
     public AugmentDisplay[] boons;
     public AugmentDisplay[] skills;
 
-    
+    public DisplayType test_display_type;
+    public bool test_display;
 
     void Awake(){
         health_bars = new List<HealthBar>();
@@ -30,7 +31,19 @@ public class CanvasController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        if(test_display){
+            StartCoroutine(LateStart(1));
+        }
+    }
+
+    IEnumerator LateStart(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        if(test_display_type == DisplayType.Boon){
+            DisplayBoonChoices();
+        } else {
+            DisplaySkillChoices();
+        }
     }
 
     void DisplayBoonChoices(){

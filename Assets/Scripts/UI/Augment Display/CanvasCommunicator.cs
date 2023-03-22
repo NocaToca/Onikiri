@@ -74,30 +74,39 @@ namespace Augments{
                 } else {
                     chosen_nodes = new Node[5];
 
-                    List<BoonTree> skill_trees = new List<BoonTree>();
+                    List<BoonTree> boon_tree = new List<BoonTree>();
                     foreach(AugmentTree tree in trees){
                         if(tree is BoonTree){
                             BoonTree cast = (BoonTree)tree;
-                            skill_trees.Add(cast);
+                            boon_tree.Add(cast);
                         }
                     }
+
+                    if(boon_tree[0] == null){
+                        Debug.Log(boon_tree.Count);
+                        Debug.Log(trees.Count);
+                        Debug.LogError("Error in Displaying Boon Trees: Tree was found to be null");
+                    }
+
+                    Debug.Log(boon_tree[0].gameObject.name);
 
 
                     List<Node> all_available_skills = new List<Node>();
 
-                    foreach(Node n in skill_trees[0].GetChildren()){
-                        all_available_skills.Add(n);
-                    }
-                    foreach(Node n in skill_trees[1].GetChildren()){
-                        all_available_skills.Add(n);
+                    foreach(BoonTree single_boon_tree in boon_tree){
+                        List<Node> children = single_boon_tree.GetChildren();
+
+                        foreach(Node n in children){
+                            all_available_skills.Add(n);
+                        }
                     }
 
                     List<Node> possible_nodes = new List<Node>();
 
                     //Now we just have to filter out what nodes we already have
                     for(int i = 0; i < all_available_skills.Count; i++){
-                        for(int x = 0; x < skill_trees.Count; x++){
-                            if(!skill_trees[x].root.IsRelated(all_available_skills[i])){
+                        for(int x = 0; x < boon_tree.Count; x++){
+                            if(!boon_tree[x].root.IsRelated(all_available_skills[i])){
                                 possible_nodes.Add(all_available_skills[i]);
                             }
                         }

@@ -36,15 +36,9 @@ public class OgreAITree : AITree
     {
         AINode root = new Selector(new List<AINode>{
             new Selector(new List<AINode>{
-                new Sequence(new List<AINode>{
-                    new RoarNode()
-                }),
-                new Sequence(new List<AINode>{
-                    new ClubSlamNode()
-                }),
-                new Sequence(new List<AINode>{
+                    new RoarNode(),
+                    new ClubSlamNode(),
                     new OgreSlamNode()
-                })
             }),
             new Sequence(new List<AINode>{
                 new AttackNode(pawn, pawn.weapon),

@@ -61,14 +61,17 @@ namespace Augments{
         public override string Name(){
             return "Time Control";
         }
+#pragma warning disable 0219
 
         public override string Description(){
             string weapon_combat = "Weapons: All";
             string new_line = "\n";
             string base_desc = "Slow down time for everything but you.";
 
-            return weapon_combat + new_line + new_line + base_desc;
+            return base_desc;
         }
+
+        #pragma warning restore 0219
 
     }
 

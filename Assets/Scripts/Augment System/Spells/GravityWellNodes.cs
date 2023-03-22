@@ -8,6 +8,10 @@ using UnityEngine;
 namespace Augments{
     public class GravityWell : SkillNode{
         public GravityWell(Player p) : base(p){}
+
+        public override Node Assemble(){
+            return this;
+        }
     }
 
 }

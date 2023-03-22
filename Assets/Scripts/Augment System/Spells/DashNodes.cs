@@ -99,13 +99,15 @@ namespace Augments{
         public override string Name(){
             return "Spirit Dash";
         }
+#pragma warning disable 0219
 
         public override string Description(){
             string weapon_combat = "Weapons: All but the blade and whip";
             string new_line = "\n";
             string base_desc = "Dash toward your mouse direction.";
 
-            return weapon_combat + new_line + new_line + base_desc;
+            return base_desc;
+        #pragma warning restore 0219
         }
 
     }
@@ -154,10 +156,6 @@ namespace Augments{
 
             AddChild(child1.Assemble());
             AddChild(child2.Assemble());
-
-            foreach(Node child in children){
-                child.parent = this;
-            }
 
             return this;
         }

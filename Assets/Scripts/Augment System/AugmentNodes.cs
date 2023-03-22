@@ -97,12 +97,12 @@ namespace Augments{
             TimeControl c2 = new TimeControl(p);
             Rejuvenate c3 = new Rejuvenate(p);
             Vampire c4 = new Vampire(p);
-            GravityWell c5 = new GravityWell(p);
+            //GravityWell c5 = new GravityWell(p);
             AddChild(c1.Assemble());
             AddChild(c2.Assemble());
             AddChild(c3.Assemble());
             AddChild(c4.Assemble());
-            AddChild(c5.Assemble());
+            //AddChild(c5.Assemble());
 
             return this;
         }

@@ -51,9 +51,20 @@ public class Enemy : Actor
     }
     
     public static Enemy GetEnemy(GameObject go){
+        Enemy basic_cast = go.GetComponent<Enemy>();
+        if(basic_cast != null){
+            //Debug.Log("Basic Cast Success!");
+            return basic_cast;
+        }
+
         SwordEnemy sword_cast = go.GetComponent<SwordEnemy>();
         if(sword_cast != null){
             return sword_cast;
+        }
+
+        Ogre ogre_cast = go.GetComponent<Ogre>();
+        if(ogre_cast != null){
+            return ogre_cast;
         }
 
         return null;

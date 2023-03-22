@@ -72,13 +72,15 @@ namespace Augments{
         public override string Name(){
             return "Rejuvinate";
         }
+#pragma warning disable 0219
 
         public override string Description(){
             string weapon_combat = "Weapons: Orb and Dagger";
             string new_line = "\n";
             string base_desc = "Creates a well that passively heals you while inside.";
 
-            return weapon_combat + new_line + new_line + base_desc;
+            return base_desc;
+        #pragma warning restore 0219
         }
 
     }

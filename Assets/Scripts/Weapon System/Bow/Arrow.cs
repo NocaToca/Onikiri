@@ -7,6 +7,17 @@ using UnityEngine;
 public class Arrow : Projectile
 {
     //Empty atm bc almost everything was moved to the projectile class
+
+    protected override void Update(){
+        base.Update();
+
+        if(GetComponent<Animator>().GetCurrentAnimatorClipInfo(0) != null){
+            if(GetComponent<Animator>().GetCurrentAnimatorClipInfo(0)[0].clip.name == "death"){
+                Destroy(this.gameObject);
+            }
+        }
+        
+    }
    
    protected override void OnTriggerEnter2D(Collider2D other){
 
@@ -24,6 +35,7 @@ public class Arrow : Projectile
 
         base.OnTriggerEnter2D(other);
 
-        Destroy(this.gameObject);
+        GetComponent<Animator>().Play("OnHit");
+
    }
 }

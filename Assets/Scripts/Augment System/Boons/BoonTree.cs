@@ -15,6 +15,7 @@ namespace Augments{
         {
             base.Start();
             root = new BoonNode(GameObject.FindGameObjectWithTag("Player").GetComponent<Player>());
+            root.Assemble();
             if(!(root is BoonNode)){
                 Debug.LogError("Incompatible node type for BoonTree");
             }

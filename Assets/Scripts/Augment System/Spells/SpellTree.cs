@@ -20,6 +20,7 @@ namespace Augments{
             base.Start();
 
             root = new SkillNode(GameObject.FindGameObjectWithTag("Player").GetComponent<Player>());
+            root.Assemble();
             //root = new Rejuvenate(10.0f, 2.0f, this.GetComponent<Player>());
             if(!(root is SkillNode)){
                 Debug.LogError("Incompatible node type for Spell Trees");

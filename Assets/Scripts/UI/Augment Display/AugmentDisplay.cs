@@ -39,8 +39,6 @@ namespace Augments{
                 if(node is SkillNode){
                     SkillNode skill_cast = (SkillNode)node;
                     weapon_field.text = skill_cast.WeaponCompatibility();
-                } else {
-                    weapon_field.text = "";
                 }
 
                 display_image = node.display_image;
