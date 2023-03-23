@@ -21,6 +21,10 @@ public class EnemyDetection : AINode{
     public override Status Evaluate(){
         object target = GetData("target");
 
+        if(a.debug == true){
+            a.gizmos_drawn.AddListener(Visualize);
+        }
+
         if(target == null){
             Vector2 point = new Vector2(a.transform.position.x, a.transform.position.y);
             Collider2D[] colliders = Physics2D.OverlapCircleAll(point, fov);
@@ -52,7 +56,28 @@ public class EnemyDetection : AINode{
         state = Status.SUCCESS;
         return state;
     }
+
+    public void Visualize(){
+        object target = GetData("target");
+
+        //We don't see
+        if(target == null){
+            Gizmos.color = Color.red;
+        } else {
+            //We see
+            GameObject player = (GameObject)target;
+            if(Vector3.Distance(a.transform.position, player.transform.position) <= fov){
+                //We in range
+                Gizmos.color = Color.blue;
+            } else {
+                Gizmos.color = Color.red;
+            }   
+        }
+
+        Gizmos.DrawWireSphere(a.transform.position, fov);
+    }
 }
+
 
 public class GoToTarget :AINode{
     private Actor a;

@@ -6,6 +6,7 @@ using UnityEngine.Events;
 //This is just used as a parent class for Enemies and the Player to do similar functions (namely damage functions)
 public abstract class Actor : MonoBehaviour
 {
+    public bool debug; //enables debug action
     public bool movedLastFrame = false;
     Animator anime;
 
@@ -16,6 +17,8 @@ public abstract class Actor : MonoBehaviour
     [HideInInspector]
     public UnityEvent<Weapon, Actor> damage_listener = new UnityEvent<Weapon, Actor>(); 
 
+    [HideInInspector]
+    public UnityEvent gizmos_drawn = new UnityEvent();
 
     [HideInInspector]
     public Controller actor_controller;
@@ -34,6 +37,10 @@ public abstract class Actor : MonoBehaviour
 
     void Update(){
         
+    }
+
+    void OnDrawGizmos(){
+        gizmos_drawn.Invoke();
     }
 
     
