@@ -34,7 +34,9 @@ public class Arrow : Projectile
         }
 
         base.OnTriggerEnter2D(other);
-
+        if(other.gameObject.tag != "Enemy"){
+            return;
+        }
         GetComponent<Animator>().Play("OnHit");
 
    }

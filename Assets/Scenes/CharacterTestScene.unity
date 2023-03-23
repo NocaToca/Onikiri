@@ -3205,7 +3205,7 @@ MonoBehaviour:
   actor_controller: {fileID: 0}
   speed: 1
   boost_speed: 2
-  main_hand: {fileID: 11400000, guid: e274c7a7223419f47ac21af59288fd3b, type: 2}
+  main_hand: {fileID: 11400000, guid: d430cc8945888a04bbd984380eb8bec9, type: 2}
   first_tree: {fileID: 0}
   off_hand: {fileID: 0}
   second_tree: {fileID: 0}
@@ -4593,6 +4593,55 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Name Field
+--- !u!1 &1714048557
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1714048559}
+  - component: {fileID: 1714048558}
+  m_Layer: 0
+  m_Name: SpawnTest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1714048558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1714048557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c58d1339c98121194b29a041c7006aca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemies_to_spawn:
+  - {fileID: 1266944116}
+  type: 0
+  radius: 3
+  show_debug: 1
+--- !u!4 &1714048559
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1714048557}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1809586576
 GameObject:
   m_ObjectHideFlags: 0

@@ -19,6 +19,9 @@ namespace Augments{
         Dictionary<Actor, int> inflicted_enemies;
 
         public override void UpdateEvent(){
+            if(inflicted_enemies == null){
+                return;
+            }
             foreach(KeyValuePair<Actor, int> pair in inflicted_enemies){
                 float dmg = pair.Value * bleed_damage_per_second;
                 pair.Key.TakeDamage(dmg);
