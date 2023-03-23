@@ -99,6 +99,7 @@ public class GoToTarget :AINode{
 
         if(Vector3.Distance(player.transform.position, a.transform.position) > 0.01f){
             a.transform.position = Vector3.MoveTowards(a.transform.position, player.transform.position, speed * Game.tick);
+            a.transform.up= Vector3.Lerp(a.transform.up, (player.transform.position - a.transform.position), 0.1f);
         }
 
         state = Status.RUNNING;
