@@ -13,21 +13,30 @@ using Augments;
 [RequireComponent(typeof(PlayerController))]
 public class Player : Actor
 {
-    
+    [Header("Movement")]
+    [Tooltip("Base speed of the character")]
     public float speed;
+
+    [Tooltip("Boosted speed of the character when sprinting")]
     public float boost_speed;
     
+
+    [Header("Weapons")]
+    [Tooltip("Main hand weapon")]
     public Weapon main_hand;
-    public SpellTree first_tree;
 
+    [Tooltip("Offhand weapons")]
     public Weapon off_hand;
-    public SpellTree second_tree;
 
+    [Header("Augment Trees")]
+    public SpellTree first_tree;
+    public SpellTree second_tree;
     public BoonTree[] boon_trees;
 
-
+    //Calls colission effects to anything interested
     UnityEvent collision_listener;
 
+    //Enables damaging others when the player colliders with them
     bool on_enter_damage;
 
     //public List<Augment> augments;
@@ -39,7 +48,10 @@ public class Player : Actor
 
     // Start is called before the first frame update\\
 
+    //On Awake, we want to initialize the augment trees
     void Awake(){
+
+        //Grabbing our base tree prefab, and if it is not null creates it
         GameObject tree_prefab = null;
         if(first_tree != null){
             tree_prefab = first_tree.gameObject;
@@ -47,6 +59,8 @@ public class Player : Actor
                 Debug.LogError("Please put skill trees and boon trees on seperate game objects to the player. Thank you!");
             }
         } else {
+
+            //Our tree is on a new gameobject we make that is a child to this
             tree_prefab = new GameObject();
             GameObject t = Instantiate(tree_prefab);
             t.transform.SetParent(this.transform);
@@ -54,6 +68,7 @@ public class Player : Actor
             t.gameObject.name = "Spell Tree One";
         }
 
+        //Basically the same process for the rest of the Augment trees
         GameObject t2 = Instantiate(tree_prefab);
         t2.transform.SetParent(this.transform);
         second_tree = t2.AddComponent<SpellTree>();
@@ -90,6 +105,7 @@ public class Player : Actor
         
     }
 
+    //Updates our trees with the correlated children; if there are multiple it will do the first
     public void UpdateTrees(Node n){
 
         if(n is SkillNode){
@@ -111,21 +127,19 @@ public class Player : Actor
         }
     }
 
+    //Toggle functions (used as listeners for skills)
     public void ToggleMovement(){
         actor_controller.accepting_movement = !actor_controller.accepting_movement;
     }
     public void ToggleMovement(bool status){
         actor_controller.accepting_movement = status;
     }
-
     public void ToggleOnEnterDamage(){
         on_enter_damage = !on_enter_damage;
     }
     public void ToggleOnEnterDamage(bool status){
         on_enter_damage = status;
     }
-
-
     //Easiest thing would be to turn off collider, but this could cause problems if we need for otherthings
     public void ToggleCollisionImmunity(){
         immune = !immune;
@@ -133,7 +147,6 @@ public class Player : Actor
     public void ToggleCollisionImmunity(bool status){
         immune = status;
     }
-
     //Used for main collider, not the trigger collider
     public void ToggleCollider(){
         immune = !immune;
@@ -142,6 +155,7 @@ public class Player : Actor
         immune = status;
     }
 
+    //Gets all of our augment trees and then returns them easily
     public List<AugmentTree> GetAugmentTrees(){
         List<AugmentTree> trees = new List<AugmentTree>();
 
@@ -188,7 +202,7 @@ public class Player : Actor
     // }
 
     
-
+    //Attempts an attack
     public bool AttemptAttack(){
         if(main_hand != null){
             main_hand.Attack();

@@ -4,9 +4,12 @@ using UnityEngine;
 
 using AI;
 
+//Our main detection node
 public class EnemyDetection : AINode{
 
     private Actor a;
+
+    //Our field of view, or radius for now
     public float fov;
 
     public EnemyDetection(Actor a, float fov) : base(){
@@ -21,16 +24,23 @@ public class EnemyDetection : AINode{
     public override Status Evaluate(){
         object target = GetData("target");
 
+        //If our debug variable is true for our actor, we draw the view distance
         if(a.debug == true){
             a.gizmos_drawn.AddListener(Visualize);
         }
 
+        //If we don't have a target, we try to find one
         if(target == null){
+
+            //3d to 2d
             Vector2 point = new Vector2(a.transform.position.x, a.transform.position.y);
+
+            //Grabbing all of the colliders in the fov
             Collider2D[] colliders = Physics2D.OverlapCircleAll(point, fov);
 
             // Debug.Log(colliders.Length);
 
+            //Look through each collission and see if it is the player, if it is great! we will add it to the root environment
             GameObject player = null;
             foreach(Collider2D col in colliders){
                 if(col.gameObject.tag == "Player"){
@@ -57,6 +67,7 @@ public class EnemyDetection : AINode{
         return state;
     }
 
+    //Gizmo logic
     public void Visualize(){
         object target = GetData("target");
 
@@ -78,7 +89,7 @@ public class EnemyDetection : AINode{
     }
 }
 
-
+//Actually moves our character to the target
 public class GoToTarget :AINode{
     private Actor a;
 
@@ -97,6 +108,7 @@ public class GoToTarget :AINode{
     public override Status Evaluate(){
         GameObject player = (GameObject)GetData("target");
 
+        //If our target is not close enough we move to it and look towards it
         if(Vector3.Distance(player.transform.position, a.transform.position) > 0.01f){
             a.transform.position = Vector3.MoveTowards(a.transform.position, player.transform.position, speed * Game.tick);
             a.transform.up= Vector3.Lerp(a.transform.up, (player.transform.position - a.transform.position), 0.1f);

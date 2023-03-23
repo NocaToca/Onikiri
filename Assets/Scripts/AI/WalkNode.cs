@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using AI;
 
+//Walks in random directions
 public class WalkNode : AINode
 {
     public float speed;
@@ -21,6 +22,7 @@ public class WalkNode : AINode
 
     private Vector3 destination;
 
+    //Sets up the walk node with random settings
     private void Init(Actor actor, WalkSettings settings){
         this.actor = actor;
         speed = settings.speed;
@@ -43,6 +45,7 @@ public class WalkNode : AINode
         Init(actor, settings);
     }
 
+    //Chooses a new random destination to walk to based off our radius
     private Vector3 ChooseNewDestination(){
         float angle = Random.Range(0.0f, 90.0f);
 
@@ -64,6 +67,8 @@ public class WalkNode : AINode
     }
 
     public override Status Evaluate(){
+
+        //If we are waiting, we idle until we have waited long enough and choose a new destination
         if(waiting){
             time_spent_waiting += 1.0f * Game.tick; 
             if(time_spent_waiting >= wait_time){
@@ -72,6 +77,8 @@ public class WalkNode : AINode
                 destination = ChooseNewDestination();
             }
         } else {
+
+            //If we aren't, we just move towards the destination
             if(Vector3.Distance(actor.transform.position, destination) <= 0.01f){
                 waiting = true;
             } else {

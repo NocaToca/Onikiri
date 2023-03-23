@@ -2,8 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    Our main Node class for our AI
+
+    AI Decisions work like a tree
+*/
 namespace AI
 {
+    //The current status of our AI, obvious from their names
     public enum Status{
         RUNNING,
         SUCCESS,
@@ -12,20 +18,26 @@ namespace AI
 
     public class AINode{
 
+        //State
         protected Status state;
 
+        //Parent
         public AINode parent;
 
+        //Children
         public List<AINode> children = new List<AINode>();
 
+        //Shared data, or the environment relative to the node
         protected Dictionary<string, object> environment;
 
+        //Initialize environment and children
         public AINode(){
             parent = null;
             environment = new Dictionary<string, object>();
             children = new List<AINode>();
         }
 
+        //Set the children
         public AINode(List<AINode> children){
             parent = null;
             environment = new Dictionary<string, object>();
@@ -34,19 +46,23 @@ namespace AI
             }
         }
 
+        //Attaches a node to their parent, making sure to set the parent correctly
         public void AttachNode(AINode node){
             node.parent = this;
             children.Add(node);
         }
 
+        //Main Evaluate function to be implemented independently on each node instance
         public virtual Status Evaluate(){
             return Status.FAILURE;
         }
 
+        //Sets the data in the environment
         public void SetData(string id, object value){
             environment[id] = value;
         }
 
+        //Runs through each parent environment and tries to find the value
         public object GetData(string id){
 
             object return_object = null;
@@ -70,6 +86,7 @@ namespace AI
 
         }
 
+        //Clears the data from our environment if we are done with it
         public bool ClearData(string id){
 
             if(environment.ContainsKey(id)){
@@ -92,6 +109,7 @@ namespace AI
             return false;
         }
 
+        //Finds the root of the tree from any given node
         public AINode GetRoot(){
             if(parent == null){
                 return this;
@@ -105,6 +123,7 @@ namespace AI
             return root;
         }
 
+        //Shorthands
         public Status FAIL(){
             state = Status.FAILURE;
             return state;
@@ -120,6 +139,25 @@ namespace AI
 
     }
 
+    /*
+        Main idea of Sequence is that if we have Node A, Node B, and Node C as children, the tree will not look like this:
+                    Parent
+                /      |      \
+            Node A   Node B   Node C
+
+        But Like this:
+
+        Parent
+           |
+        Node A
+           |
+        Node B
+           |
+        Node C
+
+        Or, in other words, the Sequence node will run each child in sequence until one fails. This is really useful for nodes that rely on each other, like ability
+        check to cast
+    */
     public class Sequence : AINode{
 
         public Sequence() : base(){
@@ -157,6 +195,9 @@ namespace AI
 
     }
 
+    /*
+        Selector chooses the first available node from the children. It looks like a typical branch in a tree
+    */
     public class Selector : AINode{
 
         public Selector() : base(){

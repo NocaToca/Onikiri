@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using AI;
 
+//Our ogre selector for the specific skills
 public class OgreSelector : Selector{
 
     public OgreSelector(Ogre ogre, OgreSettings settings) : base(){
@@ -16,6 +17,7 @@ public class OgreSelector : Selector{
     }
 }
 
+//Basically our ogre skills that all do the same thing
 public class ClubSlamCheck : AINode{
     
     private float wait_time;

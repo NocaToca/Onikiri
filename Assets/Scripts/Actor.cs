@@ -6,12 +6,14 @@ using UnityEngine.Events;
 //This is just used as a parent class for Enemies and the Player to do similar functions (namely damage functions)
 public abstract class Actor : MonoBehaviour
 {
-    public bool debug; //enables debug action
+
+    [HideInInspector]
     public bool movedLastFrame = false;
     Animator anime;
 
     public Stats stats;
 
+    [HideInInspector]
     public bool immune;
 
     [HideInInspector]
@@ -23,10 +25,17 @@ public abstract class Actor : MonoBehaviour
     [HideInInspector]
     public Controller actor_controller;
 
+    [Header("Debug")]
+    [Tooltip("Shows debug information related to the actor")]
+    public bool debug; //enables debug action
+
     protected virtual void Start(){
         //SetController();
 
+        //We create a new base Stats with a base health of 100
         stats = new Stats(100.0f);
+
+        //Getting the animator
         anime = GetComponent<Animator>();
         if(anime == null){
             Debug.LogWarning("Warning: No animator found on the Game Object " + gameObject.name + ". No animations will play.");
@@ -39,12 +48,18 @@ public abstract class Actor : MonoBehaviour
         
     }
 
+
+    /*
+        This is used to help debug information relating to skills or anything else actor-specific, just write your specific debug and
+        then add it as a listener
+    */
     void OnDrawGizmos(){
+        //Invokes all debug gizmos related to an actor
         gizmos_drawn.Invoke();
     }
 
     
-
+    //Base hit animation
     public void PlayDamageAnimation(){
         if(anime != null){
             anime.Play("Hit");
@@ -53,6 +68,7 @@ public abstract class Actor : MonoBehaviour
         }
     }
 
+    //We Take damage, play the damage animation, and then die if we have less than zero hp
     public virtual void TakeDamage(float damage){
         if(immune){
             return;
@@ -64,6 +80,7 @@ public abstract class Actor : MonoBehaviour
         }
     }
 
+    //The opposite of damage
     public void Heal(float amount){
         stats.health += amount;
         if(stats.health > stats.max_health){
@@ -71,10 +88,12 @@ public abstract class Actor : MonoBehaviour
         }
     }
 
+    //depricated
     public void DamageOther(Weapon weapon, Actor other){
         damage_listener.Invoke(weapon, other);
     }
 
+    //Death function
     protected virtual void Die(){
 
     }
@@ -97,6 +116,7 @@ public abstract class Actor : MonoBehaviour
     }
 }
 
+//Base Stats struct
 public struct Stats{
 
     public float max_health {get; internal set;}

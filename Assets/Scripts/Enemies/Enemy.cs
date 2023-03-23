@@ -10,12 +10,17 @@ public class Enemy : Actor
     Rigidbody2D rb;
     BoxCollider2D cc;
 
+    [Header("Basic Variables")]
+    [Tooltip("The speed of the enemy")]
     public float speed;
-
+    [Tooltip("How fast the enemy attacks")]
     public float attack_speed;
 
+    [Header("Weapon")]
+    [Tooltip("The weapon the enemy holders")]
     public Weapon weapon;
 
+    [HideInInspector]//depricated
     public List<AIAction> available_actions; 
 
     //Is the animator or animation running for a different move?
@@ -37,6 +42,7 @@ public class Enemy : Actor
         
     }
 
+    //Takes damage and then displays the health bar over the enemy
     public override void TakeDamage(float damage){
         base.TakeDamage(damage);
 
@@ -51,6 +57,8 @@ public class Enemy : Actor
     }
     
     public static Enemy GetEnemy(GameObject go){
+
+        //Apparently Unity fixed the cast problem
         Enemy basic_cast = go.GetComponent<Enemy>();
         if(basic_cast != null){
             //Debug.Log("Basic Cast Success!");
