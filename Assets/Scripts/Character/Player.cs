@@ -90,6 +90,16 @@ public class Player : Actor
         
     }
 
+    public void UpdateTrees(Node n){
+
+        if(n is SkillNode){
+            first_tree.root = n;
+        } else {
+            boon_trees[0].root = n;
+        }
+
+    }
+
     private void OnTriggerEnter2D(Collider2D col){
         //collision_listener.Invoke();
         if(on_enter_damage){

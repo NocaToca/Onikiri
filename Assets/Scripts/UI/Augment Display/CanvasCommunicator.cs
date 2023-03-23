@@ -18,6 +18,8 @@ namespace Augments{
             public AugmentDisplay[] boons;
             public AugmentDisplay[] skills;
 
+            DisplayType current_type;
+
             public CanvasCommunicator(AugmentDisplay[] boons, AugmentDisplay[] skills){
                 if(skills.Length != 3 || boons.Length != 5){
                     Debug.LogError("Canvas Communicator should have an array of length 5 and 3.");
@@ -27,9 +29,65 @@ namespace Augments{
                 this.skills = skills;
             }
 
+            public void TurnOffDisplay(){
+                foreach(AugmentDisplay boon in boons){
+                    boon.DeactivateDisplay();
+                }
+                foreach(AugmentDisplay skill in skills){
+                    skill.DeactivateDisplay();
+                }
+            }
+
+            public bool Overlap(Vector3 position, AugmentDisplay ad){
+                Rect rect = ad.background.rectTransform.rect;
+
+                Vector2 point = new Vector2(position.x, position.y) - new Vector2(Screen.width / 2, Screen.height / 2);;
+
+                // Get the left, right, top, and bottom boundaries of the rect
+                float leftSide = ad.background.rectTransform.anchoredPosition.x - (rect.width * ad.background.rectTransform.localScale.x) / 2;
+                float rightSide = ad.background.rectTransform.anchoredPosition.x + (rect.width * ad.background.rectTransform.localScale.x) / 2;
+                float topSide = ad.background.rectTransform.anchoredPosition.y + (rect.height * ad.background.rectTransform.localScale.y) / 2;
+                float bottomSide = ad.background.rectTransform.anchoredPosition.y - (rect.height * ad.background.rectTransform.localScale.y) / 2;
+
+                //Debug.Log(leftSide + ", " + rightSide + ", " + topSide + ", " + bottomSide);
+
+                // Check to see if the point is in the calculated bounds
+                if (point.x >= leftSide &&
+                    point.x <= rightSide &&
+                    point.y >= bottomSide &&
+                    point.y <= topSide)
+                {
+                    return true;
+                }
+                return false;
+            }
+
+            public Node CheckOverlap(Vector3 position){
+
+                //Check if we are displaying the boons or skills
+                if(current_type == DisplayType.Boon){
+                    for(int i = 0; i < boons.Length; i++){
+                        if(Overlap(position, boons[i])){
+                            return boons[i].SelectUpgrade();
+                        }
+                    }
+                } else {
+                    for(int i = 0; i < skills.Length; i++){
+                        if(Overlap(position, skills[i])){
+                            return skills[i].SelectUpgrade();
+                        }
+                    }
+                }
+
+                // Debug.LogError("Search for Augment failed");
+                return null;
+            }
+
             //This is the chunk of logic to display each upgrade
             public void ChooseDisplayUpgrades(Player p, DisplayType type){
                 List<AugmentTree> trees = p.GetAugmentTrees();
+
+                current_type = type;
 
                 Node[] chosen_nodes = null;
 

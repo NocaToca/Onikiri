@@ -35,3 +35,19 @@ public abstract class Controller : MonoBehaviour
         return null;
     }
 }
+
+
+/*
+Lol I'm doing an ocaml thing in class and decided to just do it here long story short ignore this
+
+let rec map : ('a -> 'b) -> 'a ll -> unit =
+    fun f ll ->
+    let rec helper no = 
+    match no with
+    | None -> ()
+    | Some node -> node.data <- f node.data;
+        helper (node.next)
+    in 
+    helper ll.head
+
+*/

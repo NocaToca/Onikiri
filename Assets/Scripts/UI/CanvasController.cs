@@ -22,10 +22,13 @@ public class CanvasController : MonoBehaviour
     public DisplayType test_display_type;
     public bool test_display;
 
+    bool displaying;
+
     void Awake(){
         health_bars = new List<HealthBar>();
         augment_comminicator = new CanvasCommunicator(boons, skills);
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        displaying = false;
     }
 
     // Start is called before the first frame update
@@ -48,18 +51,38 @@ public class CanvasController : MonoBehaviour
 
     void DisplayBoonChoices(){
         augment_comminicator.ChooseDisplayUpgrades(player, DisplayType.Boon);
+        displaying = true;
     }
 
     void DisplaySkillChoices(){
         augment_comminicator.ChooseDisplayUpgrades(player, DisplayType.Skill);
+        displaying = true;
+    }
+
+    private void TurnOffDisplay(){
+        displaying = false;
+        augment_comminicator.TurnOffDisplay();
     }
 
     // Update is called once per frame
     void Update()
     {
+        UpdateAugmentDisplay();
         UpdateManaSprites();
         UpdateHealth();
         
+    }
+
+    private void UpdateAugmentDisplay(){
+        if(displaying){
+            if(Input.GetMouseButtonDown(0)){
+                Augments.Node n = augment_comminicator.CheckOverlap(Input.mousePosition);
+                if(n != null){
+                    player.UpdateTrees(n);
+                    TurnOffDisplay();
+                }
+            }
+        }
     }
 
     private void UpdateManaSprites(){
