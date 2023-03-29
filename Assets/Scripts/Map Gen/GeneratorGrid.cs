@@ -20,10 +20,10 @@ public class GeneratorGrid : MonoBehaviour
     //I know this SEEMS really inefficient memory wise but these are only used for generation as well as they are bool arrays.
     //That's important bc 2 of these arrays arrays take as much memory as one single-point 1024 array (float[1024])
     //We also trash them immediately after we're done with them
-    bool[,] first_quad; //Works with positive x and y coordinates
-    bool[,] second_quad; //Works with negative x and positive y coordinates
-    bool[,] third_quad; //Works with negative x and y coordinates
-    bool[,] fourth_quad; //Works with positve x and negative y coordinates
+    public bool[,] first_quad; //Works with positive x and y coordinates
+    public bool[,] second_quad; //Works with negative x and positive y coordinates
+    public bool[,] third_quad; //Works with negative x and y coordinates
+    public bool[,] fourth_quad; //Works with positve x and negative y coordinates
 
     //Awake
     void Awake(){
@@ -69,7 +69,7 @@ public class GeneratorGrid : MonoBehaviour
         bool return_bool = false;
 
         int top_left_x = (int)center.x - width/2;
-        int top_left_y = (int)center.y + height/2; 
+        int top_left_y = (int)center.y - height/2; 
 
         for(int y = top_left_y; y < top_left_y + height; y++){
             for(int x = top_left_x; x < top_left_x + width; x++){
@@ -88,6 +88,10 @@ public class GeneratorGrid : MonoBehaviour
                     return return_bool;
                 }
             }
+        }
+
+        if(return_bool){
+            Debug.Log("test");
         }
 
         return return_bool;
@@ -128,7 +132,7 @@ public class GeneratorGrid : MonoBehaviour
     //Basically same format as the function above but here we're going to edit the array's value
     public void Place(int height, int width, Vector3 center){
         int top_left_x = (int)center.x - width/2;
-        int top_left_y = (int)center.y + height/2; 
+        int top_left_y = (int)center.y - height/2; 
 
         for(int y = top_left_y; y < top_left_y + height; y++){
             for(int x = top_left_x; x < top_left_x + width; x++){

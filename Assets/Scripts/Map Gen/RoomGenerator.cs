@@ -20,7 +20,7 @@ public class RoomGenerator : MonoBehaviour
     [Range(50, 750)]
     public int higher_end_room_distance_threshold = 50;
 
-    [Range(0,10)]
+    [Range(0,100)]
     public int max_snap_distance = 5; //The max distance the exit will snap 
 
     //We use this so we wont frustrate ourselves
@@ -778,7 +778,7 @@ public class RoomGenerator : MonoBehaviour
 
         //Now that we have placed our path we can start our recursion
         for(int k = 0; k < path.Count; k++){
-            RecursiveStepBridges(path[k], 0, 2, current_weights);
+            RecursiveStepBridges(path[k], 0, 0, current_weights);
         }
 
     }
