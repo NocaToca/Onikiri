@@ -3193,7 +3193,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ecda591772247d318afa861283cbf47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 0
   movedLastFrame: 0
   immune: 0
   damage_listener:
@@ -3203,11 +3202,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   actor_controller: {fileID: 0}
+  debug: 0
   speed: 1
   boost_speed: 2
   main_hand: {fileID: 11400000, guid: d430cc8945888a04bbd984380eb8bec9, type: 2}
-  first_tree: {fileID: 0}
   off_hand: {fileID: 0}
+  first_tree: {fileID: 0}
   second_tree: {fileID: 0}
   boon_trees: []
 --- !u!114 &1226369021
@@ -3649,7 +3649,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f364b2b0c4cf6bbe9a5cfd1aa0b2363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 1
   movedLastFrame: 0
   immune: 0
   damage_listener:
@@ -3659,6 +3658,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   actor_controller: {fileID: 0}
+  debug: 1
   speed: 1
   attack_speed: 1
   weapon: {fileID: 11400000, guid: 3406da6a03e48c74781df7a5f35f216d, type: 2}
