@@ -22,6 +22,8 @@ public class CanvasController : MonoBehaviour
     public DisplayType test_display_type;
     public bool test_display;
 
+    public float health_bar_display_time = 1.0f;
+
     bool displaying;
 
     void Awake(){
@@ -133,12 +135,32 @@ public class CanvasController : MonoBehaviour
         }
     }
 
+    public void PokeHealthBar(Actor actor){
+        foreach(HealthBar bar in health_bars){
+            if(bar.actor == actor){
+                StartCoroutine(ShowHealthBar(bar));
+                return;
+            }
+        }
+    }
+
     public void CreateHealthBar(Actor actor){
         HealthBar bar = new HealthBar(Instantiate(health_bar_prefab), actor);
         bar.display.gameObject.transform.SetParent(this.transform);
-        bar.display.gameObject.SetActive(true);
         health_bars.Add(bar);
 
+        StartCoroutine(ShowHealthBar(bar));
+    }
+
+    IEnumerator ShowHealthBar(HealthBar bar){
+
+        bar.display.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(health_bar_display_time);
+
+        if(bar.display != null){
+            bar.display.gameObject.SetActive(false);
+        }
     }
 
 

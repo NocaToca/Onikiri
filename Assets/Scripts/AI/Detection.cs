@@ -108,8 +108,16 @@ public class GoToTarget :AINode{
     public override Status Evaluate(){
         GameObject player = (GameObject)GetData("target");
 
+        object data = GetData("Proximity Distance");
+
+        float walk_to_distance = 0.01f;
+
+        if(data != null){
+            walk_to_distance = (float)data;
+        }
+
         //If our target is not close enough we move to it and look towards it
-        if(Vector3.Distance(player.transform.position, a.transform.position) > 0.01f){
+        if(Vector3.Distance(player.transform.position, a.transform.position) > walk_to_distance){
             a.transform.position = Vector3.MoveTowards(a.transform.position, player.transform.position, speed * Game.tick);
             a.transform.up= Vector3.Lerp(a.transform.up, (player.transform.position - a.transform.position), 0.1f);
         }

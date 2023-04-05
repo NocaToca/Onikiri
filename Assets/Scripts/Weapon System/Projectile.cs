@@ -51,6 +51,12 @@ public class Projectile : MonoBehaviour
     protected virtual void DamageCollidingEnemies(Collider2D other)
     {
         Actor possible_actor = Actor.ExtractActor(other.gameObject);
+        if(sender is Enemy){
+            if(possible_actor is Player){
+                Debug.Log(this.name + " is dealing damage to " + other.gameObject.name);
+                possible_actor.TakeDamage(10.0f);
+            }
+        } else 
         if (possible_actor is Enemy)
         {
             Debug.Log(this.name + " is dealing damage to " + other.gameObject.name);

@@ -778,7 +778,7 @@ public class RoomGenerator : MonoBehaviour
 
         //Now that we have placed our path we can start our recursion
         for(int k = 0; k < path.Count; k++){
-            RecursiveStepBridges(path[k], 0, 0, current_weights);
+            RecursiveStepBridges(path[k], 0, 5, current_weights);
         }
 
     }

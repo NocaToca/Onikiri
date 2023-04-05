@@ -13,6 +13,8 @@ namespace Spawning{
     public class SpawnZone : MonoBehaviour
     {
 
+        public int num_enemies_to_spawn = 1;
+
         public List<GameObject> enemies_to_spawn;
 
         public SpawnType type;
@@ -24,15 +26,16 @@ namespace Spawning{
         // Start is called before the first frame update
         void Start()
         {
-            if(show_debug){
+            //if(show_debug){
                 StartCoroutine(StartOffset(2.0f));
-            }
+            //}
         }
 
         IEnumerator StartOffset(float wait_time){
             yield return new WaitForSeconds(wait_time);
-
-            Spawn();
+            for(int i = 0; i <num_enemies_to_spawn; i++){
+                Spawn();
+            }
         }
 
         // Update is called once per frame

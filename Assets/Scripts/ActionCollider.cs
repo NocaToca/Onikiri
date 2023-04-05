@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ActionCollider : MonoBehaviour
 {
-    public enum ColliderType{Box, Circle};
+    public enum ColliderType{Box, Circle, None};
     [Header("Collider Options")]
 
     [Tooltip("What type of hitbox our collider has - either a box or circle")]

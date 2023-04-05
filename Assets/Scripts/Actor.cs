@@ -70,13 +70,17 @@ public abstract class Actor : MonoBehaviour
 
     //We Take damage, play the damage animation, and then die if we have less than zero hp
     public virtual void TakeDamage(float damage){
-        if(immune){
-            return;
-        }
         PlayDamageAnimation();
         stats.health -= damage;
         if(stats.health <= 0){
             Die();
+        }
+
+        CanvasController canvas = GameObject.FindGameObjectWithTag("Canvas").GetComponent<CanvasController>();
+        if(!canvas.HealthBarExist(this)){
+            canvas.CreateHealthBar(this);
+        } else {
+            canvas.PokeHealthBar(this);
         }
     }
 

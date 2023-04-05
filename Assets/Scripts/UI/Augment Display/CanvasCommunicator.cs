@@ -18,6 +18,8 @@ namespace Augments{
             public AugmentDisplay[] boons;
             public AugmentDisplay[] skills;
 
+            public bool debug = false;
+
             DisplayType current_type;
 
             public CanvasCommunicator(AugmentDisplay[] boons, AugmentDisplay[] skills){
@@ -39,15 +41,29 @@ namespace Augments{
             }
 
             public bool Overlap(Vector3 position, AugmentDisplay ad){
-                Rect rect = ad.background.rectTransform.rect;
+                RectTransform rect_transform = ad.GetComponent<RectTransform>();
+                Rect rect = rect_transform.rect;
 
                 Vector2 point = new Vector2(position.x, position.y) - new Vector2(Screen.width / 2, Screen.height / 2);;
 
                 // Get the left, right, top, and bottom boundaries of the rect
-                float leftSide = ad.background.rectTransform.anchoredPosition.x - (rect.width * ad.background.rectTransform.localScale.x) / 2;
-                float rightSide = ad.background.rectTransform.anchoredPosition.x + (rect.width * ad.background.rectTransform.localScale.x) / 2;
-                float topSide = ad.background.rectTransform.anchoredPosition.y + (rect.height * ad.background.rectTransform.localScale.y) / 2;
-                float bottomSide = ad.background.rectTransform.anchoredPosition.y - (rect.height * ad.background.rectTransform.localScale.y) / 2;
+                float leftSide = rect_transform.anchoredPosition.x - (ad.background.rectTransform.rect.width * ad.background.rectTransform.localScale.x) / 2;
+                float rightSide = rect_transform.anchoredPosition.x + (ad.background.rectTransform.rect.width * ad.background.rectTransform.localScale.x) / 2;
+                float topSide = rect_transform.anchoredPosition.y + (ad.background.rectTransform.rect.height * ad.background.rectTransform.localScale.y) / 2;
+                float bottomSide = rect_transform.anchoredPosition.y - (ad.background.rectTransform.rect.height * ad.background.rectTransform.localScale.y) / 2;
+
+                if(debug){
+                    string debug = "Augment Display Name: " + ad.node.Name();
+                    debug += "\nLeft Bound: " + leftSide;
+                    debug += "\nRight Bound: " + rightSide;
+                    debug += "\nTop Bound: " + topSide;
+                    debug += "\nBottom Bound: " + bottomSide;
+
+                    debug += "\n\nMouse position: " + position;
+
+                    Debug.Log(debug);
+                }
+                
 
                 //Debug.Log(leftSide + ", " + rightSide + ", " + topSide + ", " + bottomSide);
 
@@ -118,7 +134,17 @@ namespace Augments{
                     for(int i = 0; i < all_available_skills.Count; i++){
                         for(int x = 0; x < skill_trees.Count; x++){
                             if(!skill_trees[x].root.IsRelated(all_available_skills[i])){
-                                possible_nodes.Add(all_available_skills[i]);
+                                bool already_in = false;
+                                foreach(Node n in possible_nodes){
+                                    if(all_available_skills[i].Name() == n.Name()){
+                                        already_in = true;
+                                        break;
+                                    }
+                                }
+
+                                if(!already_in){
+                                    possible_nodes.Add(all_available_skills[i]);
+                                }
                             }
                         }
                     }

@@ -46,10 +46,7 @@ public class Enemy : Actor
     public override void TakeDamage(float damage){
         base.TakeDamage(damage);
 
-        CanvasController canvas = GameObject.FindGameObjectWithTag("Canvas").GetComponent<CanvasController>();
-        if(!canvas.HealthBarExist(this)){
-            canvas.CreateHealthBar(this);
-        }
+        
     }
 
     protected override void Die(){

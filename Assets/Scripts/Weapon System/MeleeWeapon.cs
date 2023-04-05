@@ -37,7 +37,11 @@ public abstract class MeleeWeapon : Weapon
         Vector2 origin = new Vector2(actor.transform.position.x, actor.transform.position.y);
         Vector2 direction = new Vector2(cast_direction.x, cast_direction.y);
 
-        hit = Physics2D.Raycast(origin, direction, attacking_distance);
+        int layer = 1 << 7;
+
+        hit = Physics2D.Raycast(origin, direction, attacking_distance, layer);
+
+        //Debug.Log(hit.collider != null);
 
         return hit.collider != null;
 

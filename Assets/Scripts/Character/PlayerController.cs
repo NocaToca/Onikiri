@@ -38,8 +38,11 @@ public class PlayerController : Controller
     }
 
     void HandleInteractionInput(){
-        if(Input.GetKeyDown(KeyCode.E)){
+        if(Input.GetMouseButtonDown(0)){
             p.AttemptAttack();
+        }
+        if(Input.GetKeyDown(KeyCode.T)){
+            p.SwapWeapons();
         }
     }
 

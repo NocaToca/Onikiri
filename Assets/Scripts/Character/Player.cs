@@ -105,6 +105,13 @@ public class Player : Actor
         
     }
 
+    public void SwapWeapons(){
+        Weapon temp = main_hand;
+        main_hand = off_hand;
+        off_hand = temp;
+        main_hand.holding_actor = this;
+    }
+
     //Updates our trees with the correlated children; if there are multiple it will do the first
     public void UpdateTrees(Node n){
 
@@ -209,6 +216,10 @@ public class Player : Actor
         }
 
         return main_hand != null;
+    }
+
+    protected override void Die(){
+        gameObject.SetActive(false);
     }
 }
 

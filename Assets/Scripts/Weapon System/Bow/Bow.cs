@@ -18,4 +18,15 @@ public class Bow : RangedWeapon
         new_arrow.GetComponent<Arrow>().SetInitialVelocity(new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)));
         return new_arrow;
     }
+
+    public override GameObject FireProjectile(Vector3 destination){
+        GameObject new_arrow = base.FireProjectile(destination);
+
+        new_arrow.GetComponent<Arrow>().SetSender(holding_actor);
+
+        float angle = new_arrow.transform.rotation.eulerAngles.z * Mathf.Deg2Rad;
+
+        new_arrow.GetComponent<Arrow>().SetInitialVelocity(new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)));
+        return new_arrow;
+    }
 }

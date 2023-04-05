@@ -32,7 +32,7 @@ namespace Augments{
             //Description field
             public Text description_field;
 
-            Node node;
+            internal Node node;
 
             public void SetUpDisplay(Node node){
                 name_field.text = node.Name();

@@ -21,7 +21,6 @@ public class Arrow : Projectile
    
    protected override void OnTriggerEnter2D(Collider2D other){
 
-        base.OnTriggerEnter2D(other);
         //We have to make sure we aren't colliding with another arrow as well
         //We'll make a projectile tag for anything else later but for now we have this
         Arrow possible_arrow = other.gameObject.GetComponent<Arrow>();
@@ -34,7 +33,7 @@ public class Arrow : Projectile
         }
 
         base.OnTriggerEnter2D(other);
-        if(other.gameObject.tag != "Enemy"){
+        if(other.gameObject.tag != "Enemy" && other.gameObject.tag != "Player"){
             return;
         }
         GetComponent<Animator>().Play("OnHit");
