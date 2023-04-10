@@ -165,12 +165,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21ebc04574bd90140a73a14dec737184, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spell_range: 3
+  spell_range: 6
   speed: 1
   radius: 1
   radius_buffer: 1
   wait_time: 1
-  fov: 3
+  fov: 6
 --- !u!212 &8647202892165244161
 SpriteRenderer:
   m_ObjectHideFlags: 0

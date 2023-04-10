@@ -22,6 +22,7 @@ namespace Augments{
 
         public override void ActivateEvent(){
             active = true;
+            
         }
 
         public override void UpdateEvent(){
@@ -45,7 +46,14 @@ namespace Augments{
             if(well_spawned){
                 return;
             }
+            if(well_prefab == null){
+                well_prefab = new GameObject();
+                well_prefab.AddComponent<Well>();
+                well_prefab.AddComponent<CircleCollider2D>();
+                well_prefab.SetActive(false);
+            }
             well = Instantiate(well_prefab);
+            well.SetActive(true);
             well.transform.position = p.transform.position; 
             well.GetComponent<Well>().player_event.AddListener(PlayerEffect);
             well_spawned = true;

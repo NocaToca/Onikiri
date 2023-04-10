@@ -16,6 +16,7 @@ namespace Augments{
 
         public TimeControl(Player p) : base(p){
             toggled = false;
+            percentage = 0.5f;
 
         }
 

@@ -218,8 +218,14 @@ public class Player : Actor
         return main_hand != null;
     }
 
+    public void Respawn(){
+        stats.health = stats.max_health;
+        gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        this.transform.position = Vector3.zero;
+    }
+
     protected override void Die(){
-        gameObject.SetActive(false);
+        gameObject.GetComponent<SpriteRenderer>().enabled = false;
     }
 }
 

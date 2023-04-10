@@ -44,6 +44,12 @@ public class PlayerController : Controller
         if(Input.GetKeyDown(KeyCode.T)){
             p.SwapWeapons();
         }
+        if(Input.GetKeyDown(KeyCode.R)){
+            p.Respawn();
+        }
+        if(Input.GetKeyDown(KeyCode.Escape)){
+            Application.Quit();
+        }
     }
 
     // Update is called once per frame
@@ -80,7 +86,7 @@ public class PlayerController : Controller
         velocity = velocity.normalized;
         //Debug.Log(velocity);
 
-        if(Input.GetKey(KeyCode.Z)){
+        if(Input.GetKey(KeyCode.LeftShift)){
             velocity.y *= p.boost_speed;
             velocity.x *= p.boost_speed;
         }
