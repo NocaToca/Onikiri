@@ -57,7 +57,14 @@ public class PlayerController : Controller
     void HandleInteractionInput(){
         if(Input.GetMouseButtonDown(0)){
             p.AttemptAttack();
-            pah.TryAttackSword();
+            if(p.main_hand is Orb){
+                pah.TryAttackOrb();
+            } else
+            if(p.main_hand is MeleeWeapon){
+                pah.TryAttackSword();
+            } else {
+                Debug.LogWarning("No animation for given weapon");
+            }
         }
         if(Input.GetKeyDown(KeyCode.T)){
             p.SwapWeapons();
@@ -209,6 +216,13 @@ namespace Animation{
             UpdateListeners = new UnityEvent();
         }
 
+        public void TryAttackOrb(){
+            if(current_animation == AnimationType.IDLE || current_animation == AnimationType.WALK){
+                current_animation = AnimationType.ORB_ATTACK;
+                Play(AssembleString());
+            }
+        }
+
         public void TryAttackSword(){
             //We're going to want to:
             /*
@@ -246,7 +260,7 @@ namespace Animation{
                     };
                 }
 
-                bool moved = false;
+                //bool moved = false;
 
                 //If this is confusing, we're basically just setting our increment correctly, then telling our class to consistently check if
                 //our animation transitioned, and if so move onto the next animation before flushing the listener;
