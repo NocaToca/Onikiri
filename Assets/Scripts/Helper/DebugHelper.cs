@@ -38,5 +38,17 @@ public static class DebugHelper{
         Debug.Log(s);
 
     }
+
+    public static void Log(GameObject obj, string message){
+        Debug.Log("Log on " + obj.name + ": " + message);
+    }
+
+    public static void LogWarning(GameObject obj, string message){
+        Debug.LogWarning("Warning on " + obj.name +": " + message);
+    }
+
+    public static void LogError(GameObject obj, string message){
+        Debug.LogError("Error on " + obj.name + ": " + message);
+    }
     
 }
