@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Events;
 using Augments;
 
 
@@ -57,6 +57,7 @@ public class PlayerController : Controller
     void HandleInteractionInput(){
         if(Input.GetMouseButtonDown(0)){
             p.AttemptAttack();
+            pah.TryAttackSword();
         }
         if(Input.GetKeyDown(KeyCode.T)){
             p.SwapWeapons();
@@ -155,11 +156,18 @@ namespace Animation{
 
         private AnimationType current_animation;
 
+        //Functions that we want to listen to the update
+        UnityEvent UpdateListeners;
+        Dictionary<string, UnityAction> actions_to_remove;
+
         public PlayerAnimationHandler(Animator main_animator){
             this.main_animator = main_animator;
             current_direction = Direction.West;
             current_animation = AnimationType.IDLE;
             Play("Idle_Left");
+            actions_to_remove = new Dictionary<string, UnityAction>();
+
+            UpdateListeners = new UnityEvent();
         }
 
         public void UpdateAnimation(){
@@ -168,7 +176,120 @@ namespace Animation{
             if(direction != current_direction){
                 UpdateDirection(direction);
             }
-            CheckAnimation();
+            if(current_animation == AnimationType.IDLE || current_animation == AnimationType.WALK){
+                CheckAnimation();
+            }
+
+            if(main_animator.GetCurrentAnimatorClipInfo(0)[0].clip.name.Substring(0,6) == "Seathe"){
+                current_animation = AnimationType.SEATHE;
+            }
+
+            if(current_animation == AnimationType.SEATHE){
+                if(actions_to_remove.Count == 0){
+                    var check = main_animator.GetCurrentAnimatorClipInfo(0);
+                    if(check.Length != 0){
+                        if(check[0].clip.name.Substring(0,4) == "Idle"){
+                            current_animation = AnimationType.IDLE;
+                        }
+                    }
+                }
+            }
+                
+            Debug.Log(AssembleString());
+
+            UpdateListeners.Invoke();
+        }
+
+        public bool ValidateAnimation(){
+            string clip_name = main_animator.GetCurrentAnimatorClipInfo(0)[0].clip.name;
+            return clip_name == AssembleString();
+        }
+
+        public void FlushListener(){
+            UpdateListeners = new UnityEvent();
+        }
+
+        public void TryAttackSword(){
+            //We're going to want to:
+            /*
+            1. Check what sword attack stage we are on (1-3)
+            2. Queue a sword attack if it is pressed multiple times
+            3. Queue seathe for when we stop attacking
+            */
+            System.Func<bool> current_attack = delegate(){
+                return current_animation == AnimationType.SWORD_ATTACK_1 || current_animation == AnimationType.SWORD_ATTACK_2 || current_animation == AnimationType.SWORD_ATTACK_3;
+            };
+
+            if(current_attack() || current_animation == AnimationType.SEATHE){
+                System.Func<AnimationType> move_next = delegate(){
+                    return AnimationType.IDLE;
+                };
+
+                if(current_animation == AnimationType.SWORD_ATTACK_1){
+                    Debug.Log("Check one");
+                    move_next = delegate(){
+                        return AnimationType.SWORD_ATTACK_2;
+                    };
+                } else 
+                if(current_animation == AnimationType.SWORD_ATTACK_2){
+                    Debug.Log("Check two");
+
+                    move_next = delegate(){
+                        return AnimationType.SWORD_ATTACK_3;
+                    };
+                } else
+                if(current_animation == AnimationType.SWORD_ATTACK_3) {
+                    Debug.Log("Check three");
+
+                    move_next = delegate(){
+                        return AnimationType.SWORD_ATTACK_1;
+                    };
+                }
+
+                bool moved = false;
+
+                //If this is confusing, we're basically just setting our increment correctly, then telling our class to consistently check if
+                //our animation transitioned, and if so move onto the next animation before flushing the listener;
+                UnityAction increment_attack = delegate(){
+                    if(!current_attack()){
+                        current_animation = move_next();
+                        Play(current_animation);
+                        FlushQueue();
+                    }
+                };
+
+                UnityAction check_if_seathe = delegate(){
+                    if(main_animator.GetCurrentAnimatorClipInfo(0)[0].clip.name.Substring(0,6) == "Seathe"){
+                        current_animation = AnimationType.SEATHE;
+                        increment_attack();
+                    }
+                };
+
+                // if(!actions_to_remove.ContainsKey("attack_queue")){
+                //     actions_to_remove.Add("attack_queue", increment_attack);
+                // }
+                if(!actions_to_remove.ContainsKey("seathe")){
+                    actions_to_remove.Add("seathe", check_if_seathe);
+                    UpdateListeners.AddListener(check_if_seathe);
+                }
+
+                //UpdateListeners.AddListener(increment_attack);
+                
+
+            } else
+            if(!(current_animation == AnimationType.SEATHE)) {
+                current_animation = AnimationType.SWORD_ATTACK_1;
+                Play(AssembleString());
+            }
+            
+        }
+
+        public void FlushQueue(){
+            foreach(KeyValuePair<string, UnityAction> pair in actions_to_remove){
+                UpdateListeners.RemoveListener(pair.Value);
+            }
+
+            actions_to_remove = new Dictionary<string, UnityAction>();
         }
 
         public string AssembleString(){
@@ -232,7 +353,11 @@ namespace Animation{
             return current_direction;
         }
 
-        public void Play(string name){
+        private void Play(AnimationType type){
+            current_animation = type;
+            Play(AssembleString());
+        }
+        private void Play(string name){
             main_animator.Play(name);
         }
 
