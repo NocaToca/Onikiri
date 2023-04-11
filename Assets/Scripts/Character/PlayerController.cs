@@ -52,6 +52,12 @@ public class PlayerController : Controller
     }
 
     void Update(){
+        if(pah.current_direction == Direction.West){
+            p.sword_collider.gameObject.transform.rotation = Quaternion.EulerAngles(new Vector3(0,0,Mathf.PI));
+        } else {
+            p.sword_collider.gameObject.transform.rotation = Quaternion.EulerAngles(new Vector3(0,0,0));
+        }
+
         HandleInteractionInput();
         pah.UpdateAnimation();
     }
@@ -168,7 +174,7 @@ namespace Animation{
         }
 
         private Animator main_animator;
-        Direction current_direction;
+        public Direction current_direction;
 
         private AnimationType current_animation;
 
@@ -266,6 +272,17 @@ namespace Animation{
             System.Func<bool> current_attack = delegate(){
                 return current_animation == AnimationType.SWORD_ATTACK_1 || current_animation == AnimationType.SWORD_ATTACK_2 || current_animation == AnimationType.SWORD_ATTACK_3;
             };
+
+            Vector3 mouse_pos = Input.mousePosition;
+            Vector3 screen_pos_of_mouse = Camera.main.ScreenToWorldPoint(mouse_pos);
+
+            Vector3 direction_vector = screen_pos_of_mouse - main_animator.gameObject.transform.position;
+
+            if(direction_vector.x > 0){
+                current_direction = Direction.East;
+            } else {
+                current_direction = Direction.West;
+            }
 
             if(current_attack() || current_animation == AnimationType.SEATHE){
                 System.Func<AnimationType> move_next = delegate(){

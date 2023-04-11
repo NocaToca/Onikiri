@@ -6,10 +6,12 @@ using UnityEngine;
 public class ActionCollider : MonoBehaviour
 {
     public enum ColliderType{Box, Circle, None};
+    public enum DetectType{Player, Enemy}
     [Header("Collider Options")]
 
     [Tooltip("What type of hitbox our collider has - either a box or circle")]
     public ColliderType type;
+    public DetectType scan_type;
 
     [Header("Debug")]
     [Tooltip("Displays debug gizmos to visualize the collision")]
@@ -20,6 +22,9 @@ public class ActionCollider : MonoBehaviour
 
     [HideInInspector]
     public bool is_player_in_action_collider;
+
+    
+    List<GameObject> enemies = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start()
@@ -94,16 +99,45 @@ public class ActionCollider : MonoBehaviour
         }
     }
 
+    public void ApplyToEnemies(System.Action<Actor> function){
+        foreach(GameObject go in enemies){
+            Actor enemy = Actor.ExtractActor(go);
+            function(enemy);
+        }   
+    }
+
     //Activates and Deactivates when the player enter and leaves the collider
     private void OnTriggerEnter2D(Collider2D other){
-        if(other.gameObject == Game.player.gameObject){
-            is_player_in_action_collider = true;
+        if(scan_type == DetectType.Player){
+            if(other.gameObject == Game.player.gameObject){
+                is_player_in_action_collider = true;
+            }
+        } else {
+            if(other.gameObject.tag == "Enemy"){
+                Debug.Log("Beep");
+                if(!enemies.Contains(other.gameObject)){
+                Debug.Log("Boop");
+                    enemies.Add(other.gameObject);
+                }
+            }
         }
     }
 
     private void OnTriggerExit2D(Collider2D other){
-        if(other.gameObject == Game.player.gameObject){
-            is_player_in_action_collider = false;
+        if(scan_type == DetectType.Player){
+            if(other.gameObject == Game.player.gameObject){
+                is_player_in_action_collider = false;
+            }
+        } else {
+            if(other.gameObject.tag == "Enemy"){
+                List<GameObject> flushed_objects = new List<GameObject>();
+                foreach(GameObject go in enemies){
+                    if(go != null && go != other.gameObject){
+                        flushed_objects.Add(go);
+                    }
+                }
+                enemies = flushed_objects;
+            }
         }
     }
 }

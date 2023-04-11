@@ -33,6 +33,8 @@ public class Player : Actor
     public SpellTree second_tree;
     public BoonTree[] boon_trees;
 
+    public ActionCollider sword_collider;
+
     //Calls colission effects to anything interested
     UnityEvent collision_listener;
 

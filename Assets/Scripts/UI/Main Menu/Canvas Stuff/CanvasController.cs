@@ -14,7 +14,7 @@ namespace MainMenu{
         public GameObject options_menu;
         public GameObject help_menu;
 
-        public int scene_number = 2;
+        public int scene_number = 1;
 
         // Start is called before the first frame update
         void Start()
@@ -66,7 +66,7 @@ namespace MainMenu{
         }
 
         public void LoadScene(){
-            SceneManager.LoadScene(2);
+            SceneManager.LoadScene(scene_number);
         }
 
         public void Quit(){

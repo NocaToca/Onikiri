@@ -854,7 +854,7 @@ MonoBehaviour:
   - {fileID: 1163640389}
   options_menu: {fileID: 317382474}
   help_menu: {fileID: 1262715629}
-  scene_number: 2
+  scene_number: 1
 --- !u!114 &487235814
 MonoBehaviour:
   m_ObjectHideFlags: 0
