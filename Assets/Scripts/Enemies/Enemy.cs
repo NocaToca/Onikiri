@@ -7,6 +7,8 @@ using UnityEngine;
 //Will probably be abstract in the future but right now here to test weapon functionality
 public class Enemy : Actor
 {
+    
+
     Rigidbody2D rb;
     BoxCollider2D cc;
 

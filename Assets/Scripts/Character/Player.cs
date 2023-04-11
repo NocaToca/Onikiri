@@ -210,12 +210,10 @@ public class Player : Actor
 
     
     //Attempts an attack
-    public bool AttemptAttack(){
+    public void AttemptAttack(){
         if(main_hand != null){
             main_hand.Attack();
         }
-
-        return main_hand != null;
     }
 
     public void Respawn(){

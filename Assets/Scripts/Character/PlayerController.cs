@@ -56,12 +56,11 @@ public class PlayerController : Controller
 
     void HandleInteractionInput(){
         if(Input.GetMouseButtonDown(0)){
-            p.AttemptAttack();
             if(p.main_hand is Orb){
                 pah.TryAttackOrb();
             } else
             if(p.main_hand is MeleeWeapon){
-                pah.TryAttackSword();
+                pah.TryAttackSword(p.AttemptAttack);
             } else {
                 Debug.LogWarning("No animation for given weapon");
             }
@@ -218,12 +217,24 @@ namespace Animation{
 
         public void TryAttackOrb(){
             if(current_animation == AnimationType.IDLE || current_animation == AnimationType.WALK){
+
+                Vector3 mouse_pos = Input.mousePosition;
+                Vector3 screen_pos_of_mouse = Camera.main.ScreenToWorldPoint(mouse_pos);
+
+                Vector3 direction_vector = screen_pos_of_mouse - main_animator.gameObject.transform.position;
+
+                if(direction_vector.x > 0){
+                    current_direction = Direction.East;
+                } else {
+                    current_direction = Direction.West;
+                }
+
                 current_animation = AnimationType.ORB_ATTACK;
                 Play(AssembleString());
             }
         }
 
-        public void TryAttackSword(){
+        public void TryAttackSword(System.Action attacking_action){
             //We're going to want to:
             /*
             1. Check what sword attack stage we are on (1-3)
@@ -266,6 +277,8 @@ namespace Animation{
                 //our animation transitioned, and if so move onto the next animation before flushing the listener;
                 UnityAction increment_attack = delegate(){
                     if(!current_attack()){
+                        PushPlayer();
+                        attacking_action();
                         current_animation = move_next();
                         Play(current_animation);
                         FlushQueue();
@@ -293,6 +306,8 @@ namespace Animation{
             } else
             if(!(current_animation == AnimationType.SEATHE)) {
                 current_animation = AnimationType.SWORD_ATTACK_1;
+                PushPlayer();
+                attacking_action();
                 Play(AssembleString());
             }
             
@@ -422,6 +437,24 @@ namespace Animation{
             }
 
             throw new InvalidAnimationType();
+        }
+
+        //Push function
+        public void PushPlayer(){
+            Rigidbody2D rb = main_animator.gameObject.GetComponent<Rigidbody2D>();
+
+            Vector2 force_direction = new Vector2(0,0);
+            float magnitude = 100.0f;
+
+            if(current_direction == Direction.West){
+                force_direction.x -= 1.0f;
+            } else 
+            if(current_direction == Direction.East){
+                force_direction.x += 1.0f;
+            }
+
+            force_direction *= magnitude;
+            rb.AddForce(force_direction);
         }
 
     }
