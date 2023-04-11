@@ -175,7 +175,7 @@ MonoBehaviour:
   base_speed: 1
   sender: {fileID: 0}
   max_distance: 0
-  speed_scale: 8
+  speed_scale: 35
 --- !u!95 &4361660548121288562
 Animator:
   serializedVersion: 5

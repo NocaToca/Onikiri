@@ -1,3 +1,5 @@
+#define none
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -57,7 +59,7 @@ public class PlayerController : Controller
     void HandleInteractionInput(){
         if(Input.GetMouseButtonDown(0)){
             if(p.main_hand is Orb){
-                pah.TryAttackOrb();
+                pah.TryAttackOrb(p.AttemptAttack);
             } else
             if(p.main_hand is MeleeWeapon){
                 pah.TryAttackSword(p.AttemptAttack);
@@ -110,7 +112,13 @@ public class PlayerController : Controller
         velocity = velocity.normalized;
         //Debug.Log(velocity);
 
-        if(Input.GetKey(KeyCode.LeftShift)){
+        KeyCode boost = KeyCode.LeftShift;
+
+        #if UNITY_EDITOR
+        boost = KeyCode.Z;
+        #endif
+
+        if(Input.GetKey(boost)){
             velocity.y *= p.boost_speed;
             velocity.x *= p.boost_speed;
         }
@@ -144,6 +152,8 @@ public class PlayerController : Controller
 //Just for animating the player, handles all animation operations.
 namespace Animation{
     #pragma warning disable 0168
+
+    
 
     public class PlayerAnimationHandler{
 
@@ -186,8 +196,11 @@ namespace Animation{
                 CheckAnimation();
             }
 
-            if(main_animator.GetCurrentAnimatorClipInfo(0)[0].clip.name.Substring(0,6) == "Seathe"){
-                current_animation = AnimationType.SEATHE;
+            var clip_info = main_animator.GetCurrentAnimatorClipInfo(0);
+            if(clip_info.Length != 0){
+                if(main_animator.GetCurrentAnimatorClipInfo(0)[0].clip.name.Substring(0,6) == "Seathe"){
+                    current_animation = AnimationType.SEATHE;
+                }
             }
 
             if(current_animation == AnimationType.SEATHE){
@@ -200,8 +213,9 @@ namespace Animation{
                     }
                 }
             }
-                
+            #if Noca_Debug
             Debug.Log(AssembleString());
+            #endif
 
             UpdateListeners.Invoke();
         }
@@ -215,7 +229,7 @@ namespace Animation{
             UpdateListeners = new UnityEvent();
         }
 
-        public void TryAttackOrb(){
+        public void TryAttackOrb(System.Action attacking_action){
             if(current_animation == AnimationType.IDLE || current_animation == AnimationType.WALK){
 
                 Vector3 mouse_pos = Input.mousePosition;
@@ -230,8 +244,16 @@ namespace Animation{
                 }
 
                 current_animation = AnimationType.ORB_ATTACK;
+
+                //What a round-about way LMFAO
+                main_animator.gameObject.GetComponent<PlayerController>().StartCoroutine(OrbOffset(attacking_action));
                 Play(AssembleString());
             }
+        }
+
+        IEnumerator OrbOffset(System.Action attacking_action){
+            yield return new WaitForSeconds(.15f);
+            attacking_action();
         }
 
         public void TryAttackSword(System.Action attacking_action){
@@ -251,20 +273,26 @@ namespace Animation{
                 };
 
                 if(current_animation == AnimationType.SWORD_ATTACK_1){
+                    #if Noca_Debug
                     Debug.Log("Check one");
+                    #endif
                     move_next = delegate(){
                         return AnimationType.SWORD_ATTACK_2;
                     };
                 } else 
                 if(current_animation == AnimationType.SWORD_ATTACK_2){
+                    #if Noca_Debug
                     Debug.Log("Check two");
+                    #endif
 
                     move_next = delegate(){
                         return AnimationType.SWORD_ATTACK_3;
                     };
                 } else
                 if(current_animation == AnimationType.SWORD_ATTACK_3) {
+                    #if Noca_Debug
                     Debug.Log("Check three");
+                    #endif
 
                     move_next = delegate(){
                         return AnimationType.SWORD_ATTACK_1;

@@ -47,8 +47,21 @@ public class Enemy : Actor
     //Takes damage and then displays the health bar over the enemy
     public override void TakeDamage(float damage){
         base.TakeDamage(damage);
+        PushBack();
+    }
 
-        
+    //We're going to assume that we're taking damage from the player direction, but that will clearly not be the case all the time
+    public void PushBack(){
+        Vector3 enemy_position = this.gameObject.transform.position;
+        Vector3 player_position = GameObject.FindGameObjectWithTag("Player").transform.position;
+
+        Vector3 direction = enemy_position - player_position;
+        direction = direction.normalized;
+
+        float magnitude = 50.0f;
+        direction *= magnitude;
+
+        rb.AddForce(direction);
     }
 
     protected override void Die(){
