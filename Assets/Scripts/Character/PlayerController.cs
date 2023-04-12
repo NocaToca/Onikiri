@@ -18,7 +18,8 @@ public class PlayerController : Controller
 {
 
     private Animator anime;
-    private Player p;
+    [HideInInspector]
+    public Player p;
     private Rigidbody2D rb;
 
     Animation.PlayerAnimationHandler pah;
@@ -117,6 +118,7 @@ public class PlayerController : Controller
         }
 
         velocity = velocity.normalized;
+        velocity *= p.speed;
         //Debug.Log(velocity);
 
         KeyCode boost = KeyCode.LeftShift;
@@ -199,6 +201,8 @@ namespace Animation{
         UnityEvent UpdateListeners;
         Dictionary<string, UnityAction> actions_to_remove;
 
+        Player p {get{return main_animator.GetComponent<Player>();}}
+
         public PlayerAnimationHandler(Animator main_animator){
             this.main_animator = main_animator;
             current_direction = Direction.West;
@@ -216,6 +220,7 @@ namespace Animation{
                 UpdateDirection(direction);
             }
             if(current_animation == AnimationType.IDLE || current_animation == AnimationType.WALK){
+                main_animator.gameObject.GetComponent<PlayerController>().DisableAttacking();
                 CheckAnimation();
             }
 
@@ -312,6 +317,7 @@ namespace Animation{
                     Debug.Log("Check one");
                     #endif
                     move_next = delegate(){
+                        p.SetPushbackForce(50);
                         PushPlayer(10);
                         return AnimationType.SWORD_ATTACK_2;
                     };
@@ -322,6 +328,7 @@ namespace Animation{
                     #endif
 
                     move_next = delegate(){
+                        p.SetPushbackForce(200);
                         PushPlayer(400);
                         return AnimationType.SWORD_ATTACK_3;
                     };
@@ -346,8 +353,8 @@ namespace Animation{
                 //our animation transitioned, and if so move onto the next animation before flushing the listener;
                 UnityAction increment_attack = delegate(){
                     if(!current_attack()){
-                        attacking_action();
                         current_animation = move_next();
+                        attacking_action();
                         Play(current_animation);
                         FlushQueue();
                         main_animator.gameObject.GetComponent<PlayerController>().SetAttacking();
@@ -376,6 +383,7 @@ namespace Animation{
             if(!(current_animation == AnimationType.SEATHE)) {
                 current_animation = AnimationType.SWORD_ATTACK_1;
                 main_animator.gameObject.GetComponent<PlayerController>().SetAttacking();
+                p.SetPushbackForce(50);
                 PushPlayer(10);
                 attacking_action();
                 Play(AssembleString());

@@ -212,6 +212,10 @@ public class Player : Actor
     //     return false;
     // }
 
+    public float force_magnitude = 10.0f;
+    public void SetPushbackForce(float mag){
+        this.sword_collider.force = mag;
+    }
     
     //Attempts an attack
     public void AttemptAttack(){

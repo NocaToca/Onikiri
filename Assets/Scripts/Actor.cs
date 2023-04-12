@@ -25,6 +25,9 @@ public abstract class Actor : MonoBehaviour
     [HideInInspector]
     public Controller actor_controller;
 
+    [HideInInspector]
+    public float incoming_force = 0.0f;
+
     [Header("Debug")]
     [Tooltip("Shows debug information related to the actor")]
     public bool debug; //enables debug action
@@ -70,6 +73,9 @@ public abstract class Actor : MonoBehaviour
 
     //We Take damage, play the damage animation, and then die if we have less than zero hp
     public virtual void TakeDamage(float damage){
+        if(immune){
+            damage = 0.0f;
+        }
         PlayDamageAnimation();
         stats.health -= damage;
         if(stats.health <= 0){

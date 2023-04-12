@@ -25,6 +25,9 @@ public class ActionCollider : MonoBehaviour
 
     System.Action<Actor> function;
 
+    [HideInInspector]
+    public float force = 10.0f;
+
     
     List<GameObject> enemies = new List<GameObject>();
 
@@ -105,6 +108,7 @@ public class ActionCollider : MonoBehaviour
         this.function = function;
         foreach(GameObject go in enemies){
             Actor enemy = Actor.ExtractActor(go);
+            enemy.incoming_force = force;
             function(enemy);
         }   
     }
@@ -122,6 +126,8 @@ public class ActionCollider : MonoBehaviour
                 //Debug.Log("Boop");
                     if(Game.player.attacking){
                         if(function != null){
+                            Actor enemy = Actor.ExtractActor(other.gameObject);
+                            enemy.incoming_force = force;
                             function(Actor.ExtractActor(other.gameObject));
                         }
                     }

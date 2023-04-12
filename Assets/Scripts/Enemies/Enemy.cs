@@ -27,6 +27,8 @@ public class Enemy : Actor
     //Is the animator or animation running for a different move?
     [HideInInspector]
     public bool playing_action;
+
+    
     
     // Start is called before the first frame update
     protected override void Start()
@@ -57,8 +59,8 @@ public class Enemy : Actor
         Vector3 direction = enemy_position - player_position;
         direction = direction.normalized;
 
-        float magnitude = 50.0f;
-        direction *= magnitude;
+        direction *= incoming_force;
+        Debug.Log(incoming_force);
 
         rb.AddForce(direction);
     }

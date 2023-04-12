@@ -20,6 +20,10 @@ public abstract class Weapon : ScriptableObject{
         PlayAttackAnimation();
     }
 
+    public virtual void Attack(float pushback_force){
+        Attack();
+    }
+
     public virtual void Attack(GameObject inflicting_actor){
         Attack();
     }
