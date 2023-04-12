@@ -107,9 +107,11 @@ public class ActionCollider : MonoBehaviour
     public void ApplyToEnemies(System.Action<Actor> function){
         this.function = function;
         foreach(GameObject go in enemies){
-            Actor enemy = Actor.ExtractActor(go);
-            enemy.incoming_force = force;
-            function(enemy);
+            if(go != null){
+                Actor enemy = Actor.ExtractActor(go);
+                enemy.incoming_force = force;
+                function(enemy);
+            }
         }   
     }
 

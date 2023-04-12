@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using Augments.Display;
+using TMPro;
 
 //Main class to display the UI functions
 public class CanvasController : MonoBehaviour
@@ -52,10 +53,12 @@ public class CanvasController : MonoBehaviour
     IEnumerator PlayDamageText(float damage, Actor inflicted_actor){
         GameObject new_text = Instantiate(damage_display);
 
+        new_text.transform.SetParent(this.transform);
+
         Vector3 screen_point = Camera.main.WorldToScreenPoint(inflicted_actor.gameObject.transform.position);
         Vector2 rect_point = new Vector2(screen_point.x, screen_point.y + 35.0f);
 
-        new_text.GetComponent<TMPro.TextMeshProUGUI>().text = damage.ToString();
+        new_text.GetComponent<TextMeshProUGUI>().text = damage.ToString();
         new_text.transform.position = rect_point;
 
         for(int i = 0; i < 50; i++){
