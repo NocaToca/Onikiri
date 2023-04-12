@@ -285,7 +285,7 @@ namespace Animation{
             attacking_action();
         }
 
-        public void TryAttackSword(System.Action attacking_action){
+        public void TryAttackSword(System.Action<float> attacking_action){
             //We're going to want to:
             /*
             1. Check what sword attack stage we are on (1-3)
@@ -318,6 +318,7 @@ namespace Animation{
                     #endif
                     move_next = delegate(){
                         p.SetPushbackForce(50);
+                        attacking_action(1.0f);
                         PushPlayer(10);
                         return AnimationType.SWORD_ATTACK_2;
                     };
@@ -329,6 +330,7 @@ namespace Animation{
 
                     move_next = delegate(){
                         p.SetPushbackForce(200);
+                        attacking_action(1.5f);
                         PushPlayer(400);
                         return AnimationType.SWORD_ATTACK_3;
                     };
@@ -354,7 +356,6 @@ namespace Animation{
                 UnityAction increment_attack = delegate(){
                     if(!current_attack()){
                         current_animation = move_next();
-                        attacking_action();
                         Play(current_animation);
                         FlushQueue();
                         main_animator.gameObject.GetComponent<PlayerController>().SetAttacking();
@@ -385,7 +386,7 @@ namespace Animation{
                 main_animator.gameObject.GetComponent<PlayerController>().SetAttacking();
                 p.SetPushbackForce(50);
                 PushPlayer(10);
-                attacking_action();
+                attacking_action(1.0f);
                 Play(AssembleString());
             }
             

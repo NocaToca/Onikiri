@@ -14,11 +14,11 @@ public class Sword : MeleeWeapon
         }
     }
 
-    public override void Attack(float pushback_force){
+    public override void Attack(float damage_multiplier){
         PlayAttackAnimation();
         if(holding_actor is Player){
             Player p = (Player)holding_actor;
-            p.sword_collider.force = pushback_force;
+            EmpowerNextHit(damage_multiplier);
             p.sword_collider.ApplyToEnemies(OnHit);
             //Debug.Log("Sent");
         }

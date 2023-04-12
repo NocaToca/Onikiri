@@ -47,7 +47,14 @@ public abstract class MeleeWeapon : Weapon
 
     }
 
+    protected float damage_mul = 1.0f;
+
+    protected void EmpowerNextHit(float damage){
+        damage_mul = damage;
+    }
+
     public virtual void OnHit(Actor a){
-        a.TakeDamage(damage);
+        a.TakeDamage(damage * damage_mul);
+        damage_mul = 1.0f;
     }
 }

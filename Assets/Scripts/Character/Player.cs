@@ -224,6 +224,12 @@ public class Player : Actor
         }
     }
 
+    public void AttemptAttack(float damage){
+        if(main_hand != null){
+            main_hand.Attack(damage);
+        }
+    }
+
     public void Respawn(){
         stats.health = stats.max_health;
         gameObject.GetComponent<SpriteRenderer>().enabled = true;

@@ -19,6 +19,10 @@ public class CanvasController : MonoBehaviour
     public AugmentDisplay[] boons;
     public AugmentDisplay[] skills;
 
+    [Header("Damage Text")]
+    public GameObject damage_display;
+    public float damage_text_display_duration;
+
     public DisplayType test_display_type;
     public bool test_display;
 
@@ -39,6 +43,27 @@ public class CanvasController : MonoBehaviour
         if(test_display){
             StartCoroutine(LateStart(1));
         }
+    }
+
+    public void SpawnDamageText(float damage, Actor inflicted_actor){
+        StartCoroutine(PlayDamageText(damage, inflicted_actor));
+    }
+
+    IEnumerator PlayDamageText(float damage, Actor inflicted_actor){
+        GameObject new_text = Instantiate(damage_display);
+
+        Vector3 screen_point = Camera.main.WorldToScreenPoint(inflicted_actor.gameObject.transform.position);
+        Vector2 rect_point = new Vector2(screen_point.x, screen_point.y + 35.0f);
+
+        new_text.GetComponent<TMPro.TextMeshProUGUI>().text = damage.ToString();
+        new_text.transform.position = rect_point;
+
+        for(int i = 0; i < 50; i++){
+            new_text.gameObject.transform.position = new Vector2(new_text.gameObject.transform.position.x, new_text.gameObject.transform.position.y + 0.5f);
+            yield return new WaitForEndOfFrame();
+        }
+
+        Destroy(new_text);
     }
 
     IEnumerator LateStart(float waitTime)
