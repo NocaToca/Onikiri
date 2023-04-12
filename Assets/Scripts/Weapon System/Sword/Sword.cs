@@ -10,7 +10,7 @@ public class Sword : MeleeWeapon
         if(holding_actor is Player){
             Player p = (Player)holding_actor;
             p.sword_collider.ApplyToEnemies(OnHit);
-            Debug.Log("Sent");
+            //Debug.Log("Sent");
         }
     }
 }

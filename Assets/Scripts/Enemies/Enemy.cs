@@ -8,7 +8,6 @@ using UnityEngine;
 public class Enemy : Actor
 {
     
-
     Rigidbody2D rb;
     BoxCollider2D cc;
 

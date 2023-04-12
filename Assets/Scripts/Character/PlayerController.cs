@@ -23,6 +23,7 @@ public class PlayerController : Controller
 
     Animation.PlayerAnimationHandler pah;
 
+
     // List<SkillListener> skills;
 
     // Start is called before the first frame update
@@ -53,9 +54,9 @@ public class PlayerController : Controller
 
     void Update(){
         if(pah.current_direction == Direction.West){
-            p.sword_collider.gameObject.transform.rotation = Quaternion.EulerAngles(new Vector3(0,0,Mathf.PI));
+            p.sword_collider.gameObject.transform.rotation = Quaternion.Euler(new Vector3(0,0,180));
         } else {
-            p.sword_collider.gameObject.transform.rotation = Quaternion.EulerAngles(new Vector3(0,0,0));
+            p.sword_collider.gameObject.transform.rotation = Quaternion.Euler(new Vector3(0,0,0));
         }
 
         HandleInteractionInput();
@@ -87,7 +88,7 @@ public class PlayerController : Controller
     // Update is called once per frame
     void FixedUpdate()
     {
-        rb.velocity = Vector2.zero;
+        //rb.velocity = Vector2.zero;
         HandleMovement(1);
     }
 
@@ -134,8 +135,24 @@ public class PlayerController : Controller
             p.movedLastFrame = false;
         }
 
+        if(velocity == Vector2.zero){
+            return;
+        }
+
+        //Debug.Log("Two");
+
         rb.velocity = velocity;
 
+    }
+
+    public void SetAttacking(){
+        accepting_movement = false;
+        p.attacking = true;
+    }
+
+    public void DisableAttacking(){
+        accepting_movement = true;
+        p.attacking = false;
     }
 }
 
@@ -214,6 +231,7 @@ namespace Animation{
                     var check = main_animator.GetCurrentAnimatorClipInfo(0);
                     if(check.Length != 0){
                         if(check[0].clip.name.Substring(0,4) == "Idle"){
+                            main_animator.gameObject.GetComponent<PlayerController>().DisableAttacking();
                             current_animation = AnimationType.IDLE;
                         }
                     }
@@ -294,6 +312,7 @@ namespace Animation{
                     Debug.Log("Check one");
                     #endif
                     move_next = delegate(){
+                        PushPlayer(10);
                         return AnimationType.SWORD_ATTACK_2;
                     };
                 } else 
@@ -303,6 +322,7 @@ namespace Animation{
                     #endif
 
                     move_next = delegate(){
+                        PushPlayer(400);
                         return AnimationType.SWORD_ATTACK_3;
                     };
                 } else
@@ -310,11 +330,15 @@ namespace Animation{
                     #if Noca_Debug
                     Debug.Log("Check three");
                     #endif
+                    return;
 
-                    move_next = delegate(){
-                        return AnimationType.SWORD_ATTACK_1;
-                    };
+                    // move_next = delegate(){
+                    //     PushPlayer(100);
+                    //     return AnimationType.SWORD_ATTACK_1;
+                    // };
                 }
+
+                main_animator.gameObject.GetComponent<PlayerController>().SetAttacking();
 
                 //bool moved = false;
 
@@ -322,11 +346,11 @@ namespace Animation{
                 //our animation transitioned, and if so move onto the next animation before flushing the listener;
                 UnityAction increment_attack = delegate(){
                     if(!current_attack()){
-                        PushPlayer();
                         attacking_action();
                         current_animation = move_next();
                         Play(current_animation);
                         FlushQueue();
+                        main_animator.gameObject.GetComponent<PlayerController>().SetAttacking();
                     }
                 };
 
@@ -351,7 +375,8 @@ namespace Animation{
             } else
             if(!(current_animation == AnimationType.SEATHE)) {
                 current_animation = AnimationType.SWORD_ATTACK_1;
-                PushPlayer();
+                main_animator.gameObject.GetComponent<PlayerController>().SetAttacking();
+                PushPlayer(10);
                 attacking_action();
                 Play(AssembleString());
             }
@@ -382,13 +407,13 @@ namespace Animation{
 
                 //We can really only change our direction if we move
                 if(current_animation == AnimationType.IDLE){
-                    if(game_object_rigid_body.velocity.magnitude > 0.01f){
+                    if(game_object_rigid_body.velocity.magnitude > 0.25f){
                         current_animation = AnimationType.WALK;
                         Play(AssembleString());
                         return;
                     }
                 } else {
-                    if(game_object_rigid_body.velocity.magnitude < 0.01f){
+                    if(game_object_rigid_body.velocity.magnitude < 0.25f){
                         current_animation = AnimationType.IDLE;
                         Play(AssembleString());
                         return;
@@ -485,11 +510,10 @@ namespace Animation{
         }
 
         //Push function
-        public void PushPlayer(){
+        public void PushPlayer(float magnitude){
             Rigidbody2D rb = main_animator.gameObject.GetComponent<Rigidbody2D>();
 
             Vector2 force_direction = new Vector2(0,0);
-            float magnitude = 100.0f;
 
             if(current_direction == Direction.West){
                 force_direction.x -= 1.0f;

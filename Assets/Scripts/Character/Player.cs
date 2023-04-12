@@ -46,6 +46,8 @@ public class Player : Actor
     //Our mana
     public Mana kitsunebi;
 
+    public bool attacking = false;
+
     //Holds the functions that we call do update
 
     // Start is called before the first frame update\\

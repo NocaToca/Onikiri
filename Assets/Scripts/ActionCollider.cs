@@ -23,6 +23,8 @@ public class ActionCollider : MonoBehaviour
     [HideInInspector]
     public bool is_player_in_action_collider;
 
+    System.Action<Actor> function;
+
     
     List<GameObject> enemies = new List<GameObject>();
 
@@ -100,6 +102,7 @@ public class ActionCollider : MonoBehaviour
     }
 
     public void ApplyToEnemies(System.Action<Actor> function){
+        this.function = function;
         foreach(GameObject go in enemies){
             Actor enemy = Actor.ExtractActor(go);
             function(enemy);
@@ -114,9 +117,14 @@ public class ActionCollider : MonoBehaviour
             }
         } else {
             if(other.gameObject.tag == "Enemy"){
-                Debug.Log("Beep");
+                //Debug.Log("Beep");
                 if(!enemies.Contains(other.gameObject)){
-                Debug.Log("Boop");
+                //Debug.Log("Boop");
+                    if(Game.player.attacking){
+                        if(function != null){
+                            function(Actor.ExtractActor(other.gameObject));
+                        }
+                    }
                     enemies.Add(other.gameObject);
                 }
             }
