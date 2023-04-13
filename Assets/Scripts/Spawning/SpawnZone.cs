@@ -10,6 +10,11 @@ namespace Spawning{
         Circle
     }
 
+    public enum SpawnMode{
+        Single,
+        Continous
+    }
+
     public class SpawnZone : MonoBehaviour
     {
 
@@ -18,6 +23,7 @@ namespace Spawning{
         public List<GameObject> enemies_to_spawn;
 
         public SpawnType type;
+        public SpawnMode mode;
 
         public float radius;
 
@@ -35,6 +41,13 @@ namespace Spawning{
             yield return new WaitForSeconds(wait_time);
             for(int i = 0; i <num_enemies_to_spawn; i++){
                 Spawn();
+            }
+
+            if(mode == SpawnMode.Continous){
+                while(GameObject.FindGameObjectsWithTag("Enemy").Length >= 5){
+                    yield return new WaitForEndOfFrame();
+                }
+                StartCoroutine(StartOffset(wait_time));
             }
         }
 
@@ -87,6 +100,8 @@ namespace Spawning{
             int ran = Random.Range(0, enemies_to_spawn.Count);
 
             GameObject enemy_object = Instantiate(enemies_to_spawn[ran]);
+
+            Actor.ExtractActor(enemy_object).Scale();
 
             enemy_object.transform.position = FindRandomValueInBounds() + this.transform.position;
         }

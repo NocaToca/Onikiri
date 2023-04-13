@@ -9,6 +9,8 @@ public class Game : MonoBehaviour
     //An easy static way to get the player
     public static Player player {get{return GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();}}
 
+    public static Game game {get{return GameObject.FindGameObjectWithTag("Game").GetComponent<Game>();}}
+
     //Used to normalize actor speed and other operations running on FixedUpdate()
     public static float normalizing_speed_constant = 0.01f;
     //Another name for it
@@ -34,6 +36,22 @@ public class Game : MonoBehaviour
                     break;
                 }
             }
+        }
+    }
+
+    public void Kill(Actor a){
+        StartCoroutine(DeathPartum(a));
+    }
+    
+
+    IEnumerator DeathPartum(Actor a){
+        a.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+
+        yield return new WaitForSeconds(2.5f);
+
+        if(!a.puppet){
+            //No mercy
+            Destroy(a.gameObject);
         }
     }
 }

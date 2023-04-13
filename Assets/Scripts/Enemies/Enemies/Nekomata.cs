@@ -15,6 +15,12 @@ public class Nekomata : Enemy
 
     GameObject player;
 
+    [HideInInspector]
+    public bool has_puppet;
+    GameObject puppet_object;
+
+
+
     protected override void Start(){
         base.Start();
         player = GameObject.FindGameObjectWithTag("Player");
@@ -22,17 +28,23 @@ public class Nekomata : Enemy
     }
 
     protected void FixedUpdate(){
+        List<GameObject> alive_fire_wisps = new List<GameObject>();
         foreach(GameObject wisp in fire_wisps){
-            wisp.transform.position = Vector3.MoveTowards(wisp.transform.position, player.transform.position, wisp_speed * Game.tick);
+            if(wisp != null){
+                wisp.transform.position = Vector3.MoveTowards(wisp.transform.position, player.transform.position, wisp_speed * Game.tick);
 
-            //Makeshift collider
-            if(Vector3.Distance(wisp.transform.position, player.transform.position) <= 0.2f){
-                player.GetComponent<Player>().TakeDamage(GetComponent<FireWispSkill>().damage);
-                fire_wisps.Remove(wisp);
-                Destroy(wisp);
+                //Makeshift collider
+                if(Vector3.Distance(wisp.transform.position, player.transform.position) <= 0.2f){
+                    player.GetComponent<Player>().TakeDamage(GetComponent<FireWispSkill>().damage);
+                    Destroy(wisp);
+                } else {
+                    alive_fire_wisps.Add(wisp);
+                }
+                //Debug.Log(Vector3.Distance(wisp.transform.position, player.transform.position));
             }
-            //Debug.Log(Vector3.Distance(wisp.transform.position, player.transform.position));
         }
+
+        fire_wisps = alive_fire_wisps;
     }
 
     public void SpawnFireWisp(){
@@ -41,11 +53,23 @@ public class Nekomata : Enemy
         fire_wisps.Add(wisp);
     }
 
+    public void SetPuppet(GameObject puppet){
+        this.puppet_object = puppet;
+        puppet_object.GetComponent<AI.AITree>().mode = AI.AIMode.ON;
+        has_puppet = true;
+        Actor.ExtractActor(puppet_object).SetAsPuppet();
+    }
+
     //Have to clean up the firewisps before destroying them
     protected override void Die(){
         foreach(GameObject wisp in fire_wisps){
             Destroy(wisp);
         }
+
+        if(puppet_object != null){
+            Destroy(puppet_object);
+        }
+
         base.Die();
     }
 

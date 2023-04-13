@@ -91,8 +91,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  scan_type: 0
   debug_display: 1
   is_player_in_action_collider: 0
+  force: 10
 --- !u!1 &580961271974042750
 GameObject:
   m_ObjectHideFlags: 0
@@ -184,8 +186,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  scan_type: 0
   debug_display: 1
   is_player_in_action_collider: 0
+  force: 10
 --- !u!1 &580961272017369077
 GameObject:
   m_ObjectHideFlags: 0
@@ -267,8 +271,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
+  scan_type: 0
   debug_display: 1
   is_player_in_action_collider: 0
+  force: 10
 --- !u!1 &580961272159341708
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,7 +383,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 5
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -477,7 +483,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   actor_controller: {fileID: 0}
+  incoming_force: 0
   debug: 1
+  puppet: 0
   speed: 1
   attack_speed: 1
   weapon: {fileID: 11400000, guid: 3406da6a03e48c74781df7a5f35f216d, type: 2}
@@ -494,6 +502,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f272bfe2f51115044a5349e7164c7416, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mode: 0
   speed: 1
   radius: 1
   radius_buffer: 1

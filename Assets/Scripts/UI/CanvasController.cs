@@ -62,8 +62,8 @@ public class CanvasController : MonoBehaviour
         new_text.transform.position = rect_point;
 
         for(int i = 0; i < 50; i++){
-            new_text.gameObject.transform.position = new Vector2(new_text.gameObject.transform.position.x, new_text.gameObject.transform.position.y + 0.5f);
-            yield return new WaitForEndOfFrame();
+            new_text.gameObject.transform.position = new Vector2(new_text.gameObject.transform.position.x, new_text.gameObject.transform.position.y + 5.0f/(i+1));
+            yield return new WaitForSeconds(0.5f/50.0f);
         }
 
         Destroy(new_text);

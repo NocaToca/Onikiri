@@ -66,7 +66,9 @@ public class Enemy : Actor
     }
 
     protected override void Die(){
-        Destroy(this.gameObject);
+        base.Die();
+        GetComponent<AI.AITree>().mode = AI.AIMode.OFF;
+        Game.game.Kill(this);
     }
     
     public static Enemy GetEnemy(GameObject go){

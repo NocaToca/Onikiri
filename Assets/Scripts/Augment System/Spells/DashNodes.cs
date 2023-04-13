@@ -65,6 +65,7 @@ namespace Augments{
         }
 
         public override void SkillEvent(){
+            Debug.Log("4");
             ChooseDestination();
 
             enable_event.Invoke();

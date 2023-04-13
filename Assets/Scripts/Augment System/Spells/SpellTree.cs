@@ -28,11 +28,18 @@ namespace Augments{
 
         }
 
+        public void Poke(){
+            Debug.Log("3");
+            Debug.Log(root.Name());
+            SkillNode skill_root = (SkillNode)root;
+            skill_root.SkillEvent();
+        }
+
         protected override void Update(){
-            if(active && Input.GetKeyDown(KeyCode.Q)){
-                SkillNode skill_root = (SkillNode)root;
-                skill_root.SkillEvent();
-            } 
+            // if(active && Input.GetKeyDown(KeyCode.Q)){
+            //     SkillNode skill_root = (SkillNode)root;
+            //     skill_root.SkillEvent();
+            // } 
         }
 
         protected override void FixedUpdate(){

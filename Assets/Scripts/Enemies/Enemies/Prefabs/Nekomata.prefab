@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 8647202892165244166}
   - component: {fileID: 8647202892165244161}
   - component: {fileID: 612530981}
+  - component: {fileID: 66697042}
   m_Layer: 7
   m_Name: Nekomata
   m_TagString: Enemy
@@ -64,7 +65,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &8647202892165244165
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -131,7 +132,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   actor_controller: {fileID: 0}
+  incoming_force: 0
   debug: 1
+  puppet: 0
+  dead: 0
   speed: 1
   attack_speed: 1
   weapon: {fileID: 0}
@@ -139,6 +143,7 @@ MonoBehaviour:
   fire_wisp_prefab: {fileID: 7219370514168482716, guid: e82ed628ee6e2fe409387458cad94cad, type: 3}
   fire_wisps: []
   wisp_speed: 3
+  has_puppet: 0
 --- !u!114 &8647202892165244167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,7 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21ebc04574bd90140a73a14dec737184, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mode: 0
+  mode: 3
   spell_range: 6
   speed: 1
   radius: 1
@@ -245,3 +250,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &66697042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8647202892165244160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff0ae854d525def429eb44f7e963ce42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitbox: {fileID: 0}
+  damage: 5
+  cooldown: 5

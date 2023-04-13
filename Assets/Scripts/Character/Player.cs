@@ -33,6 +33,11 @@ public class Player : Actor
     public SpellTree second_tree;
     public BoonTree[] boon_trees;
 
+    [Header("Dash Tree")]
+    public SpellTree dash_tree;
+
+    public Dash dash_root;
+
     public ActionCollider sword_collider;
 
     //Calls colission effects to anything interested
@@ -78,6 +83,11 @@ public class Player : Actor
         second_tree = t2.AddComponent<SpellTree>();
         t2.gameObject.name = "Spell Tree Two";
 
+        GameObject t3 = Instantiate(tree_prefab);
+        t3.transform.SetParent(this.transform);
+        dash_tree = t3.AddComponent<SpellTree>();
+        t3.gameObject.name = "Dash Spell Tree";
+
         boon_trees = new BoonTree[3];
         for(int i = 0; i < 3; i++){
             GameObject t_boon = Instantiate(tree_prefab);
@@ -97,10 +107,18 @@ public class Player : Actor
         //We have 9 mana
         kitsunebi = new Mana(9);
 
-        
 
         //augments.Add(this.gameObject.AddComponent<Dash>());
         //augments.Add(this.gameObject.AddComponent<SpeedIncrease>());
+    }
+
+    public void Dash(){
+        if(dash_tree.root.Name() == "N/A"){
+            dash_tree.root = new Dash(50.0f, 5.0f, this);
+
+        }
+            Debug.Log("2");
+        dash_tree.Poke();
     }
 
     // Update is called once per frame
@@ -233,11 +251,13 @@ public class Player : Actor
     public void Respawn(){
         stats.health = stats.max_health;
         gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        this.gameObject.GetComponent<PlayerController>().enabled = true;
         this.transform.position = Vector3.zero;
     }
 
     protected override void Die(){
         gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        this.gameObject.GetComponent<PlayerController>().enabled = false;
     }
 }
 

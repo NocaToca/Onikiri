@@ -32,6 +32,11 @@ public abstract class Actor : MonoBehaviour
     [Tooltip("Shows debug information related to the actor")]
     public bool debug; //enables debug action
 
+    [HideInInspector]
+    public bool puppet;
+    [HideInInspector]
+    public bool dead;
+
     protected virtual void Start(){
         //SetController();
 
@@ -73,10 +78,13 @@ public abstract class Actor : MonoBehaviour
 
     //We Take damage, play the damage animation, and then die if we have less than zero hp
     public virtual void TakeDamage(float damage){
+        if(dead && !puppet){
+            return;
+        }
         CanvasController canvas = GameObject.FindGameObjectWithTag("Canvas").GetComponent<CanvasController>();
         canvas.SpawnDamageText(damage, this);
 
-        if(immune){
+        if(immune || dead){
             damage = 0.0f;
         }
         PlayDamageAnimation();
@@ -107,7 +115,19 @@ public abstract class Actor : MonoBehaviour
 
     //Death function
     protected virtual void Die(){
+        dead = true;
+    }
 
+    public virtual void SetAsPuppet(){
+        stats.health = stats.max_health;
+        GetComponent<SpriteRenderer>().enabled = true;
+        puppet = true;
+    }
+
+    public virtual void Scale(){
+        this.stats.max_health += Time.unscaledTime * 5.0f;
+        this.stats.health = this.stats.max_health;
+        Debug.Log(stats.health);
     }
 
     //Tries to extract an object of trpe Actor

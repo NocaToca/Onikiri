@@ -24,6 +24,9 @@ public class PlayerController : Controller
 
     Animation.PlayerAnimationHandler pah;
 
+    private float time_since_last_dash = 1.0f;
+    public float dash_cooldown = 1.0f;
+
 
     // List<SkillListener> skills;
 
@@ -60,8 +63,19 @@ public class PlayerController : Controller
             p.sword_collider.gameObject.transform.rotation = Quaternion.Euler(new Vector3(0,0,0));
         }
 
+        HandleCooldowns();
+
         HandleInteractionInput();
-        pah.UpdateAnimation();
+    }
+
+    bool able_to_dash = true;
+    private void HandleCooldowns(){
+        if(time_since_last_dash > dash_cooldown){
+            able_to_dash = true;
+        } else {
+            able_to_dash = false;
+        }
+        time_since_last_dash += Time.deltaTime;
     }
 
     void HandleInteractionInput(){
@@ -81,6 +95,11 @@ public class PlayerController : Controller
         if(Input.GetKeyDown(KeyCode.R)){
             p.Respawn();
         }
+        if(able_to_dash && !p.attacking && Input.GetKeyDown(KeyCode.Space)){
+            // Debug.Log("1");
+            p.Dash();
+            time_since_last_dash = 0.0f;
+        }
         if(Input.GetKeyDown(KeyCode.Escape)){
             Application.Quit();
         }
@@ -90,6 +109,7 @@ public class PlayerController : Controller
     void FixedUpdate()
     {
         //rb.velocity = Vector2.zero;
+        pah.UpdateAnimation();
         HandleMovement(1);
     }
 
@@ -219,7 +239,7 @@ namespace Animation{
             if(direction != current_direction){
                 UpdateDirection(direction);
             }
-            if(current_animation == AnimationType.IDLE || current_animation == AnimationType.WALK){
+            if(current_animation == AnimationType.IDLE || current_animation == AnimationType.WALK || current_animation == AnimationType.SEATHE){
                 main_animator.gameObject.GetComponent<PlayerController>().DisableAttacking();
                 CheckAnimation();
             }
@@ -232,6 +252,7 @@ namespace Animation{
             }
 
             if(current_animation == AnimationType.SEATHE){
+                main_animator.gameObject.GetComponent<PlayerController>().DisableAttacking();
                 if(actions_to_remove.Count == 0){
                     var check = main_animator.GetCurrentAnimatorClipInfo(0);
                     if(check.Length != 0){
@@ -415,7 +436,7 @@ namespace Animation{
                 }
 
                 //We can really only change our direction if we move
-                if(current_animation == AnimationType.IDLE){
+                if(current_animation != AnimationType.WALK){
                     if(game_object_rigid_body.velocity.magnitude > 0.25f){
                         current_animation = AnimationType.WALK;
                         Play(AssembleString());

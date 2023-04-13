@@ -36,7 +36,8 @@ public class NekomataAITree : AITree
     protected override AINode SetUpTree(){
         AINode root = new Selector(new List<AINode>{
             new Selector(new List<AINode>{
-                    new FireWisp()
+                new Necropuppet(),
+                new FireWisp()
             }),
             new Sequence(new List<AINode>{
                 new EnemyDetection(pawn, fov),

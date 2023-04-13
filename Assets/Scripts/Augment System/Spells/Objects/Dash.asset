@@ -12,6 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dc1f822df857f5d18bf505e70acdf67, type: 3}
   m_Name: Dash
   m_EditorClassIdentifier: 
-  children: []
+  children:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   parent: {fileID: 0}
   active: 0
+  p: {fileID: 0}
+  display_image: {fileID: 0}
+  speed: 5
+  distance: 3
