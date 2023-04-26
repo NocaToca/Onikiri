@@ -164,6 +164,9 @@ public class CanvasController : MonoBehaviour
     }
 
     public void PokeHealthBar(Actor actor){
+        if(actor is Player){
+            return;
+        }
         foreach(HealthBar bar in health_bars){
             if(bar.actor == actor){
                 StartCoroutine(ShowHealthBar(bar));
@@ -173,11 +176,15 @@ public class CanvasController : MonoBehaviour
     }
 
     public void CreateHealthBar(Actor actor){
-        HealthBar bar = new HealthBar(Instantiate(health_bar_prefab), actor);
+        bool player = actor is Player;
+
+        HealthBar bar = new HealthBar(Instantiate(health_bar_prefab), actor, player);
         bar.display.gameObject.transform.SetParent(this.transform);
         health_bars.Add(bar);
 
-        StartCoroutine(ShowHealthBar(bar));
+        if(!player){
+            StartCoroutine(ShowHealthBar(bar));
+        }
     }
 
     IEnumerator ShowHealthBar(HealthBar bar){
@@ -198,10 +205,12 @@ public struct HealthBar{
 
     public Slider display;
     public Actor actor;
+    public bool player;
 
-    public HealthBar(Slider display, Actor actor){
+    public HealthBar(Slider display, Actor actor, bool player = false){
         this.display = display;
         this.actor = actor;
+        this.player = player;
     }
 
 }

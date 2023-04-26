@@ -26,14 +26,20 @@ namespace Spawning{
         public SpawnMode mode;
 
         public float radius;
+        public float spawn_radius;
 
         public bool show_debug;
+
+        bool active;
 
         // Start is called before the first frame update
         void Start()
         {
+            active = false;
             //if(show_debug){
+                #if UNITY_EDITOR
                 StartCoroutine(StartOffset(2.0f));
+                #endif
             //}
         }
 
@@ -55,6 +61,8 @@ namespace Spawning{
         void Update()
         {
             
+            active = Vector3.Distance(GameObject.FindGameObjectWithTag("Player").transform.position, this.transform.position) <= spawn_radius;
+            
         }
 
         public Bounds GetBounds(){
@@ -69,7 +77,11 @@ namespace Spawning{
                 } else {
                     Gizmos.DrawWireSphere(this.transform.position, radius);
                 }
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawWireSphere(this.transform.position, spawn_radius);
             }
+
+            
             
         }
 

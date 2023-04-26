@@ -251,13 +251,13 @@ public class Player : Actor
     public void Respawn(){
         stats.health = stats.max_health;
         gameObject.GetComponent<SpriteRenderer>().enabled = true;
-        this.gameObject.GetComponent<PlayerController>().enabled = true;
+        this.gameObject.GetComponent<PlayerController>().ToggleMovement(true);
         this.transform.position = Vector3.zero;
     }
 
     protected override void Die(){
         gameObject.GetComponent<SpriteRenderer>().enabled = false;
-        this.gameObject.GetComponent<PlayerController>().enabled = false;
+        this.gameObject.GetComponent<PlayerController>().ToggleMovement(false);
     }
 }
 

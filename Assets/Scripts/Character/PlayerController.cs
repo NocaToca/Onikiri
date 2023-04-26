@@ -68,6 +68,11 @@ public class PlayerController : Controller
         HandleInteractionInput();
     }
 
+    bool allowed_movement = true;
+    public void ToggleMovement(bool state){
+        allowed_movement = state;
+    }
+
     bool able_to_dash = true;
     private void HandleCooldowns(){
         if(time_since_last_dash > dash_cooldown){
@@ -114,7 +119,7 @@ public class PlayerController : Controller
     }
 
     private void HandleMovement(float deltaTime){
-        if(!accepting_movement){
+        if(!accepting_movement || !allowed_movement){
             return;
         }
 
