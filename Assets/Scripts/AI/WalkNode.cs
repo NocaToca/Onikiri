@@ -90,6 +90,14 @@ public class WalkNode : AINode
         return state;
     }
 
+    public override string Name(){
+        if(waiting){
+            return "Idle";
+        } else {
+            return "Walk";
+        }
+    }
+
 }
 
 public struct WalkSettings{

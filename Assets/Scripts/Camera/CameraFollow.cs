@@ -28,7 +28,7 @@ public class CameraFollow : MonoBehaviour
     //Every update, we move toward the point but lock z, which allows us to innately have a nice lerp effect
     //The reason for this is the increasing magnitude weight in z, the direction we ignore, as we get closer
     public void Update(){
-        Vector3 point = Vector3.MoveTowards(this.transform.position, follow.transform.position, Game.tick * speed);
+        Vector3 point = Vector3.MoveTowards(this.transform.position, follow.transform.position, Game.tick * speed * Mathf.Max(1.0f,Vector3.Distance(this.transform.position, follow.transform.position)));
         point.z = this.transform.position.z;
 
         this.transform.position = point;

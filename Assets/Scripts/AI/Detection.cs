@@ -67,6 +67,10 @@ public class EnemyDetection : AINode{
         return state;
     }
 
+    public override string Name(){
+        return "Scanning";
+    }
+
     //Gizmo logic
     public void Visualize(){
         object target = GetData("target");
@@ -90,14 +94,16 @@ public class EnemyDetection : AINode{
 }
 
 //Actually moves our character to the target
-public class GoToTarget :AINode{
+public class GoToTarget : AINode{
     private Actor a;
 
     float speed;
+    bool moving;
 
     public GoToTarget(Actor a, float speed) : base(){
         this.a = a;
         this.speed =speed;
+        moving = false;
     }
 
     public GoToTarget(Actor a, float speed, List<AINode> children) : base(children){
@@ -119,11 +125,22 @@ public class GoToTarget :AINode{
         //If our target is not close enough we move to it and look towards it
         if(Vector3.Distance(player.transform.position, a.transform.position) > walk_to_distance){
             a.transform.position = Vector3.MoveTowards(a.transform.position, player.transform.position, speed * Game.tick);
-            a.transform.up= Vector3.Lerp(a.transform.up, (player.transform.position - a.transform.position), 0.1f);
+            moving = true;
+            //a.transform.up= Vector3.Lerp(a.transform.up, (player.transform.position - a.transform.position), 0.1f);
+        } else {
+            moving = false;
         }
 
         state = Status.RUNNING;
         return state;
+    }
+
+    public override string Name(){
+        if(moving){
+            return "Walk";
+        } else {
+            return "Idle";
+        }
     }
 
 }

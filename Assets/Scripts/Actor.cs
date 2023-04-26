@@ -68,11 +68,16 @@ public abstract class Actor : MonoBehaviour
 
     
     //Base hit animation
-    public void PlayDamageAnimation(){
+    public virtual void PlayDamageAnimation(){
         if(anime != null){
             anime.Play("Hit");
         } else {
             Debug.Log("Hit");
+        }
+    }
+    public virtual void PlayCastAnimation(){
+        if(anime != null){
+            anime.Play("Cast");
         }
     }
 

@@ -62,6 +62,7 @@ public class FireWisp : AINode
             if(Vector3.Distance(owner.gameObject.transform.position, GameObject.FindGameObjectWithTag("Player").transform.position) <= skill_range){
                 //We play here
                 Nekomata neko = (Nekomata)owner;
+                neko.PlayCastAnimation();
                 neko.SpawnFireWisp();
                 wait_time = 0.0f;
                 return SUCCESS();

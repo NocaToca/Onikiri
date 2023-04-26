@@ -69,6 +69,7 @@ public class Necropuppet : AINode
                         neko.SetPuppet(go);
                         Debug.Log("Setting puppet");
                         wait_time = 0.0f;
+                        neko.PlayCastAnimation();
                         return SUCCESS();
                     } 
                 }   

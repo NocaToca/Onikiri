@@ -19,7 +19,7 @@ namespace AI
     public class AINode{
 
         //State
-        protected Status state;
+        public Status state {get; protected set;}
 
         //Parent
         public AINode parent;
@@ -135,6 +135,10 @@ namespace AI
         public Status RUNNING(){
             state = Status.RUNNING;
             return state;
+        }
+
+        public virtual string Name(){
+            return "N/A";
         }
 
     }

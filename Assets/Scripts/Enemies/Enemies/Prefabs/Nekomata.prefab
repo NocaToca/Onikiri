@@ -33,11 +33,11 @@ Transform:
   m_GameObject: {fileID: 8647202892165244160}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -7.96, y: 1.7, z: 0.6994641}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &8647202892165244170
 Rigidbody2D:
@@ -240,7 +240,7 @@ Animator:
   m_GameObject: {fileID: 8647202892165244160}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 81ac206d4795de6479ac42a7c4eafe7d, type: 2}
+  m_Controller: {fileID: 9100000, guid: 129733ec8c1c5e84699347cbfcfcb91e, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

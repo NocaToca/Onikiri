@@ -292,11 +292,23 @@ namespace Animation{
 
                 Vector3 direction_vector = screen_pos_of_mouse - main_animator.gameObject.transform.position;
 
+                Direction horizontal_direction = Direction.East;
+
                 if(direction_vector.x > 0){
-                    current_direction = Direction.East;
+                    horizontal_direction = Direction.East;
                 } else {
-                    current_direction = Direction.West;
+                    horizontal_direction = Direction.West;
+                } 
+
+                Direction vertical_direction = Direction.North;
+
+                if(direction_vector.y > 0){
+                    vertical_direction = Direction.North;
+                } else {
+                    vertical_direction = Direction.South;
                 }
+
+                current_direction = (Mathf.Abs(direction_vector.y) > Mathf.Abs(direction_vector.x)) ? vertical_direction : horizontal_direction;
 
                 current_animation = AnimationType.ORB_ATTACK;
 
@@ -327,11 +339,23 @@ namespace Animation{
 
             Vector3 direction_vector = screen_pos_of_mouse - main_animator.gameObject.transform.position;
 
+            Direction horizontal_direction = Direction.East;
+
             if(direction_vector.x > 0){
-                current_direction = Direction.East;
+                horizontal_direction = Direction.East;
             } else {
-                current_direction = Direction.West;
+                horizontal_direction = Direction.West;
+            } 
+
+            Direction vertical_direction = Direction.North;
+
+            if(direction_vector.y > 0){
+                vertical_direction = Direction.North;
+            } else {
+                vertical_direction = Direction.South;
             }
+
+            current_direction = (Mathf.Abs(direction_vector.y) > Mathf.Abs(direction_vector.x)) ? vertical_direction : horizontal_direction;
 
             if(current_attack() || current_animation == AnimationType.SEATHE){
                 System.Func<AnimationType> move_next = delegate(){
@@ -428,7 +452,18 @@ namespace Animation{
 
         public string AssembleString(){
             string state = ConvertCurrentAnimationTypeToString();
-            state = (current_direction == Direction.West) ? state+"_Left" : state+"_Right";
+            if(current_direction == Direction.West){
+                state += "_Left";
+            } else 
+            if(current_direction == Direction.East){
+                state += "_Right";
+            } else
+            if(current_direction == Direction.South){
+                state += "_Down";
+            } else 
+            if(current_direction == Direction.North){
+                state += "_Up";
+            }
             return state;
         }
 
@@ -472,11 +507,36 @@ namespace Animation{
                 }
 
                 //We can really only change our direction if we move
-                if(game_object_rigid_body.velocity.x > 0.01f){
-                    return Direction.East;
+
+                float x = game_object_rigid_body.velocity.x;
+                float y = game_object_rigid_body.velocity.y;
+
+                Direction horizontal_direction = Direction.East;
+                bool moving_horizontally = true;
+
+                if(x > 0.01f){
+                    horizontal_direction = Direction.East;
                 } else
-                if(game_object_rigid_body.velocity.x < -0.01f){
-                    return Direction.West;
+                if(x < -0.01f){
+                    horizontal_direction = Direction.West;
+                } else {
+                    moving_horizontally = false;
+                }
+
+                Direction vertical_direction = Direction.North;
+                bool moving_vertically = true;
+
+                if(y > 0.01){
+                    vertical_direction = Direction.North;
+                } else
+                if(y < -0.01f){
+                    vertical_direction = Direction.South;
+                } else {
+                    moving_vertically = false;
+                }
+
+                if(moving_horizontally || moving_vertically){
+                    return (Mathf.Abs(y) > Mathf.Abs(x)) ? vertical_direction : horizontal_direction;
                 }
 
             }catch(NullRigidBodyReference e){
@@ -508,8 +568,15 @@ namespace Animation{
 
             if(direction == Direction.West){
                 state_name += "_Left";
-            } else {
+            } else 
+            if(direction == Direction.East){
                 state_name += "_Right";
+            } else 
+            if(direction == Direction.South){
+                state_name += "_Down";
+            } else 
+            if(direction == Direction.North){
+                state_name += "_Up";
             }
 
             //Will have more transition logic done here later "I.E not reset sword swings when turning in the middle of them"
@@ -555,7 +622,13 @@ namespace Animation{
             } else 
             if(current_direction == Direction.East){
                 force_direction.x += 1.0f;
-            }
+            } else
+            if(current_direction == Direction.North){
+                force_direction.y += 1.0f;
+            } else
+            if(current_direction == Direction.South){
+                force_direction.y -= 1.0f;
+            } 
 
             force_direction *= magnitude;
             rb.AddForce(force_direction);

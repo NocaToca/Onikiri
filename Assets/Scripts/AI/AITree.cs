@@ -39,6 +39,41 @@ namespace AI{
 
         //Abstract setup
         protected abstract AINode SetUpTree();
+
+        public string GrabNameOfCurrentNode(){
+            return RecurseGNoCN(root).Name();
+        }
+
+        public AINode RecurseGNoCN(AINode curr){
+            if(curr.state == Status.SUCCESS || curr.state == Status.RUNNING){
+                if(curr.children.Count == 0){
+                    return curr;
+                } else {
+                    if(curr is Sequence){
+
+                        foreach(AINode child in curr.children){
+                            AINode r = RecurseGNoCN(child);
+                            if(r == null){
+                                return null;
+                            }
+                        }
+
+                        return curr.children[curr.children.Count-1];
+
+                    } else {
+                        foreach(AINode child in curr.children){
+                            AINode r = RecurseGNoCN(child);
+                            if(r != null){
+                                return r;
+                            }
+                        }
+                        return null;
+                    }
+                }
+            } else {
+                return null;
+            }
+        }
     }
 
 }
