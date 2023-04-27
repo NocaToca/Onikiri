@@ -149,7 +149,7 @@ Transform:
   m_GameObject: {fileID: 13488089}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -2.41, y: -4.02, z: -4671}
-  m_LocalScale: {x: 57.8863, y: 48.867676, z: 51.899998}
+  m_LocalScale: {x: 65.04684, y: 54.91261, z: 58.32003}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 608814102}
@@ -938,7 +938,7 @@ MonoBehaviour:
   - {fileID: 1163640389}
   options_menu: {fileID: 317382474}
   help_menu: {fileID: 1262715629}
-  scene_number: 1
+  scene_number: 2
 --- !u!114 &487235814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1390,12 +1390,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Some relevant info about the current state is that it is very obviously
-    not completed, as well as the core loop of the gameplay you are going to play
-    is not the desired core loop for the final product. This sounds counter-intuitive
-    - I know - but I am primarily looking for feedback on the combat and fluidity
-    of movement! For this reason, the current state of the game will resemble that
-    of an endless fighter.
+  m_text: So, thank you for playing the current build I have! It's still nowhere
+    near done, go figure, but there is quite a number of things to explore that are
+    new. First off, there is a map that you can run around in, but there isn't much
+    there to find yet. I also edited some things based off of feedback - what I could
+    in time anyway. Hope you all enjoy it!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2518,6 +2517,7 @@ GameObject:
   - component: {fileID: 1797531543}
   - component: {fileID: 1797531542}
   - component: {fileID: 1797531541}
+  - component: {fileID: 1797531544}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2599,6 +2599,49 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1797531544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1797531540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+  m_TaaSettings:
+    quality: 3
+    frameInfluence: 0.1
+    jitterScale: 1
+    mipBias: 0
+    varianceClampScale: 0.9
+    contrastAdaptiveSharpening: 0
 --- !u!1 &1833456299
 GameObject:
   m_ObjectHideFlags: 0

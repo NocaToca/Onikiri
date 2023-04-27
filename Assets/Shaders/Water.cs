@@ -35,7 +35,7 @@ public class Water : MonoBehaviour{
         waterWaves.Dispatch(0, renderTexture.width/8, renderTexture.height/8, 1);
 
         waterMat.SetTexture("_WaterNormals", renderTexture);
-
+        //a = GameObject.FindGameObjectWithTag("Player").GetComponent<Actor>();
         
     }
 
@@ -48,12 +48,12 @@ public class Water : MonoBehaviour{
 
     private void FixedUpdate() {
 
-        if(active){
-            CheckRipples();
-        } else {
-            waterMat.SetVector("_PressedWorld", new Vector2(-1.0f, -1.0f));
-            waterWaves.SetVector("pressedUV", new Vector2(-0.0f, 0.0f));
-        }
+        waterMat.SetVector("_PressedWorld", new Vector2(-1.0f, -1.0f));
+        waterWaves.SetVector("pressedUV", new Vector2(-0.0f, 0.0f));
+
+            
+        CheckRipples();
+        
         waterWaves.SetTexture(0, "Input", renderTexture);
 
         waterWaves.Dispatch(0, renderTexture.width/8, renderTexture.height/8, 1);
@@ -74,6 +74,10 @@ public class Water : MonoBehaviour{
 
 
         //foreach(Actor a in currentObjects){
+
+            if(!active || a == null){
+                return;
+            }
             Vector3 position = a.transform.position;
 
             if(a.movedLastFrame){
@@ -98,7 +102,7 @@ public class Water : MonoBehaviour{
 
                         //waterWaves.SetTexture(1, "Base_Input", renderTexture);
                         waterWaves.SetVector("pressedUV", uvSpace);
-                        waterWaves.Dispatch(0, renderTexture.width/8, renderTexture.height/8, 1);
+                       // waterWaves.Dispatch(0, renderTexture.width/8, renderTexture.height/8, 1);
                         //waterWaves.Dispatch(1, renderTexture.width/8, renderTexture.height/8, 1);
                         
                         

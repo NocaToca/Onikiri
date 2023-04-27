@@ -630,7 +630,7 @@
         "m_Guid": ""
     },
     "isMainTexture": false,
-    "useTilingAndOffset": false,
+    "useTilingAndOffset": true,
     "m_Modifiable": true,
     "m_DefaultType": 0
 }
@@ -1133,7 +1133,7 @@
 }
 
 {
-    "m_SGVersion": 1,
+    "m_SGVersion": 2,
     "m_Type": "UnityEditor.Rendering.Universal.ShaderGraph.UniversalLitSubTarget",
     "m_ObjectId": "4a341917e51d4dbba6fa6ca3d77bb0dc",
     "m_WorkflowMode": 1,
@@ -2037,7 +2037,8 @@
     },
     "m_TextureType": 0,
     "m_NormalMapSpace": 0,
-    "m_EnableGlobalMipBias": true
+    "m_EnableGlobalMipBias": true,
+    "m_MipSamplingMode": 0
 }
 
 {
@@ -2430,6 +2431,7 @@
     "m_SGVersion": 1,
     "m_Type": "UnityEditor.Rendering.Universal.ShaderGraph.UniversalTarget",
     "m_ObjectId": "a8e5e72c8ab14f6a998dd45eb5a6b45f",
+    "m_Datas": [],
     "m_ActiveSubTarget": {
         "m_Id": "4a341917e51d4dbba6fa6ca3d77bb0dc"
     },
@@ -2442,6 +2444,7 @@
     "m_AlphaClip": false,
     "m_CastShadows": true,
     "m_ReceiveShadows": true,
+    "m_SupportsLODCrossFade": false,
     "m_CustomEditorGUI": "",
     "m_SupportVFX": false
 }
@@ -2714,10 +2717,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -2163.0,
-            "y": -662.0000610351563,
+            "x": -2178.0,
+            "y": -570.0000610351563,
             "width": 208.0,
-            "height": 312.9999694824219
+            "height": 313.0000305175781
         }
     },
     "m_Slots": [
@@ -3025,9 +3028,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -681.0000610351563,
-            "y": -356.00006103515627,
-            "width": 208.00003051757813,
+            "x": -931.0000610351563,
+            "y": -356.0000305175781,
+            "width": 208.0,
             "height": 302.0
         }
     },
@@ -3214,10 +3217,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -1335.0,
+            "x": -1333.0001220703125,
             "y": -489.0,
             "width": 208.0,
-            "height": 435.0
+            "height": 434.9999694824219
         }
     },
     "m_Slots": [
@@ -3257,8 +3260,9 @@
         "m_SerializableColors": []
     },
     "m_TextureType": 0,
-    "m_NormalMapSpace": 0,
-    "m_EnableGlobalMipBias": true
+    "m_NormalMapSpace": 1,
+    "m_EnableGlobalMipBias": true,
+    "m_MipSamplingMode": 0
 }
 
 {

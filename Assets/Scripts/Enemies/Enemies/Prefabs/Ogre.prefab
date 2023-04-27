@@ -486,6 +486,7 @@ MonoBehaviour:
   incoming_force: 0
   debug: 1
   puppet: 0
+  dead: 0
   speed: 1
   attack_speed: 1
   weapon: {fileID: 11400000, guid: 3406da6a03e48c74781df7a5f35f216d, type: 2}
@@ -502,7 +503,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f272bfe2f51115044a5349e7164c7416, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mode: 0
+  mode: 3
   speed: 1
   radius: 1
   radius_buffer: 1

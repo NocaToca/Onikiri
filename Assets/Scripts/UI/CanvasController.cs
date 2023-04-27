@@ -14,6 +14,7 @@ public class CanvasController : MonoBehaviour
 
     public Slider health_bar_prefab;
     public List<HealthBar> health_bars;
+    public Slider player_health_bar;
 
     public CanvasCommunicator augment_comminicator;
 
@@ -149,6 +150,8 @@ public class CanvasController : MonoBehaviour
                 GameObject.Destroy(bar.display.gameObject);
             }
         }
+
+        player_health_bar.value = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().stats.percent_health;
 
         foreach(HealthBar bar in health_bars){
             bar.display.value = bar.actor.stats.percent_health;
