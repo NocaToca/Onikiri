@@ -38,7 +38,9 @@ namespace Spawning{
             active = false;
             //if(show_debug){
                 #if UNITY_EDITOR
-                StartCoroutine(StartOffset(2.0f));
+                if(show_debug){
+                    StartCoroutine(StartOffset(2.0f));
+                }
                 #endif
             //}
         }
@@ -58,11 +60,15 @@ namespace Spawning{
         }
 
         // Update is called once per frame
+        bool spawned = false;
         void Update()
         {
             
             active = Vector3.Distance(GameObject.FindGameObjectWithTag("Player").transform.position, this.transform.position) <= spawn_radius;
-            
+            if(active && !spawned){
+                StartCoroutine(StartOffset(2.0f));
+                spawned = true;
+            }
         }
 
         public Bounds GetBounds(){
